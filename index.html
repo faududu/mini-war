@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mini War v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b2a40;--ink2:#4a5d78;--parch:#f7f9fc;--parch2:#dce6f2;--gold:#d9a521;--gold2:#ffe08a;--wood:#1e3a5f;--wood2:#2f5d8f;
+  --p0:#c62f2f;--p1:#2563c9;--p2:#2c8f3c;
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .24  0 0 0 0 .1  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:Nunito,system-ui,sans-serif;color:var(--ink);user-select:none;
+  background:var(--noise),radial-gradient(ellipse at 50% 40%,#3d78b3 0%,#24456e 60%,#18304f 100%);background-color:#24456e}
+button{font-family:inherit;cursor:pointer}
+.cinzel{font-family:'Russo One',sans-serif}
+
+/* ---------- TITLE ---------- */
+#title{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:5;padding:16px;overflow:auto}
+.logo{font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(64px,10vw,150px);line-height:.9;letter-spacing:4px;margin:0;
+  background:linear-gradient(180deg,#fff6c9 0%,#ffd75a 35%,#c98a12 60%,#ffe9a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 0 #0d1a2c) drop-shadow(0 14px 22px rgba(0,0,0,.55));position:relative}
+.logo-wrap{position:relative;text-align:center}
+.logo-sub{font-family:'Russo One',sans-serif;font-weight:800;color:#ffffff;letter-spacing:8px;font-size:clamp(14px,1.6vw,24px);text-shadow:0 2px 0 #0d1a2c;margin-top:8px}
+.swords{font-size:clamp(40px,5vw,70px);display:block;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.empires{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;margin-top:52px}
+.ecard{width:250px;border-radius:18px;padding:18px 16px 16px;text-align:center;position:relative;
+  background:var(--noise),linear-gradient(180deg,var(--parch) 0%,var(--parch2) 100%);border:4px solid #132238;
+  box-shadow:0 10px 0 #132238,0 18px 30px rgba(0,0,0,.45);animation:rise .6s backwards}
+.ecard:nth-child(2){animation-delay:.1s}.ecard:nth-child(3){animation-delay:.2s}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}}
+.ecard .crest{font-size:64px;width:104px;height:104px;margin:-60px auto 6px;border-radius:50%;display:grid;place-items:center;border:5px solid #132238;box-shadow:0 6px 0 #132238, inset 0 -8px 0 rgba(0,0,0,.2)}
+.ecard h3{font-family:'Russo One',sans-serif;font-weight:900;margin:4px 0 2px;font-size:24px}
+.ecard .hero{font-weight:800;color:var(--ink2);font-size:15px}
+.ecard .ab{margin:8px 0 10px;font-size:14px;background:rgba(255,255,255,.45);border-radius:10px;padding:8px}
+.ecard .ab b{font-family:'Russo One',sans-serif;letter-spacing:1px}
+.ecard input{width:100%;font:800 22px Nunito;text-align:center;padding:8px;border-radius:10px;border:3px solid #132238;background:#ffffff;color:var(--ink)}
+.pick{display:flex;gap:6px;margin-top:8px}
+.pick button{flex:1;font-weight:900;font-size:12px;padding:7px 4px;border-radius:10px;border:2px solid #132238;background:#fff;color:#132238}
+.pick button.on{background:linear-gradient(180deg,#ffe58a,#d99a17);box-shadow:0 0 12px rgba(255,200,60,.7)}
+.help{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;margin-top:8px}
+.help div{background:#fff;border:3px solid #132238;border-radius:16px;padding:12px 14px;font-weight:800;font-size:17px;line-height:1.35}
+.help b{font-family:'Russo One',sans-serif;font-weight:400;font-size:20px;display:block;margin-bottom:4px}
+.help .goal{grid-column:1/3;background:linear-gradient(180deg,#fff6d0,#ffe58a)}
+.title-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.btn{font-weight:900;font-size:18px;padding:12px 22px;border-radius:14px;border:3px solid #132238;background:linear-gradient(180deg,#ffffff,#d6e2f0);color:#132238;
+  box-shadow:0 5px 0 #132238;transition:transform .08s,box-shadow .08s,filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #132238}
+.btn.big{font-family:'Russo One',sans-serif;font-size:26px;padding:16px 40px;background:linear-gradient(180deg,#ffe58a,#d99a17);box-shadow:0 7px 0 #132238,0 0 40px rgba(255,210,90,.45);animation:glow 2s infinite}
+@keyframes glow{50%{box-shadow:0 7px 0 #132238,0 0 60px rgba(255,210,90,.8)}}
+.btn:disabled{opacity:.45;filter:grayscale(.6);cursor:not-allowed;animation:none}
+select.btn{padding:10px 14px}
+.lbl{color:#ffffff;font-weight:800;text-shadow:0 2px 0 #0d1a2c}
+
+/* ---------- GAME LAYOUT ---------- */
+#game{position:fixed;inset:0;display:none;grid-template-rows:74px 1fr;grid-template-columns:270px 1fr 300px;gap:12px;padding:10px 12px 12px}
+#top{grid-column:1/4;display:flex;align-items:center;gap:14px;padding:0 14px;border-radius:16px;border:4px solid #132238;
+  background:var(--noise),linear-gradient(180deg,#2f5d8f,#1c3a5e);box-shadow:0 6px 0 #132238, inset 0 2px 0 rgba(255,255,255,.2);color:#ffffff}
+.mini-logo{font-family:'Russo One',sans-serif;font-weight:900;font-size:26px;background:linear-gradient(180deg,#fff6c9,#ffd75a 45%,#c98a12);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #132238);white-space:nowrap}
+.turnchip{display:flex;align-items:center;gap:10px;padding:6px 16px 6px 8px;border-radius:40px;font-weight:900;font-size:22px;border:3px solid #132238;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4);white-space:nowrap}
+.turnchip .c{font-size:30px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.25)}
+.round{font-family:'Russo One',sans-serif;font-weight:800;font-size:15px;opacity:.9;white-space:nowrap}
+.phases{display:flex;gap:6px;margin-left:auto}
+.ph{font-family:'Russo One',sans-serif;font-weight:800;font-size:15px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,.25);color:#cfe0f5;border:2px solid transparent;white-space:nowrap}
+.ph.on{background:linear-gradient(180deg,#ffe58a,#d99a17);color:#132238;border-color:#132238;box-shadow:0 0 18px rgba(255,210,90,.6)}
+#nextBtn{font-family:'Russo One',sans-serif;font-size:19px;padding:10px 18px;white-space:nowrap}
+#nextBtn.ready{animation:glow 1.2s infinite;background:linear-gradient(180deg,#ffe58a,#d99a17)}
+.timer{font-family:'Russo One',sans-serif;font-weight:900;font-size:26px;padding:4px 14px;border-radius:12px;background:rgba(0,0,0,.3);min-width:118px;text-align:center;cursor:pointer;white-space:nowrap}
+.timer.low{color:#ff8a7a;animation:pulse 1s infinite}
+.timer.paused{opacity:.5}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.ibtn{width:46px;height:46px;border-radius:12px;font-size:22px;border:3px solid #132238;background:linear-gradient(180deg,#ffffff,#d6e2f0);box-shadow:0 4px 0 #132238;display:grid;place-items:center;padding:0}
+.ibtn:active{transform:translateY(3px);box-shadow:0 1px 0 #132238}
+
+.panel{border-radius:16px;border:4px solid #132238;background:var(--noise),linear-gradient(180deg,var(--parch),var(--parch2));box-shadow:0 6px 0 #132238, inset 0 0 30px rgba(30,60,100,.12);overflow:auto;min-height:0}
+.panel h4{font-family:'Russo One',sans-serif;font-weight:900;margin:0 0 8px;font-size:16px;letter-spacing:1px;color:var(--wood)}
+#left{padding:10px;display:flex;flex-direction:column;gap:10px}
+.pcard{border-radius:14px;padding:10px;border:3px solid rgba(0,0,0,.25);background:rgba(255,255,255,.4);transition:transform .25s, box-shadow .25s;position:relative}
+.pcard.cur{transform:scale(1.03);box-shadow:0 0 0 4px var(--gold),0 0 26px rgba(255,200,60,.7);background:rgba(255,255,255,.7)}
+.pcard.dead{opacity:.4;filter:grayscale(1)}
+.pcard .row{display:flex;align-items:center;gap:8px}
+.pcard .crest{font-size:30px;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;border:3px solid #132238;flex:none}
+.pcard .nm{font-weight:900;font-size:21px;line-height:1.05}
+.pcard .em{font-family:'Russo One',sans-serif;font-weight:800;font-size:12px;color:var(--ink2)}
+.stats{display:flex;gap:10px;margin-top:6px;font-weight:900;font-size:17px}
+.xp{margin-top:6px;font-size:12px;font-weight:800;color:var(--ink2)}
+.bar{height:9px;border-radius:9px;background:rgba(0,0,0,.18);overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ffd75a,#e08a10);border-radius:9px;transition:width .5s}
+
+#mapWrap{position:relative;border-radius:18px;border:5px solid #132238;box-shadow:0 7px 0 #132238,inset 0 0 70px rgba(10,40,80,.35);
+  background:var(--noise),radial-gradient(ellipse at 50% 50%,#c6ebfd 0%,#8fcdf1 60%,#5aa6da 100%);overflow:hidden;min-height:0;display:flex;flex-direction:column}
+#mapWrap.quake{animation:quake .45s}
+@keyframes quake{20%{transform:translate(-7px,3px)}40%{transform:translate(6px,-4px)}60%{transform:translate(-4px,2px)}80%{transform:translate(3px,-1px)}}
+#map{flex:1;width:100%;min-height:0}
+#hint{text-align:center;font-weight:900;font-size:21px;padding:8px 10px 10px;color:var(--wood);text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.hex{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .18s}
+.hex:hover{transform:translateY(-4px)}
+.hex .base{transition:fill .5s}
+.hex:hover .base{filter:brightness(1.12)}
+.hex .ring{fill:none;stroke-width:7;opacity:0;pointer-events:none}
+.hex.sel .ring{opacity:1;stroke:#ffd84a;filter:url(#glow)}
+.hex.tA .ring{opacity:1;stroke:#ff2d2d;animation:blink 1s infinite}
+.hex.tM .ring{opacity:1;stroke:#20d05a;animation:blink 1s infinite}
+.hex.tC .ring{opacity:1;stroke:#ffd84a;stroke-dasharray:14 8;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.hex.dim{opacity:.55}
+.hex.shake{animation:hshake .45s}
+@keyframes hshake{20%{transform:translate(-7px,2px)}40%{transform:translate(7px,-2px)}60%{transform:translate(-5px,1px)}80%{transform:translate(4px,0)}}
+.hex.pop{animation:hpop .7s}
+@keyframes hpop{0%{transform:scale(1)}30%{transform:scale(1.18)}60%{transform:scale(.96)}100%{transform:scale(1)}}
+.tname{font-family:'Russo One',sans-serif;font-weight:900;font-size:17px;fill:#fff;stroke:rgba(10,20,35,.85);stroke-width:4px;paint-order:stroke;text-anchor:middle;pointer-events:none;letter-spacing:.5px}
+.temoji{font-size:28px;text-anchor:middle;pointer-events:none}
+.ttroops{font-family:Nunito,sans-serif;font-weight:900;font-size:25px;text-anchor:middle;pointer-events:none;fill:#132238}
+.tshield{font-size:26px;pointer-events:none;animation:bob 2s infinite}
+.sea{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2.5;stroke-linecap:round}
+.route{stroke:rgba(255,255,255,.9);stroke-width:4;stroke-dasharray:3 9;stroke-linecap:round;fill:none}
+
+#right{padding:12px;display:flex;flex-direction:column;gap:14px}
+.herobox{border-radius:14px;padding:10px;background:rgba(255,255,255,.5);border:3px solid rgba(0,0,0,.2)}
+.herohead{display:flex;gap:10px;align-items:center}
+.heroicon{font-size:34px;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;border:3px solid #132238;flex:none}
+.heroname{font-weight:900;font-size:19px;line-height:1.1}
+.lvl{font-family:'Russo One',sans-serif;font-weight:900;font-size:13px;background:#132238;color:#ffd75a;border-radius:8px;padding:2px 8px;display:inline-block;margin-top:2px}
+.abname{font-family:'Russo One',sans-serif;font-weight:900;margin-top:8px;font-size:15px}
+.abtxt{font-size:14px;font-weight:700;margin:2px 0 8px}
+#abBtn{width:100%;font-family:'Russo One',sans-serif}
+.hand{display:flex;gap:8px;min-height:132px}
+.card{flex:1;max-width:84px;height:128px;border-radius:12px;border:3px solid #132238;background:linear-gradient(160deg,#ffffff,#d9e4f2);box-shadow:0 5px 0 #132238;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;cursor:pointer;transition:transform .15s;position:relative}
+.card:hover{transform:translateY(-8px) rotate(-2deg)}
+.card .ci{font-size:38px}
+.card .cn{font-family:'Russo One',sans-serif;font-weight:900;font-size:11px;line-height:1.1;margin-top:4px}
+.card.empty{background:rgba(0,0,0,.08);border-style:dashed;border-color:rgba(0,0,0,.25);box-shadow:none;cursor:default}
+.card.empty:hover{transform:none}
+.card.new{animation:flipin .8s}
+@keyframes flipin{0%{transform:rotateY(180deg) scale(.4)}100%{transform:rotateY(0) scale(1)}}
+.words{display:flex;flex-wrap:wrap;gap:6px}
+.words span{font-weight:900;font-size:15px;padding:4px 9px;border-radius:9px;background:rgba(255,255,255,.55);border:2px solid rgba(0,0,0,.18)}
+.sidebtns{display:flex;gap:8px}
+.sidebtns .btn{flex:1;font-size:16px;padding:10px 8px}
+
+/* ---------- MODALS ---------- */
+.modal{position:fixed;inset:0;background:rgba(10,25,45,.6);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal.on{display:flex}
+.mbox{width:min(860px,100%);max-height:96vh;overflow:auto;border-radius:22px;border:5px solid #132238;padding:20px 24px 22px;text-align:center;position:relative;
+  background:var(--noise),linear-gradient(180deg,var(--parch),var(--parch2));box-shadow:0 10px 0 #132238,0 30px 60px rgba(0,0,0,.5);animation:mIn .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes mIn{from{transform:scale(.7);opacity:0}}
+.mtitle{font-family:'Russo One',sans-serif;font-weight:900;font-size:30px;margin:0 0 10px;letter-spacing:1px}
+.vs{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:12px}
+.side{flex:1;border-radius:16px;padding:10px;color:#fff;border:3px solid #132238;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.side .tn{font-family:'Russo One',sans-serif;font-weight:900;font-size:26px}
+.side .tt{font-weight:900;font-size:20px}
+.side .who{font-weight:800;font-size:15px;opacity:.95}
+.vsx{font-family:'Russo One',sans-serif;font-weight:900;font-size:40px;color:#b3200f;text-shadow:0 3px 0 #132238}
+.say{font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(20px,2.3vw,30px);background:#ffffff;border:3px dashed #2f5d8f;border-radius:14px;padding:12px 14px;margin:8px 0;line-height:1.25}
+.say small{display:block;font-family:Nunito;font-weight:800;font-size:15px;color:var(--ink2);letter-spacing:2px;margin-bottom:4px}
+.dicechoice{display:flex;gap:8px;justify-content:center;align-items:center;margin:8px 0;font-weight:900;font-size:17px}
+.dc{width:52px;height:46px;border-radius:12px;border:3px solid #132238;background:#ffffff;font-weight:900;font-size:22px;box-shadow:0 4px 0 #132238}
+.dc.on{background:linear-gradient(180deg,#ffe58a,#d99a17)}
+.dc:disabled{opacity:.3}
+.arena{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:110px;margin:8px 0;padding:10px 20px;border-radius:16px;background:rgba(30,60,100,.1)}
+.dset{display:flex;gap:14px;flex:1;justify-content:center;perspective:500px}
+.die{width:64px;height:64px;position:relative}
+.cube{width:100%;height:100%;position:absolute;transform-style:preserve-3d}
+.face{position:absolute;inset:0;border-radius:12px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:8px;border:2px solid rgba(0,0,0,.35);backface-visibility:hidden}
+.face i{display:block;width:12px;height:12px;border-radius:50%;margin:auto;visibility:hidden}
+.face i.on{visibility:visible}
+.die.a .face{background:radial-gradient(circle at 30% 25%,#ff7a6a,#b01c1c)}
+.die.a .face i{background:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+.die.d .face{background:radial-gradient(circle at 30% 25%,#ffffff,#e0d6bf)}
+.die.d .face i{background:#132238}
+.f1{transform:translateZ(32px)}.f6{transform:rotateY(180deg) translateZ(32px)}.f2{transform:rotateY(90deg) translateZ(32px)}
+.f5{transform:rotateY(-90deg) translateZ(32px)}.f3{transform:rotateX(90deg) translateZ(32px)}.f4{transform:rotateX(-90deg) translateZ(32px)}
+.die.win{filter:drop-shadow(0 0 10px #ffd84a) drop-shadow(0 0 4px #ffd84a)}
+.die.lose{opacity:.45;filter:grayscale(.7)}
+.die .plus{position:absolute;top:-12px;right:-12px;background:#ffd75a;color:#132238;border:2px solid #132238;border-radius:10px;font-weight:900;font-size:14px;padding:1px 6px;z-index:2}
+.vsmall{font-family:'Russo One',sans-serif;font-size:28px;font-weight:900;color:#2f5d8f}
+.result{font-weight:900;font-size:22px;min-height:30px;margin:4px 0}
+.report{font-family:'Russo One',sans-serif;font-weight:900;font-size:22px;background:#132238;color:#ffffff;border-radius:14px;padding:10px 14px;margin:8px 0}
+.report small{display:block;font-family:Nunito;font-size:13px;letter-spacing:3px;color:#ffd75a}
+.mbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.mover{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0;font-weight:900;font-size:20px}
+.mover .num{font-family:'Russo One',sans-serif;font-size:44px;min-width:70px}
+.mover input{width:260px;accent-color:#d99a17}
+.bigcard{width:230px;height:320px;margin:4px auto 10px;border-radius:20px;border:5px solid #132238;background:linear-gradient(160deg,#ffffff,#cfdcee);
+  box-shadow:0 8px 0 #132238,0 0 40px rgba(255,210,90,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;animation:flip .7s}
+@keyframes flip{0%{transform:perspective(800px) rotateY(180deg) scale(.6)}100%{transform:perspective(800px) rotateY(0)}}
+.bigcard .ci{font-size:90px}
+.bigcard .cn{font-family:'Russo One',sans-serif;font-weight:900;font-size:26px;margin:6px 0}
+.bigcard .ct{font-weight:800;font-size:17px}
+.opts{display:flex;flex-direction:column;gap:10px;max-width:560px;margin:12px auto 0}
+.opt{font-weight:900;font-size:21px;padding:12px;border-radius:14px;border:3px solid #132238;background:#ffffff;box-shadow:0 4px 0 #132238}
+.opt:hover{background:#e8f1ff}
+.opt.right{background:#7fdc8c}.opt.wrong{background:#ff9c8c}
+.evq{font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(22px,2.4vw,30px);line-height:1.25;margin:8px 0}
+.dealgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.dealgrid div{font-family:'Russo One',sans-serif;font-weight:900;font-size:20px;background:#ffffff;border:3px solid #132238;border-radius:14px;padding:12px}
+
+/* ---------- FX ---------- */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+#banner{position:fixed;left:0;right:0;top:38%;z-index:30;pointer-events:none;display:none;align-items:center;justify-content:center;gap:20px;padding:18px;color:#fff;
+  font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(34px,5vw,64px);text-shadow:0 4px 0 rgba(0,0,0,.45);border-top:5px solid #132238;border-bottom:5px solid #132238}
+#banner.go{display:flex;animation:sweep 1.7s cubic-bezier(.2,.9,.3,1) forwards}
+#banner .bc{font-size:1.3em}
+#banner .bs{display:block;font-size:.38em;letter-spacing:6px;opacity:.9}
+@keyframes sweep{0%{transform:translateX(-110%) skewX(-12deg)}18%{transform:translateX(0) skewX(0)}78%{transform:translateX(0);opacity:1}100%{transform:translateX(110%) skewX(12deg);opacity:0}}
+#toasts{position:fixed;top:92px;left:50%;transform:translateX(-50%);z-index:35;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{font-weight:900;font-size:21px;padding:10px 20px;border-radius:14px;border:3px solid #132238;background:linear-gradient(180deg,#ffffff,#d6e2f0);box-shadow:0 5px 0 #132238;animation:tin .35s cubic-bezier(.2,1.5,.4,1), tout .4s 2.4s forwards}
+@keyframes tin{from{transform:translateY(-30px) scale(.7);opacity:0}}
+@keyframes tout{to{opacity:0;transform:translateY(-14px)}}
+
+/* ---------- END ---------- */
+#over{position:fixed;inset:0;z-index:25;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,25,45,.7)}
+#over.on{display:flex}
+.rank{width:100%;border-collapse:collapse;margin-top:10px;font-weight:900;font-size:20px}
+.rank td{padding:8px;border-bottom:2px solid rgba(0,0,0,.15)}
+.wcrest{font-size:110px;animation:bob 2s infinite;display:block}
+
+@media (max-width:1200px){#game{grid-template-columns:220px 1fr 240px}.phases .ph{font-size:12px;padding:6px 8px}.mini-logo{display:none}}
+
+/* ---------- v4 ---------- */
+#title{justify-content:flex-start;padding-top:6px;gap:10px}
+.logo{font-size:clamp(44px,5.6vw,92px)}
+.swords{font-size:clamp(30px,3.5vw,50px)}
+.empires{display:grid;grid-template-columns:repeat(4,212px);gap:42px 16px;margin-top:36px}
+.ecard{width:212px;padding:10px 12px 12px;animation-delay:calc(var(--k)*.06s)}
+.ecard .crest{font-size:44px;width:74px;height:74px;margin:-46px auto 4px}
+.ecard h3{font-size:19px}
+.ecard .hero{font-size:13px}
+.ecard .ab{font-size:12.5px;margin:6px 0 8px;padding:6px;min-height:54px;line-height:1.22}
+.ecard input{font-size:18px;padding:6px}
+.ecard input::placeholder{color:#9aa8bb;font-size:14px}
+.ecard.off{opacity:.6}
+.pick button{font-size:11px;padding:5px 2px}
+.onl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;background:rgba(0,0,0,.25);border:3px solid #132238;border-radius:16px;padding:10px 14px}
+.onl input{font:400 22px 'Russo One';width:120px;text-align:center;text-transform:uppercase;padding:7px;border-radius:10px;border:3px solid #132238}
+.code{font-family:'Russo One';font-size:38px;color:#ffd75a;letter-spacing:6px;text-shadow:0 3px 0 #0d1a2c}
+.chk{color:#fff;font-weight:900;display:flex;gap:6px;align-items:center;text-shadow:0 2px 0 #0d1a2c;cursor:pointer}
+.chk input{width:22px;height:22px;accent-color:#d99a17}
+.who-list{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.temoji{font-size:20px}
+.ttroops{font-size:17px}
+.tshield,.tfort{font-size:19px;pointer-events:none}
+.cont{font-family:'Russo One';font-size:15px;fill:#1e3a5f;letter-spacing:2px;pointer-events:none;paint-order:stroke;stroke:rgba(255,255,255,.7);stroke-width:3px}
+.link{stroke:rgba(120,90,45,.55);stroke-width:7;stroke-linecap:round}
+.hand{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;min-height:104px}
+.card{max-width:none;height:100px;padding:3px}
+.card .ci{font-size:26px}.card .cn{font-size:9px}
+.card .sym{position:absolute;top:2px;left:5px;font-size:15px;font-weight:900}
+.card.lock::after{content:'🔒';position:absolute;bottom:2px;right:3px;font-size:13px}
+.mission{border-radius:14px;padding:9px 10px;background:linear-gradient(180deg,#fff6d0,#ffe58a);border:3px solid #132238;font-weight:800;font-size:14px}
+.mission b{font-family:'Russo One';font-weight:400;display:block;font-size:15px;margin-bottom:2px}
+.prog{font-size:13px;color:var(--ink2);margin-top:3px;font-weight:800}
+.units{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:6px 0}
+.ubox{flex:1;min-width:250px;border-radius:14px;padding:8px;background:rgba(30,60,100,.08);border:2px dashed rgba(19,34,56,.35);font-weight:800}
+.ubox .lab{font-weight:900;font-size:14px;color:var(--ink2);margin-bottom:6px}
+.ub{font-weight:900;font-size:16px;padding:7px 9px;border-radius:12px;border:3px solid #132238;background:#fff;box-shadow:0 3px 0 #132238;margin:2px}
+.ub:hover{background:#fff3c4}
+.ub:disabled{opacity:.35;cursor:default}
+.uwin{font-weight:900;font-size:18px;color:#7a1515;margin:2px 0 4px}
+.flags{font-size:15px;margin-top:4px;color:#b3200f;font-weight:900}
+.pdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2ecc71;margin-left:6px;box-shadow:0 0 6px #2ecc71;vertical-align:middle}
+.pw{font-size:12px;font-weight:900;margin-top:4px}
+.netb{font-family:'Russo One';font-size:14px;padding:6px 10px;border-radius:10px;background:rgba(0,0,0,.3);white-space:nowrap}
+.rank td{font-size:16px}
+.mtxt{font-size:12.5px;font-weight:800;text-align:left}
+#tradeBtn{width:100%;margin-top:8px;font-size:15px;padding:9px 8px}
+@media (max-width:1000px){.empires{grid-template-columns:repeat(2,212px)}}
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<div id="title">
+  <div class="logo-wrap">
+    <span class="swords">⚔️</span>
+    <h1 class="logo">MINI WAR</h1>
+    <div class="logo-sub">CONQUER THE WORLD</div>
+  </div>
+  <div id="setup" style="display:flex;flex-direction:column;align-items:center;gap:12px">
+    <div class="empires" id="empCards"></div>
+    <div class="title-row" style="margin-top:6px">
+      <button class="btn" id="helpBtn">❓ How to play</button>
+      <button class="btn" id="shuffleBtn">🎲 Random empires</button>
+      <span class="lbl">Battle time</span>
+      <select class="btn" id="timeSel">
+        <option value="60">60 min</option><option value="75">75 min</option><option value="85" selected>85 min</option><option value="90">90 min</option><option value="999">No limit</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="unitsChk" checked> 🐎🏹🔱 Unit battles</label>
+    </div>
+    <div class="title-row">
+      <button class="btn big" id="startBtn">⚔️ START THE WAR</button>
+      <button class="btn" id="contBtn" style="display:none">▶ Continue battle</button>
+    </div>
+    <div class="onl">
+      <button class="btn" id="hostBtn">🌐 PLAY ONLINE (each player on their own PC)</button>
+      <span id="hostInfo"></span>
+    </div>
+  </div>
+  <div id="joinBox" class="onl" style="display:none;margin-top:40px"></div>
+</div>
+
+<!-- GAME -->
+<div id="game">
+  <div id="top">
+    <div class="mini-logo">MINI WAR</div>
+    <div class="turnchip" id="turnChip"></div>
+    <div class="round" id="roundLbl"></div>
+    <div class="netb" id="netB" style="display:none"></div>
+    <div class="phases" id="phases"></div>
+    <button class="btn" id="nextBtn">NEXT ▶</button>
+    <div class="timer" id="timer" title="Pause / resume">85:00</div>
+    <button class="ibtn" id="helpBtn2" title="How to play">❓</button>
+    <button class="ibtn" id="dealBtn" title="Diplomacy">🤝</button>
+    <button class="ibtn" id="evBtn" title="Event card (E)">📜</button>
+    <button class="ibtn" id="muteBtn" title="Sound">🔊</button>
+    <button class="ibtn" id="menuBtn" title="Menu">☰</button>
+  </div>
+  <div class="panel" id="left"></div>
+  <div id="mapWrap">
+    <svg id="map" viewBox="0 0 1060 600" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="hint"></div>
+  </div>
+  <div class="panel" id="right"></div>
+</div>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div id="over"><div class="mbox" id="overBox" style="width:min(1000px,100%)"></div></div>
+<div id="banner"></div>
+<div id="toasts"></div>
+<canvas id="fx"></canvas>
+
+<script>
+'use strict';
+/* =========================================================
+   DATA
+   ========================================================= */
+const pl_=(n,w,ws)=>n+' '+(n===1?w:(ws||w+'s'));
+const EMP = [
+  {name:'Eagle Empire', crest:'🦅', color:'#c62f2f', dark:'#7a1515', light:'#f0705f', hero:'General Hawk', hicon:'🎖️', ab:'BATTLE FURY', pw:'fury', n:[2,3,4,5],
+   t:n=>`+1 on all your attack 🎲 in your next ${pl_(n,'roll')}.`},
+  {name:'Lion Kingdom', crest:'🦁', color:'#2563c9', dark:'#123a80', light:'#66a0f2', hero:'Commander Leona', hicon:'🛡️', ab:'IRON SHIELD', pw:'shield', n:[1,2,3,4],
+   t:n=>`Protect ${pl_(n,'territory','territories')} until your next turn. Nobody can attack them!`},
+  {name:'Dragon Horde', crest:'🐉', color:'#2c8f3c', dark:'#14551f', light:'#69cc77', hero:'Marshal Drake', hicon:'🥁', ab:'WAR DRUMS', pw:'drums', n:[2,3,4,5],
+   t:n=>`Get ${n} extra troops to place.`},
+  {name:'Wolf Pack', crest:'🐺', color:'#7b3fc4', dark:'#47207f', light:'#a982ea', hero:'Captain Storm', hicon:'⚡', ab:'BLITZ', pw:'blitz', n:[1,2,3,4],
+   t:n=>`The defender rolls only 1 🎲 in your next ${pl_(n,'roll')}.`},
+  {name:'Bear Clan', crest:'🐻', color:'#8a5a2b', dark:'#4f3013', light:'#c08a55', hero:'Chief Ursa', hicon:'🪓', ab:'STONE FORT', pw:'fort', n:[1,2,3,4],
+   t:n=>`+1 on all defense 🎲 in ${pl_(n,'territory','territories')} until your next turn.`},
+  {name:'Cobra Cult', crest:'🐍', color:'#c98a12', dark:'#7a5208', light:'#f0c14a', hero:'Queen Naga', hicon:'🧪', ab:'POISON', pw:'poison', n:[1,2,3,4],
+   t:n=>`An enemy territory loses ${pl_(n,'troop')}.`},
+  {name:'Fox Tribe', crest:'🦊', color:'#e0681a', dark:'#8f3a06', light:'#ff9d55', hero:'Scout Vixen', hicon:'🗺️', ab:'SECRET PATHS', pw:'paths', n:[2,3,4,5],
+   t:n=>`Move troops ${n} times this turn, through ANY path of your lands.`},
+  {name:'Elephant Empire', crest:'🐘', color:'#13868f', dark:'#0a4b50', light:'#4cc4cc', hero:'Rajah Tusk', hicon:'👑', ab:'STAMPEDE', pw:'stamp', n:[2,3,4,5],
+   t:n=>`In your next ${pl_(n,'roll')}, you lose max 1 troop per roll.`}
+];
+const DEFAULT_NAMES = ['Mateus','Gabriel','Thiago','Fábio'];
+const ALL = EMP.map((_,i)=>i);
+const LV = [0,2,5,9,14,20,27,35,44,54];           // XP needed for level 1..10
+const TIER_LV = [1,4,7,10];
+const lvlOf = xp => { let l=1; for(let k=1;k<LV.length;k++) if(xp>=LV[k]) l=k+1; return l; };
+const tierOf = l => l>=10?3 : l>=7?2 : l>=4?1 : 0;
+
+const CONT = [
+  {n:'North America', b:2, col:'#efdca2', lx:115, ly:24},
+  {n:'South America', b:2, col:'#b9dc96', lx:120, ly:588},
+  {n:'Europe',        b:3, col:'#c9d5f2', lx:500, ly:24},
+  {n:'Africa',        b:2, col:'#f2c98f', lx:470, ly:590},
+  {n:'Asia',          b:4, col:'#eebdbd', lx:840, ly:44},
+  {n:'Oceania',       b:2, col:'#bfe8d4', lx:985, ly:385}
+];
+const TERR = [
+  {n:'Alaska',e:'🏔️',c:0,x:70,y:95},{n:'Canada',e:'🍁',c:0,x:180,y:85},{n:'USA',e:'🗽',c:0,x:150,y:195},{n:'Mexico',e:'🌮',c:0,x:165,y:300},
+  {n:'Colombia',e:'☕',c:1,x:255,y:365},{n:'Peru',e:'🦙',c:1,x:240,y:470},{n:'Brazil',e:'⚽',c:1,x:345,y:430},{n:'Argentina',e:'🥩',c:1,x:300,y:545},
+  {n:'UK',e:'💂',c:2,x:440,y:95},{n:'France',e:'🗼',c:2,x:470,y:195},{n:'Germany',e:'🏰',c:2,x:560,y:115},{n:'Spain',e:'💃',c:2,x:420,y:285},{n:'Italy',e:'🍕',c:2,x:560,y:230},
+  {n:'Morocco',e:'🌴',c:3,x:450,y:385},{n:'Egypt',e:'🐫',c:3,x:575,y:360},{n:'Nigeria',e:'🥁',c:3,x:500,y:480},{n:'S. Africa',e:'🦒',c:3,x:585,y:555},
+  {n:'Russia',e:'❄️',c:4,x:690,y:95},{n:'Turkey',e:'🕌',c:4,x:670,y:215},{n:'Arabia',e:'🛢️',c:4,x:690,y:330},{n:'India',e:'🍛',c:4,x:800,y:345},{n:'China',e:'🏯',c:4,x:810,y:205},{n:'Japan',e:'🍣',c:4,x:930,y:150},
+  {n:'Indonesia',e:'🌋',c:5,x:880,y:450},{n:'Australia',e:'🦘',c:5,x:930,y:550},{n:'N. Zealand',e:'🥝',c:5,x:1020,y:480}
+];
+const TI = n => TERR.findIndex(t=>t.n===n);
+// [a, b, sea?]
+const LINKS = [
+  ['Alaska','Canada'],['Alaska','USA'],['Canada','USA'],['USA','Mexico'],['Mexico','Colombia'],
+  ['Colombia','Peru'],['Colombia','Brazil'],['Peru','Brazil'],['Peru','Argentina'],['Brazil','Argentina'],
+  ['Canada','UK',1],['Brazil','Nigeria',1],
+  ['UK','France'],['UK','Germany'],['France','Germany'],['France','Spain'],['France','Italy'],['Germany','Italy'],
+  ['Spain','Morocco',1],['Morocco','Egypt'],['Morocco','Nigeria'],['Egypt','Nigeria'],['Nigeria','S. Africa'],['Egypt','S. Africa'],
+  ['Germany','Russia'],['Italy','Turkey'],['Russia','Turkey'],['Russia','China'],['Turkey','Arabia'],['Egypt','Arabia'],
+  ['Arabia','India'],['India','China'],['China','Japan',1],['Russia','Japan',1],
+  ['India','Indonesia',1],['Indonesia','Australia',1],['Australia','N. Zealand',1]
+].map(([a,b,s])=>[TI(a),TI(b),!!s]);
+const ADJ = TERR.map(()=>new Set());
+LINKS.forEach(([a,b])=>{ ADJ[a].add(b); ADJ[b].add(a); });
+const adj=(a,b)=>ADJ[a].has(b);
+const CT = CONT.map((_,c)=>TERR.map((t,i)=>t.c===c?i:-1).filter(i=>i>=0));
+
+const CARDS = {
+  fortify:  {name:'FORTIFY',     icon:'🏰', txt:'+3 troops to place.',                                   say:'"I\'m playing FORTIFY. Three more troops!"'},
+  trade:    {name:'TRADE ROUTE', icon:'💰', txt:'+1 troop on 5 of your border lands.',                    say:'"I\'m playing TRADE ROUTE. More troops on my borders!"'},
+  rebellion:{name:'REBELLION',   icon:'🔥', txt:'An enemy territory loses 2 troops.',                    say:'"I\'m starting a REBELLION in ___!"'},
+  catapult: {name:'CATAPULT',    icon:'🪨', txt:'The defender rolls only 1 🎲 in your next 2 rolls.',     say:'"I\'m using my CATAPULT. Your walls will fall!"'},
+  spy:      {name:'SPY',         icon:'🕵️', txt:'BLOCK the next power card of an enemy.',                say:'"My SPY is watching you, ___!"'}
+};
+const CARD_KEYS = Object.keys(CARDS);
+const SYMS=['■','▲','●'], SYMC=['#2563c9','#c62f2f','#2c8f3c'];
+const tradeVal = n => [4,6,8,10,12,15][n] ?? (15+5*(n-5));
+
+const U = {K:{n:'KNIGHTS',i:'🐎'}, A:{n:'ARCHERS',i:'🏹'}, S:{n:'SPEARS',i:'🔱'}};
+const BEATS = {K:'A', A:'S', S:'K'};   // knights beat archers, archers beat spears, spears beat knights
+
+const MISSIONS = [
+  {k:'cc',c:[1,3]},{k:'cc',c:[2,1]},{k:'cc',c:[4,5]},{k:'cc',c:[0,3]},{k:'cc',c:[2,5]},{k:'cc',c:[0,5]},
+  {k:'terr'},{k:'kill'}
+];
+
+const WORDS = ['attack','defend','conquer','ally','betray','trust','revenge','mission','troops','border','continent','surrender'];
+
+const EVENTS = [
+  {t:'q', q:'Who built the pyramids of Giza?', o:['The Egyptians','The Romans','The Vikings'], a:0},
+  {t:'q', q:'Hannibal of Carthage crossed the Alps with...', o:['elephants','camels','tanks'], a:0},
+  {t:'q', q:'Where were the first Olympic Games?', o:['Greece','Egypt','India'], a:0},
+  {t:'q', q:'Who was the most famous queen of Egypt?', o:['Cleopatra','Elizabeth','Isabella'], a:0},
+  {t:'q', q:'The Greek soldiers hid inside a giant wooden...', o:['horse','elephant','ship'], a:0},
+  {t:'q', q:'The Great Wall was built in...', o:['China','Japan','India'], a:0},
+  {t:'d', icon:'☠️', title:'PLAGUE!', q:'A terrible plague hits your empire.', o:['Lose 2 troops in your biggest army','Your hero loses 2 XP'], fx:['lose2','xp-2']},
+  {t:'d', icon:'💰', title:'MERCENARIES', q:'An army of mercenaries wants gold... or glory.', o:['Pay with glory: +4 troops, but hero −2 XP','Send them home: +1 power card'], fx:['t4xp-2','card']},
+  {t:'d', icon:'⛏️', title:'GOLD MINE', q:'Your soldiers find a gold mine!', o:['Pay the soldiers: +3 troops','Build a war school: +3 hero XP'], fx:['t3','xp3']},
+  {t:'d', icon:'🌋', title:'VOLCANO!', q:'A volcano explodes next to your city.', o:['Save the people: biggest army −3 troops','Save the army: hero power +2 turns to recharge'], fx:['lose3','cd2']},
+  {t:'d', icon:'🐎', title:'HORSES FOR SALE', q:'A merchant sells super fast horses.', o:['Buy them: −2 troops, hero power READY now','No, thanks: +1 hero XP'], fx:['t-2ready','xp1']},
+  {t:'d', icon:'🕊️', title:'PEACE OFFER', q:'{S} offers you PEACE.', o:['Accept: +3 troops, but you CAN\'T attack {S} next turn (promise it out loud!)','Refuse: +1 hero XP... and say WHY!'], fx:['t3','xp1']},
+  {t:'d', icon:'🗺️', title:'TREASURE MAP', q:'You find an old treasure map...', o:['Follow it: 50% = +5 troops, 50% = a trap, −2 troops','Ignore it: +1 troop'], fx:['gamble','t1']},
+  {t:'d', icon:'🔥', title:'REBELS!', q:'Rebels attack one of your cities.', o:['Fight them: biggest army −2 troops','Ask for help: the next player gets +2 troops'], fx:['lose2','left2']},
+  {t:'d', icon:'💍', title:'ROYAL WEDDING', q:'The weakest empire wants a royal wedding with you!', o:['Say YES: you AND them get +2 troops','Stay single: +1 power card'], fx:['wed','card']},
+  {t:'d', icon:'🍞', title:'FAMINE', q:'There is no food in your empire.', o:['Feed the people: −2 troops','Feed the army: hero power +2 turns to recharge'], fx:['lose2','cd2']},
+  {t:'d', icon:'⚔️', title:'THE DUEL', q:'An enemy champion challenges your hero!', o:['Accept: roll 🎲 — 4, 5, 6 = +3 XP · 1, 2, 3 = −1 XP','Refuse: −1 troop (shame!)'], fx:['duel','lose1']},
+  {t:'d', icon:'🌊', title:'STORM AT SEA', q:'A giant storm is coming.', o:['Stay in port: lose your newest power card','Sail anyway: biggest army −2 troops'], fx:['losecard','lose2']},
+  {t:'d', icon:'🕵️', title:'SPY CAUGHT!', q:'Your guards catch an enemy spy.', o:['Interrogate him: +1 power card','Send him back with a message: +2 hero XP'], fx:['card','xp2']}
+];
+
+/* =========================================================
+   GEOMETRY
+   ========================================================= */
+const R = 44;
+function hexPts(cx,cy,s){const p=[];for(let k=0;k<6;k++){const a=Math.PI/180*(60*k-30);p.push((cx+s*Math.cos(a)).toFixed(1)+','+(cy+s*Math.sin(a)).toFixed(1));}return p.join(' ');}
+
+/* =========================================================
+   STATE + NETWORK CORE
+   ========================================================= */
+const SAVE_KEY='miniwar-v4';
+let S=null, muted=false;
+let MODE='local', ME=null, ROOM='', peer=null, conns=[], hostConn=null, LOBBY=null, JOINMSG='Connecting...';
+let FX=[];
+try{ muted = localStorage.getItem('miniwar-mute')==='1'; }catch(e){}
+function save(){ if(MODE==='client') return; try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const s=JSON.parse(localStorage.getItem(SAVE_KEY)); return s&&s.screen==='game'&&s.ver===4?s:null; }catch(e){ return null; } }
+const rnd=n=>Math.floor(Math.random()*n);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const P=()=>S.players[S.cur];
+const owned=p=>S.terr.filter(t=>t.owner===p).length;
+const troopsOf=p=>S.terr.reduce((s,t)=>s+(t.owner===p?t.troops:0),0);
+const plural=(n,w)=>pl_(n,w);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function fx(k,a,b,c){ FX.push([k,a,b,c]); }
+
+// viewer (whose hero/cards the right panel shows) and "can this screen act now?"
+const V = () => MODE==='client' ? (ME??S.cur) : S.cur;
+const canAct = () => MODE!=='client' || ME===S.cur;
+
+function act(type,d){
+  if(!S) return;
+  if(MODE==='client'){ if(hostConn&&hostConn.open) hostConn.send({t:'act',type,d:d||{}}); return; }
+  apply(type,d||{},MODE==='host'?'host':'local');
+}
+const HOSTONLY=new Set(['pause','end','event']);
+function allowed(type,d,from){
+  if(from==='host'||from==='local') return true;
+  if(!S||S.screen!=='game'||HOSTONLY.has(type)) return false;
+  if(type==='unit') return !!S.B && ((d.side==='A'&&from===S.cur) || (d.side==='D'&&(from===S.B.def||(from===S.cur&&d.u==='?'))));
+  if(type==='evpick'||type==='evok') return !!S.ui && S.ui.k==='event' && (from===S.ui.target||from===S.cur);
+  return from===S.cur;
+}
+function apply(type,d,from){
+  const h=H[type]; if(!h||!S) return;
+  if(!allowed(type,d,from)) return;
+  h(d);
+  commit();
+}
+function commit(){
+  if(!S) return;
+  if(MODE==='host') S.on=conns.filter(c=>c.open&&c.p!=null).map(c=>c.p);
+  save();
+  const f=FX; FX=[];
+  if(MODE==='host') bcast({t:'state',S,f});
+  paint(f);
+}
+function paint(f){ render(); renderUI(); (f||[]).forEach(runFx1); }
+function later(ms,fn){ const s0=S; setTimeout(()=>{ if(!S||S!==s0) return; fn(); commit(); },ms); }
+function runFx1([k,a,b,c]){
+  if(k==='toast') toast(a);
+  else if(k==='sfx'){ if(sfx[a]) sfx[a](b); }
+  else if(k==='banner') banner();
+  else if(k==='pop') pop(a);
+  else if(k==='shake') shake(a);
+  else if(k==='burst') burst(a,b,c||40);
+  else if(k==='quake'){ const m=$('mapWrap'); m.classList.remove('quake'); void m.offsetWidth; m.classList.add('quake'); }
+  else if(k==='confetti') confetti(a);
+}
+
+const H = {
+  click:d=>clickTerr(d.i,d.shift),
+  undo:d=>undoOne(d.i),
+  next:()=>nextPhase(),
+  power:()=>usePower(),
+  play:d=>playCard(d.idx),
+  trade:()=>doTrade(),
+  cancel:()=>{ S.mode=null; S.sel=null; },
+  unit:d=>setUnit(d.side,d.u),
+  roll:()=>doRoll(false),
+  auto:()=>doRoll(true),
+  stop:()=>{ if(S.B) S.B.auto=false; },
+  retreat:()=>closeBattle(),
+  mv:d=>{ if(S.B&&S.B.conquered) S.B.move=clamp(+d.v,S.B.moveMin,S.B.moveMax);
+          else if(S.ui&&S.ui.k==='move') S.ui.v=clamp(+d.v,1,S.terr[S.ui.a].troops-1); },
+  conquer:()=>confirmConquest(),
+  moveok:()=>doMove(),
+  movecancel:()=>{ if(S.ui&&S.ui.k==='move'){ S.ui=null; S.sel=null; } },
+  evpick:d=>eventPick(+d.k),
+  evok:()=>{ if(S.ui&&S.ui.k==='event'&&S.ui.pick!==null) S.ui=null; },
+  event:()=>{ if(!S.ui&&!S.B) startEvent(S.cur); },
+  pause:()=>{ if(S.timeLeft>=0){ S.paused=!S.paused; fx('toast',S.paused?'⏸ Paused':'▶ Go!'); } },
+  end:()=>gameOver('time')
+};
+
+/* =========================================================
+   GAME FLOW
+   ========================================================= */
+function newGame(names, minutes, units){
+  const active=ALL.filter(i=>names[i]);
+  S={ver:4, screen:'game', online:MODE==='host',
+     players:EMP.map((e,i)=>({name:names[i]||e.hero, xp:0, cards:[], alive:!!names[i], out:!names[i], cd:0, blocked:null, mission:null})),
+     terr:[], cur:active[0], round:1, turnNo:0, phase:'reinforce', pool:0, undo:[], sel:null, mode:null,
+     fury:0, oneDie:0, stamp:0, conq:0, xpT:0, moves:0, maxMoves:1, paths:false, trades:0, units:!!units,
+     terrGoal: active.length<=2?20 : active.length===3?17 : 15, killedBy:{},
+     timeLeft: minutes>=999 ? -1 : minutes*60000, paused:false, events:shuffle([...EVENTS.keys()]), evPtr:0, ui:null, B:null, on:[]};
+  for(let tries=0;tries<60;tries++){
+    S.terr=TERR.map(()=>({owner:0,troops:2,shield:false,fort:false}));
+    shuffle([...TERR.keys()]).forEach((ti,k)=>S.terr[ti].owner=active[k%active.length]);
+    dealMissions(active);
+    if(!active.some(p=>missionFrac(p)>=0.6)) break;
+  }
+  // same number of troops for everybody at the start
+  const most=Math.max(...active.map(troopsOf));
+  active.forEach(p=>{ const mine=S.terr.map((t,i)=>t.owner===p?i:-1).filter(i=>i>=0); for(let k=troopsOf(p);k<most;k++) S.terr[mine[rnd(mine.length)]].troops++; });
+  startTurn();
+}
+function dealMissions(active){
+  const pool=shuffle(MISSIONS.map((_,i)=>i));
+  active.forEach((p,k)=>{
+    const m={...MISSIONS[pool[k%pool.length]]};
+    if(m.k==='kill'){ const o=active.filter(q=>q!==p); m.target=o[rnd(o.length)]; }
+    if(m.k==='terr') m.n=S.terrGoal;
+    S.players[p].mission=m;
+  });
+}
+function contOwner(c){ const o=S.terr[CT[c][0]].owner; return CT[c].every(i=>S.terr[i].owner===o) ? o : -1; }
+function contOwned(p,c){ return CT[c].filter(i=>S.terr[i].owner===p).length; }
+function contBonus(p){ return CONT.map((_,c)=>c).filter(c=>contOwner(c)===p); }
+function reinforcement(p){ return Math.max(3, Math.floor(owned(p)/3)) + contBonus(p).reduce((s,c)=>s+CONT[c].b,0); }
+
+function missionText(m){
+  if(!m) return '';
+  if(m.k==='cc') return 'Conquer '+m.c.map(c=>CONT[c].n.toUpperCase()).join(' and ')+'.';
+  if(m.k==='terr') return `Control ${m.n} territories.`;
+  const t=m.target; return `Destroy the ${EMP[t].crest} ${EMP[t].name} (${esc(S.players[t].name)}).`;
+}
+function missionProg(p){
+  const m=S.players[p].mission; if(!m) return '';
+  if(m.k==='cc') return m.c.map(c=>`${CONT[c].n}: ${contOwned(p,c)}/${CT[c].length}`).join(' · ');
+  if(m.k==='terr') return `You have ${owned(p)}/${m.n}`;
+  return S.players[m.target].alive ? `${esc(S.players[m.target].name)} still has ${pl_(owned(m.target),'territory','territories')}` : 'Done!';
+}
+function missionFrac(p){
+  const m=S.players[p].mission;
+  if(m.k==='cc'){ let a=0,b=0; m.c.forEach(c=>{a+=contOwned(p,c); b+=CT[c].length;}); return a/b; }
+  if(m.k==='terr') return owned(p)/m.n;
+  return 0;
+}
+function missionDone(p){
+  const m=S.players[p].mission; if(!m) return false;
+  if(m.k==='cc') return m.c.every(c=>CT[c].every(i=>S.terr[i].owner===p));
+  if(m.k==='terr') return owned(p)>=m.n;
+  return !S.players[m.target].alive && S.killedBy[m.target]===p;
+}
+
+function startTurn(){
+  const p=S.cur, pl=P();
+  S.turnNo++;
+  S.terr.forEach(t=>{ if(t.owner===p){ t.shield=false; t.fort=false; } });
+  if(pl.cd>0) pl.cd--;
+  Object.assign(S,{phase:'reinforce', pool:reinforcement(p), undo:[], sel:null, mode:null, fury:0, oneDie:0, stamp:0, conq:0, xpT:0, moves:0, maxMoves:1, paths:false});
+  fx('banner'); fx('sfx','turn');
+  const cb=contBonus(p);
+  if(cb.length) fx('toast','🌍 Continent bonus: '+cb.map(c=>CONT[c].n+' +'+CONT[c].b).join(' · '));
+  if(pl.cards.length>=5) fx('toast','🃏 5 cards! TRADE 3 of them 🔄');
+}
+function nextPhase(){
+  if(S.screen!=='game'||S.ui||S.B) return;
+  if(S.pool>0){ fx('toast','Place your troops first! ('+S.pool+' left)'); fx('sfx','no'); return; }
+  if(S.phase==='reinforce' && P().cards.length>=5){ fx('toast','🃏 You have 5 cards: TRADE 3 first 🔄'); fx('sfx','no'); return; }
+  S.mode=null; S.sel=null; S.undo=[];
+  if(S.phase==='reinforce') S.phase='attack';
+  else if(S.phase==='attack') S.phase='move';
+  else return endTurn();
+  fx('sfx','click');
+}
+function nextAlive(p){ let n=p; do{ n=(n+1)%S.players.length; }while(!S.players[n].alive && n!==p); return n; }
+function endTurn(){
+  if(S.conq>0) drawCard(S.cur);
+  const n=nextAlive(S.cur), wrapped = n<=S.cur;
+  S.cur=n; if(wrapped) S.round++;
+  startTurn();
+  if(wrapped && S.round>=2){
+    const alive=ALL.filter(i=>S.players[i].alive);
+    const target=alive[(S.round-2)%alive.length];
+    later(1800,()=>{ if(S.screen==='game' && !S.ui && !S.B) startEvent(target); });
+  }
+}
+function checkWin(){
+  if(S.screen!=='game') return true;
+  if(missionDone(S.cur)){ gameOver('mission',S.cur); return true; }
+  const alive=ALL.filter(i=>S.players[i].alive);
+  if(alive.length===1){ gameOver('conquest',alive[0]); return true; }
+  return false;
+}
+
+/* =========================================================
+   MAP INPUT
+   ========================================================= */
+function attackTargets(a){ return [...ADJ[a]].filter(d=>S.terr[d].owner!==S.cur && !S.terr[d].shield); }
+function canAttackFrom(a){ const t=S.terr[a]; return t.owner===S.cur && t.troops>=2 && attackTargets(a).length>0; }
+function reach(a){ const seen=new Set([a]), q=[a]; while(q.length){ const x=q.shift(); ADJ[x].forEach(y=>{ if(!seen.has(y)&&S.terr[y].owner===S.cur){ seen.add(y); q.push(y); } }); } seen.delete(a); return seen; }
+function moveOK(a,b){ return S.paths ? reach(a).has(b) : adj(a,b); }
+
+function clickTerr(i, shift){
+  if(S.screen!=='game' || S.ui || S.B) return;
+  const t=S.terr[i], mine=t.owner===S.cur;
+  if(S.mode){ handleTarget(i); return; }
+  if(S.pool>0){
+    if(!mine){ fx('sfx','no'); return; }
+    const k = shift ? S.pool : 1;
+    t.troops+=k; S.pool-=k; for(let j=0;j<k;j++) S.undo.push(i);
+    fx('sfx','place'); fx('pop',i); return;
+  }
+  if(S.phase==='attack'){
+    if(S.sel===null){ if(canAttackFrom(i)){ S.sel=i; fx('sfx','click'); } else fx('sfx','no'); }
+    else if(i===S.sel){ S.sel=null; }
+    else if(mine){ if(canAttackFrom(i)){ S.sel=i; fx('sfx','click'); } else fx('sfx','no'); }
+    else if(adj(S.sel,i) && !t.shield){ openBattle(S.sel,i); }
+    else { fx('sfx','no'); if(t.shield) fx('toast','🛡️ '+TERR[i].n+' is protected!'); }
+    return;
+  }
+  if(S.phase==='move'){
+    if(S.moves>=S.maxMoves){ fx('toast','No more moves. END TURN ▶'); return; }
+    if(S.sel===null){ if(mine && t.troops>=2){ S.sel=i; fx('sfx','click'); } else fx('sfx','no'); }
+    else if(i===S.sel){ S.sel=null; }
+    else if(mine && moveOK(S.sel,i)){ S.ui={k:'move', a:S.sel, b:i, v:S.terr[S.sel].troops-1}; fx('sfx','click'); }
+    else if(mine && t.troops>=2){ S.sel=i; fx('sfx','click'); }
+    else fx('sfx','no');
+    return;
+  }
+  if(S.phase==='reinforce' && S.pool===0) fx('toast','Ready! Press NEXT ▶');
+}
+function undoOne(i){
+  if(S.screen!=='game' || S.ui || S.B) return;
+  const k = (i===undefined||i===null) ? S.undo.length-1 : S.undo.lastIndexOf(i);
+  if(k<0) return;
+  const ti=S.undo.splice(k,1)[0];
+  S.terr[ti].troops--; S.pool++; fx('sfx','click');
+}
+function takeCard(idx){ P().cards.splice(idx,1); }
+function payPower(m){ if(m.pw && !m.paid){ P().cd=2; m.paid=1; } }
+function handleTarget(i){
+  const m=S.mode, t=S.terr[i], mine=t.owner===S.cur;
+  if(m.kind==='shield' || m.kind==='fort'){
+    if(!mine || t[m.kind]){ fx('sfx','no'); return; }
+    t[m.kind]=true; m.left--; payPower(m);
+    fx('sfx','shield'); fx('pop',i); fx('burst',i,m.kind==='shield'?'#7fb6ff':'#c08a55',30);
+    fx('toast', m.kind==='shield' ? '🛡️ '+TERR[i].n+' is protected!' : '🪓 '+TERR[i].n+' is a STONE FORT!');
+    if(m.left<=0) S.mode=null;
+  } else if(m.kind==='poison' || m.kind==='rebellion'){
+    if(mine || t.shield || t.troops<2){ fx('sfx','no'); return; }
+    t.troops=Math.max(1,t.troops-m.n);
+    if(m.kind==='rebellion') takeCard(m.card); else payPower(m);
+    S.mode=null; fx('sfx','boom'); fx('shake',i); fx('burst',i,m.kind==='poison'?'#9be15d':'#ff8a1a',60);
+    fx('toast',(m.kind==='poison'?'🧪 POISON in ':'🔥 REBELLION in ')+TERR[i].n+'!');
+  } else if(m.kind==='spy'){
+    const op=S.players[t.owner];
+    if(mine || op.blocked!=null){ fx('sfx','no'); return; }
+    takeCard(m.card); op.blocked=S.cur; S.mode=null; fx('sfx','card');
+    fx('toast','🕵️ '+esc(P().name)+'\'s spy is watching '+esc(op.name)+'! Their next card will FAIL.');
+  }
+}
+
+/* =========================================================
+   BATTLE
+   ========================================================= */
+function openBattle(a,d){
+  S.B={a,d,def:S.terr[d].owner,tA:null,tD:null,uw:null,rid:0,ra:[],rd:[],bA:[],bD:[],rA:[],rD:[],done:false,rolling:false,auto:false,
+       res:'',rep:'',conquered:false,move:1,moveMin:1,moveMax:1,nA:0};
+  S.sel=a; fx('sfx','horn');
+}
+function setUnit(side,u){
+  const B=S.B; if(!B || B.rid>0 || !S.units) return;
+  if(u==='?') u='KAS'[rnd(3)];
+  if(!U[u]) return;
+  if(side==='A' && !B.tA) B.tA=u; else if(side==='D' && !B.tD) B.tD=u; else return;
+  fx('sfx','click');
+  if(B.tA && B.tD){ B.uw = B.tA===B.tD ? 'T' : BEATS[B.tA]===B.tD ? 'A' : 'D'; fx('sfx',B.uw==='T'?'click':'shield'); }
+}
+function doRoll(auto){
+  const B=S.B; if(!B || B.rolling || B.conquered) return;
+  if(S.units && !(B.tA&&B.tD)){ fx('toast','Choose the armies first! 🐎🏹🔱'); return; }
+  if(S.terr[B.a].troops<2) return;
+  B.auto=!!auto; rollOnce();
+}
+function rollOnce(){
+  const B=S.B; if(!B) return;
+  const A=S.terr[B.a], D=S.terr[B.d];
+  if(A.troops<2 || D.troops<1){ B.auto=false; return; }
+  const one=S.oneDie>0, nA=Math.min(3,A.troops-1), nD=Math.min(D.troops, one?1:2);
+  const ra=Array.from({length:nA},()=>1+rnd(6)).sort((x,y)=>y-x);
+  const rd=Array.from({length:nD},()=>1+rnd(6)).sort((x,y)=>y-x);
+  const bA=ra.map(()=>S.fury>0?1:0); if(B.uw==='A') bA[0]++;
+  const bD=rd.map(()=>D.fort?1:0);   if(B.uw==='D') bD[0]++;
+  let lossA=0, lossD=0; const rA=[], rD=[];
+  for(let k=0;k<Math.min(nA,nD);k++){ if(ra[k]+bA[k]>rd[k]+bD[k]){ lossD++; rA[k]='win'; rD[k]='lose'; } else { lossA++; rA[k]='lose'; rD[k]='win'; } }
+  let saved=0; if(S.stamp>0 && lossA>1){ saved=lossA-1; lossA=1; }
+  if(S.fury>0) S.fury--; if(one) S.oneDie--; if(S.stamp>0) S.stamp--;
+  Object.assign(B,{rid:B.rid+1, ra, rd, bA, bD, rA, rD, done:false, rolling:true, res:'', rep:'', nA});
+  fx('sfx','dice');
+  later(B.auto?1000:1350, ()=>resolveRoll(lossA,lossD,saved));
+}
+function resolveRoll(lossA,lossD,saved){
+  const B=S.B; if(!B) return;
+  const A=S.terr[B.a], D=S.terr[B.d];
+  A.troops-=lossA; D.troops-=lossD; B.done=true; B.rolling=false;
+  if(lossD){ fx('shake',B.d); fx('burst',B.d,'#ffcf4a',18*lossD); }
+  if(lossA) fx('shake',B.a);
+  fx('quake'); fx('sfx','hit',lossD>lossA);
+  let res = lossD&&lossA ? `💥 Both armies lose! (−${lossA} / −${lossD})` : lossD ? `💥 ${TERR[B.d].n} loses ${plural(lossD,'troop')}!` : `🛡️ ${TERR[B.d].n} holds! You lose ${plural(lossA,'troop')}.`;
+  if(saved) res+=` 🐘 Stampede saved ${saved}!`;
+  let rep;
+  if(D.troops<=0){
+    D.troops=0;
+    const prev=D.owner; D.owner=S.cur; D.shield=false; D.fort=false;
+    B.conquered=true; B.auto=false;
+    B.moveMax=Math.min(3,A.troops-1); B.moveMin=Math.min(B.nA,B.moveMax); B.move=B.moveMax;
+    res=`🏆 ${TERR[B.d].n.toUpperCase()} IS YOURS!`;
+    rep=`"We conquered ${TERR[B.d].n}!"`;
+    S.conq++; fx('sfx','conquer'); fx('burst',B.d,EMP[S.cur].color,90); fx('burst',B.d,'#ffd84a',50); fx('pop',B.d);
+    if(S.xpT<2){ S.xpT++; gainXP(S.cur,1); }
+    if(owned(prev)===0) eliminate(prev);
+  } else if(lossD && !lossA) rep=`"We destroyed ${plural(lossD,'enemy troop')}!"`;
+  else if(lossA && !lossD) rep=`"We lost ${plural(lossA,'troop')}. They defended ${TERR[B.d].n}!"`;
+  else rep=`"We lost ${plural(lossA,'troop')} and they lost ${lossD}!"`;
+  B.res=res; B.rep=rep;
+  if(B.auto){
+    if(A.troops>=2) later(450,()=>{ if(S.B && S.B.auto && !S.B.conquered && !S.B.rolling) rollOnce(); });
+    else B.auto=false;
+  }
+}
+function eliminate(prev){
+  const pp=S.players[prev]; pp.alive=false; S.killedBy[prev]=S.cur;
+  pp.cards.splice(0).forEach(c=>{ if(P().cards.length<5){ c.t=S.turnNo; P().cards.push(c); } });
+  gainXP(S.cur,2);
+  fx('toast',`☠️ ${esc(pp.name)} has been ELIMINATED!`);
+  ALL.forEach(i=>{ const m=S.players[i].mission; if(i!==S.cur && m && m.k==='kill' && m.target===prev) S.players[i].mission={k:'terr',n:S.terrGoal}; });
+}
+function confirmConquest(){
+  const B=S.B; if(!B || !B.conquered) return;
+  const A=S.terr[B.a], D=S.terr[B.d];
+  A.troops-=B.move; D.troops+=B.move;
+  S.B=null; S.sel=null; fx('sfx','march'); fx('pop',B.d);
+  checkWin();
+}
+function closeBattle(){
+  const B=S.B; if(!B || B.rolling) return;
+  if(B.conquered) return confirmConquest();
+  S.B=null; S.sel=null;
+}
+
+/* =========================================================
+   MOVE
+   ========================================================= */
+function doMove(){
+  const u=S.ui; if(!u || u.k!=='move') return;
+  const A=S.terr[u.a], Bt=S.terr[u.b], v=clamp(u.v,1,A.troops-1);
+  A.troops-=v; Bt.troops+=v; S.moves++; S.ui=null; S.sel=null;
+  fx('sfx','march'); fx('pop',u.b);
+  fx('toast', S.moves<S.maxMoves ? `🐎 Done! ${plural(S.maxMoves-S.moves,'move')} left` : 'Done! END TURN ▶');
+}
+
+/* =========================================================
+   HERO / XP / CARDS
+   ========================================================= */
+function gainXP(p,n){
+  const pl=S.players[p], before=lvlOf(pl.xp);
+  pl.xp=Math.max(0,pl.xp+n);
+  const after=lvlOf(pl.xp);
+  if(after>before){ fx('sfx','level'); fx('toast',`⭐ LEVEL UP! ${EMP[p].hero} is now LEVEL ${after}!`+(tierOf(after)>tierOf(before)?' 💥 POWER UP!':'')); }
+}
+const powerN = p => EMP[p].n[tierOf(lvlOf(S.players[p].xp))];
+function usePower(){
+  if(S.mode || S.ui || S.B || S.screen!=='game') return;
+  const p=S.cur, pl=P(); if(pl.cd>0) return;
+  const E=EMP[p], n=powerN(p), pay=()=>{ pl.cd=2; };
+  switch(E.pw){
+    case 'fury':  S.fury+=n; pay(); fx('sfx','level'); fx('toast',`⚔️ BATTLE FURY! +1 on your attack 🎲 for ${plural(n,'roll')}`); break;
+    case 'drums': S.pool+=n; pay(); fx('sfx','drums'); fx('toast',`🥁 WAR DRUMS! +${n} troops to place`); break;
+    case 'blitz': S.oneDie+=n; pay(); fx('sfx','boom'); fx('toast',`⚡ BLITZ! The defender rolls 1 🎲 for ${plural(n,'roll')}`); break;
+    case 'stamp': S.stamp+=n; pay(); fx('sfx','drums'); fx('toast',`🐘 STAMPEDE! Max 1 loss per roll for ${plural(n,'roll')}`); break;
+    case 'paths': S.paths=true; S.maxMoves=Math.max(S.maxMoves,n); pay(); fx('sfx','march'); fx('toast',`🗺️ SECRET PATHS! ${plural(n,'move')} this turn, any path`); break;
+    case 'shield': S.mode={kind:'shield',left:n,pw:1}; fx('sfx','click'); break;
+    case 'fort':   S.mode={kind:'fort',left:n,pw:1}; fx('sfx','click'); break;
+    case 'poison': S.mode={kind:'poison',n,pw:1}; fx('sfx','click'); break;
+  }
+}
+function drawCard(p){
+  const pl=S.players[p];
+  if(pl.cards.length>=5) return false;
+  pl.cards.push({k:CARD_KEYS[rnd(CARD_KEYS.length)], s:rnd(3), t:S.turnNo});
+  fx('sfx','card'); fx('toast',`🃏 ${esc(pl.name)} got a new card!`);
+  return true;
+}
+function findSet(cards){
+  const by=[[],[],[]]; cards.forEach((c,i)=>by[c.s].push(i));
+  for(let s=0;s<3;s++) if(by[s].length>=3) return by[s].slice(0,3);
+  if(by[0].length && by[1].length && by[2].length) return [by[0][0],by[1][0],by[2][0]];
+  return null;
+}
+function doTrade(){
+  if(S.phase!=='reinforce' || S.mode || S.ui || S.B) return;
+  const set=findSet(P().cards); if(!set) return;
+  const v=tradeVal(S.trades++);
+  set.sort((a,b)=>b-a).forEach(i=>P().cards.splice(i,1));
+  S.pool+=v; fx('sfx','coins'); fx('toast',`🔄 "I'm trading three cards!" +${v} troops`);
+}
+function borderLands(p){ return S.terr.map((t,i)=>i).filter(i=>S.terr[i].owner===p && [...ADJ[i]].some(j=>S.terr[j].owner!==p)).sort((a,b)=>S.terr[a].troops-S.terr[b].troops); }
+function cardPlayable(k){
+  if(k==='spy') return ALL.some(i=>i!==S.cur && S.players[i].alive && S.players[i].blocked==null);
+  if(k==='rebellion') return S.terr.some(t=>t.owner!==S.cur && !t.shield && t.troops>=2);
+  return true;
+}
+function playCard(idx){
+  if(S.mode || S.ui || S.B || S.screen!=='game') return;
+  const pl=P(), c=pl.cards[idx]; if(!c) return;
+  if(c.t>=S.turnNo){ fx('toast','🔒 New card! You can play it NEXT turn.'); fx('sfx','no'); return; }
+  if(!cardPlayable(c.k)){ fx('sfx','no'); return; }
+  if(pl.blocked!=null){
+    const by=S.players[pl.blocked]; pl.blocked=null; takeCard(idx);
+    fx('sfx','no'); fx('toast',`🕵️ BLOCKED! ${esc(by.name)}'s spy stopped your ${CARDS[c.k].name}!`); return;
+  }
+  const k=c.k;
+  if(k==='fortify'){ takeCard(idx); S.pool+=3; fx('sfx','drums'); fx('toast','🏰 +3 troops to place!'); }
+  else if(k==='trade'){ takeCard(idx); const b=borderLands(S.cur).slice(0,5); b.forEach(i=>{ S.terr[i].troops++; fx('pop',i); fx('burst',i,'#ffd84a',12); }); fx('sfx','coins'); fx('toast',`💰 +1 troop in ${plural(b.length,'border land')}!`); }
+  else if(k==='catapult'){ takeCard(idx); S.oneDie+=2; fx('sfx','boom'); fx('toast','🪨 CATAPULT ready: defender rolls 1 🎲 in your next 2 rolls!'); }
+  else if(k==='rebellion'){ S.mode={kind:'rebellion',card:idx,n:2}; }
+  else if(k==='spy'){ S.mode={kind:'spy',card:idx}; }
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+function strongest(p){ let b=-1; S.terr.forEach((t,i)=>{ if(t.owner===p && (b<0||t.troops>S.terr[b].troops)) b=i; }); return b; }
+function addTroops(p,n){ const i=strongest(p); if(i<0) return '—'; S.terr[i].troops+=n; fx('pop',i); fx('burst',i,EMP[p].color,30); return TERR[i].n; }
+function loseTroops(p,n){ const i=strongest(p); if(i<0) return '—'; S.terr[i].troops=Math.max(1,S.terr[i].troops-n); fx('shake',i); return TERR[i].n; }
+function weakestOther(p){ const o=ALL.filter(i=>i!==p && S.players[i].alive).sort((a,b)=>owned(a)-owned(b)); return o.length?o[0]:null; }
+function strongestOther(p){ const o=ALL.filter(i=>i!==p && S.players[i].alive).sort((a,b)=>troopsOf(b)-troopsOf(a)); return o.length?o[0]:null; }
+function startEvent(target){
+  if(S.evPtr>=S.events.length){ S.events=shuffle([...EVENTS.keys()]); S.evPtr=0; }
+  const id=S.events[S.evPtr++], so=strongestOther(target);
+  S.ui={k:'event', id, target, order:shuffle([0,1,2]), pick:null, msg:'', so: so==null?'An enemy':EMP[so].crest+' '+S.players[so].name};
+  fx('sfx','event');
+}
+function eventPick(k){
+  const u=S.ui; if(!u || u.k!=='event' || u.pick!==null) return;
+  const ev=EVENTS[u.id], T=u.target; u.pick=k;
+  if(ev.t==='q'){
+    if(k===ev.a){ const w=addTroops(T,2); gainXP(T,1); fx('sfx','conquer'); u.msg=`✅ Correct! +2 troops in ${w} · +1 XP`; }
+    else { fx('sfx','no'); u.msg=`❌ Wrong! The answer is: ${ev.o[ev.a]}`; }
+    return;
+  }
+  u.msg=evFx(ev.fx[k],T);
+}
+function evFx(f,T){
+  const pl=S.players[T];
+  switch(f){
+    case 'lose1': return '😳 −1 troop in '+loseTroops(T,1);
+    case 'lose2': fx('sfx','boom'); return '☠️ −2 troops in '+loseTroops(T,2);
+    case 'lose3': fx('sfx','boom'); return '🌋 −3 troops in '+loseTroops(T,3);
+    case 'xp-2': gainXP(T,-2); fx('sfx','no'); return '☠️ Your hero loses 2 XP';
+    case 't4xp-2': gainXP(T,-2); fx('sfx','march'); return '💪 +4 troops in '+addTroops(T,4)+' · hero −2 XP';
+    case 'card': return drawCard(T) ? '🃏 You get a power card!' : '🃏 Your hand is full! +2 troops in '+addTroops(T,2);
+    case 't3': fx('sfx','march'); return '💪 +3 troops in '+addTroops(T,3);
+    case 't1': return '💪 +1 troop in '+addTroops(T,1);
+    case 'xp1': gainXP(T,1); fx('sfx','level'); return '⭐ +1 hero XP';
+    case 'xp2': gainXP(T,2); fx('sfx','level'); return '⭐ +2 hero XP';
+    case 'xp3': gainXP(T,3); fx('sfx','level'); return '⭐ +3 hero XP';
+    case 'cd2': pl.cd+=2; fx('sfx','no'); return '⏳ Your hero power needs 2 more turns';
+    case 't-2ready': { const w=loseTroops(T,2); pl.cd=0; fx('sfx','level'); return `🐎 −2 troops in ${w} · hero power READY!`; }
+    case 'gamble': if(Math.random()<.5){ fx('sfx','conquer'); return '🍀 TREASURE! +5 troops in '+addTroops(T,5); } fx('sfx','boom'); return '💀 A TRAP! −2 troops in '+loseTroops(T,2);
+    case 'left2': { const L=nextAlive(T); return `🤝 ${esc(S.players[L].name)} gets +2 troops in ${addTroops(L,2)}`; }
+    case 'wed': { const W=weakestOther(T); const a=addTroops(T,2); if(W==null) return `💍 +2 troops in ${a}`; const b=addTroops(W,2); fx('sfx','coins'); return `💍 +2 troops for you (${a}) and for ${esc(S.players[W].name)} (${b})`; }
+    case 'duel': { const r=1+rnd(6); if(r>=4){ gainXP(T,3); fx('sfx','conquer'); return `🎲 You rolled ${r}! VICTORY: +3 XP`; } gainXP(T,-1); fx('sfx','no'); return `🎲 You rolled ${r}... defeat: −1 XP`; }
+    case 'losecard': if(pl.cards.length){ const c=pl.cards.pop(); return `🌊 You lost ${CARDS[c.k].name}`; } return '🌊 You have no cards... lucky!';
+  }
+  return '';
+}
+
+/* =========================================================
+   GAME OVER
+   ========================================================= */
+function rankList(){ return ALL.map(i=>({p:S.players[i],i,t:owned(i),tr:troopsOf(i)})).filter(r=>!r.p.out).sort((a,b)=>b.t-a.t||b.tr-a.tr); }
+function gameOver(why,w){
+  if(!S || S.screen!=='game') return;
+  S.screen='over'; S.B=null; S.mode=null;
+  if(w==null) w=rankList()[0].i;
+  S.ui={k:'over',why,w};
+  fx('sfx','conquer'); fx('sfx','level'); fx('confetti',EMP[w].color);
+}
+function newWar(){
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  S=null; $('over').classList.remove('on');
+  if(MODE==='host') bcast({t:'reset'});
+  showTitle();
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+const svg=$('map');
+function buildMap(){
+  let h=`<defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    ${EMP.map((e,i)=>`<linearGradient id="g${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${e.light}"/><stop offset=".55" stop-color="${e.color}"/><stop offset="1" stop-color="${e.dark}"/></linearGradient>`).join('')}
+    <radialGradient id="badge" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fffdf5"/><stop offset="1" stop-color="#d6e2f0"/></radialGradient>
+  </defs>`;
+  [[330,60],[620,30],[760,280],[980,90],[40,420],[380,560],[700,560],[1000,300],[110,560]].forEach(([x,y])=>{ h+=`<path class="sea" d="M${x} ${y} q8 -7 16 0 t16 0 t16 0"/>`; });
+  // land blobs (circles + fillers between land neighbors of the same continent)
+  const blobs=[]; TERR.forEach(t=>blobs.push([t.x,t.y,64,t.c]));
+  LINKS.forEach(([a,b,sea])=>{ if(!sea && TERR[a].c===TERR[b].c) blobs.push([(TERR[a].x+TERR[b].x)/2,(TERR[a].y+TERR[b].y)/2,50,TERR[a].c]); });
+  h+='<g>'+blobs.map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r+5}" fill="#6f5f3e" opacity=".55"/>`).join('')+'</g>';
+  h+='<g>'+blobs.map(([x,y,r,c])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${CONT[c].col}"/>`).join('')+'</g>';
+  CONT.forEach((c,k)=>{ h+=`<text class="cont" id="cl${k}" x="${c.lx}" y="${c.ly}" text-anchor="middle"></text>`; });
+  // links
+  LINKS.forEach(([a,b,sea])=>{ const p=TERR[a],q=TERR[b];
+    if(sea){ const mx=(p.x+q.x)/2,my=(p.y+q.y)/2; h+=`<path class="route" d="M${p.x} ${p.y} L${q.x} ${q.y}"/><text x="${mx}" y="${my+7}" text-anchor="middle" font-size="18">⛵</text>`; }
+    else h+=`<line class="link" x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}"/>`; });
+  h+=`<g id="hexes"></g>`;
+  svg.innerHTML=h;
+  const NS='http://www.w3.org/2000/svg', g=svg.querySelector('#hexes');
+  TERR.forEach((t,i)=>{
+    const {x,y}=t, el=document.createElementNS(NS,'g');
+    el.setAttribute('class','hex'); el.dataset.i=i;
+    el.innerHTML=`<polygon points="${hexPts(x,y+6,R-2)}" fill="rgba(10,30,60,.45)"/>
+      <polygon class="base" points="${hexPts(x,y,R-2)}" stroke="#132238" stroke-width="3.5"/>
+      <polygon points="${hexPts(x,y,R-9)}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+      <polygon class="ring" points="${hexPts(x,y,R-4)}"/>
+      <text class="temoji" x="${x}" y="${y-15}">${t.e}</text>
+      <text class="tname" x="${x}" y="${y+4}" style="font-size:${t.n.length>8?10.5:12.5}px">${t.n.toUpperCase()}</text>
+      <circle cx="${x}" cy="${y+20}" r="14" fill="url(#badge)" stroke="#132238" stroke-width="3" class="badge"/>
+      <text class="ttroops" x="${x}" y="${y+26}">2</text>
+      <text class="tshield" x="${x+24}" y="${y-22}" style="display:none">🛡️</text>
+      <text class="tfort" x="${x-42}" y="${y-22}" style="display:none">🪓</text>`;
+    el.addEventListener('click',ev=>act('click',{i,shift:ev.shiftKey}));
+    el.addEventListener('contextmenu',ev=>{ ev.preventDefault(); act('undo',{i}); });
+    g.appendChild(el);
+  });
+}
+const hexEl=i=>svg.querySelector(`.hex[data-i="${i}"]`);
+
+function render(){
+  if(!S || !svg.querySelector('#hexes')) return;
+  const e=EMP[S.cur], pl=P(), me=canAct();
+  // top
+  $('turnChip').style.background=`linear-gradient(180deg,${e.light},${e.dark})`;
+  $('turnChip').innerHTML=`<span class="c">${e.crest}</span>${esc(pl.name)}`;
+  $('roundLbl').textContent='ROUND '+S.round;
+  const ph=[['reinforce','1 · REINFORCE'+(S.phase==='reinforce'&&S.pool?` (${S.pool})`:'')],['attack','2 · ATTACK'],['move','3 · MOVE'+(S.maxMoves>1?` (${S.maxMoves-S.moves})`:'')]];
+  $('phases').innerHTML=ph.map(([k,l])=>`<div class="ph ${S.phase===k?'on':''}">${l}</div>`).join('');
+  const nb=$('nextBtn');
+  nb.textContent = S.phase==='move' ? 'END TURN ▶' : 'NEXT ▶';
+  nb.disabled=!me;
+  nb.classList.toggle('ready', me && S.pool===0 && (S.phase==='reinforce' || (S.phase==='move'&&S.moves>=S.maxMoves)));
+  $('muteBtn').textContent=muted?'🔇':'🔊';
+  $('evBtn').style.display = $('menuBtn').style.display = MODE==='client'?'none':'';
+  const nbz=$('netB'); nbz.style.display=MODE==='local'?'none':'';
+  nbz.textContent = MODE==='host' ? `🌐 ${ROOM} · 🟢 ${(S.on||[]).length}` : `🌐 ${ROOM}`+(ME!=null?` · ${EMP[ME].crest}`:'');
+  renderTimer();
+  // left
+  $('left').innerHTML='<h4>EMPIRES</h4>'+ALL.map(i=>{ const p=S.players[i]; if(p.out) return '';
+    const E=EMP[i], l=lvlOf(p.xp), pct=l>=10?100:Math.min(100,(p.xp-LV[l-1])/(LV[l]-LV[l-1])*100);
+    return `<div class="pcard ${i===S.cur?'cur':''} ${p.alive?'':'dead'}">
+      <div class="row"><div class="crest" style="background:linear-gradient(180deg,${E.light},${E.dark})">${E.crest}</div>
+      <div><div class="nm">${esc(p.name)}${p.alive?'':' ☠️'}${(S.on||[]).includes(i)?'<span class="pdot" title="online"></span>':''}${p.blocked!=null?' 🕵️':''}</div><div class="em">${E.name.toUpperCase()}</div></div></div>
+      <div class="stats"><span title="territories">🏳️ ${owned(i)}</span><span title="troops">⚔️ ${troopsOf(i)}</span><span title="cards">🃏 ${p.cards.length}</span></div>
+      <div class="xp">${E.hicon} ${E.hero} · <b>Lv ${l}</b>${l<10?` · ${p.xp}/${LV[l]} XP`:' · MAX'}<div class="bar"><i style="width:${pct}%"></i></div></div>
+      <div class="pw">${p.cd>0?`⏳ ${E.ab}: ${plural(p.cd,'turn')}`:`✨ ${E.ab}: ready`}</div>
+    </div>`;}).join('');
+  // right (viewer)
+  const v=V(), vp=S.players[v], VE=EMP[v], l=lvlOf(vp.xp), tr=tierOf(l), myTurn=v===S.cur&&me;
+  const busy=S.mode||S.ui||S.B;
+  const abState = vp.cd>0 ? `⏳ RECHARGING (${plural(vp.cd,'turn')})` : (S.mode&&S.mode.pw&&v===S.cur ? '👉 CHOOSE ON THE MAP' : '✨ USE POWER');
+  const set=findSet(vp.cards);
+  const showMission = MODE==='client';
+  $('right').innerHTML=`<div class="herobox">
+      <div class="herohead"><div class="heroicon" style="background:linear-gradient(180deg,${VE.light},${VE.dark})">${VE.hicon}</div>
+      <div><div class="heroname">${VE.hero}</div><span class="lvl">LEVEL ${l}</span>${v!==S.cur?' <span class="lvl" style="background:#4a5d78;color:#fff">NOT YOUR TURN</span>':''}</div></div>
+      <div class="abname">${VE.ab}</div><div class="abtxt">${VE.t(VE.n[tr])}</div>
+      ${tr<3?`<div class="abtxt" style="opacity:.7;font-size:12px">Level ${TIER_LV[tr+1]}: ${VE.t(VE.n[tr+1])}</div>`:''}
+      <button class="btn" id="abBtn" ${!myTurn||vp.cd>0||busy?'disabled':''}>${abState}</button>
+    </div>
+    <div class="mission"><b>🎯 SECRET MISSION</b>${showMission?`${missionText(vp.mission)}<div class="prog">${missionProg(v)}</div>`:`<button class="btn" id="misBtn" style="width:100%;font-size:15px;padding:8px">👁️ ${esc(vp.name)}: peek</button>`}</div>
+    <div><h4>🃏 CARDS <span style="font-family:Nunito;font-size:12px;color:var(--ink2)">(■■■ or ■▲● = troops)</span></h4><div class="hand">${[0,1,2,3,4].map(k=>{const c=vp.cards[k];
+      return c?`<div class="card ${c.t>=S.turnNo?'lock':''}" data-k="${k}"><span class="sym" style="color:${SYMC[c.s]}">${SYMS[c.s]}</span><div class="ci">${CARDS[c.k].icon}</div><div class="cn">${CARDS[c.k].name}</div></div>`:`<div class="card empty"></div>`;}).join('')}</div>
+      <button class="btn" id="tradeBtn" ${myTurn&&set&&S.phase==='reinforce'&&!busy?'':'disabled'}>🔄 TRADE 3 CARDS → +${tradeVal(S.trades)} 🪖</button></div>
+    <div><h4>⚔️ WAR WORDS</h4><div class="words">${WORDS.map(w=>`<span>${w}</span>`).join('')}</div></div>`;
+  $('abBtn').onclick=()=>act('power');
+  $('tradeBtn').onclick=()=>act('trade');
+  if($('misBtn')) $('misBtn').onclick=openMission;
+  $('right').querySelectorAll('.card[data-k]').forEach(c=>c.onclick=()=>openCard(+c.dataset.k));
+  // map
+  CONT.forEach((c,k)=>{ const o=contOwner(k); $('cl'+k).textContent=`${c.n.toUpperCase()} +${c.b}`+(o>=0?' '+EMP[o].crest:''); });
+  const tgt=new Set(), kind={};
+  if(S.mode){
+    S.terr.forEach((t,i)=>{
+      const m=S.mode.kind;
+      if((m==='shield'||m==='fort') && t.owner===S.cur && !t[m]){ tgt.add(i); kind[i]='tC'; }
+      if((m==='rebellion'||m==='poison') && t.owner!==S.cur && !t.shield && t.troops>=2){ tgt.add(i); kind[i]='tA'; }
+      if(m==='spy' && t.owner!==S.cur && S.players[t.owner].blocked==null){ tgt.add(i); kind[i]='tA'; }
+    });
+  } else if(S.sel!==null){
+    if(S.phase==='attack') ADJ[S.sel].forEach(j=>{ const t=S.terr[j]; if(t.owner!==S.cur && !t.shield){ tgt.add(j); kind[j]='tA'; } });
+    if(S.phase==='move') (S.paths?reach(S.sel):ADJ[S.sel]).forEach(j=>{ if(S.terr[j].owner===S.cur){ tgt.add(j); kind[j]='tM'; } });
+  } else if(S.pool>0){
+    S.terr.forEach((t,i)=>{ if(t.owner===S.cur){ tgt.add(i); kind[i]='tC'; } });
+  }
+  S.terr.forEach((t,i)=>{
+    const el=hexEl(i); if(!el) return;
+    el.querySelector('.base').setAttribute('fill',`url(#g${t.owner})`);
+    el.querySelector('.ttroops').textContent=t.troops;
+    el.querySelector('.badge').setAttribute('stroke',EMP[t.owner].dark);
+    el.querySelector('.tshield').style.display=t.shield?'':'none';
+    el.querySelector('.tfort').style.display=t.fort?'':'none';
+    el.classList.toggle('sel',S.sel===i);
+    ['tA','tM','tC'].forEach(c=>el.classList.toggle(c,kind[i]===c));
+    el.classList.toggle('dim', (S.sel!==null||!!S.mode) && S.sel!==i && !tgt.has(i));
+  });
+  // hint
+  let h='';
+  if(!me) h=`⏳ ${EMP[S.cur].crest} ${esc(pl.name)} is playing...`;
+  else if(S.mode){ h={shield:'🛡️ Choose your territory to protect',fort:'🪓 Choose your territory to fortify',rebellion:'🔥 Choose an enemy territory',poison:'🧪 Choose an enemy territory',spy:'🕵️ Choose an enemy to spy on'}[S.mode.kind]+'  <span style="opacity:.6;font-size:15px">(Esc = cancel)</span>'; }
+  else if(S.pool>0) h=`🪖 Place your troops: <b>${S.pool}</b> left`;
+  else if(S.phase==='reinforce') h='✅ Ready! Press NEXT ▶';
+  else if(S.phase==='attack') h = S.sel===null ? '⚔️ Choose your army (2+ troops)' : `🎯 Choose a target for ${TERR[S.sel].n}`;
+  else h = S.moves>=S.maxMoves ? '🏁 END TURN ▶' : (S.sel===null ? `🐎 Move troops? Choose an army (optional${S.maxMoves>1?`, ${S.maxMoves-S.moves} left`:''})` : `🐎 Move from ${TERR[S.sel].n} to...`);
+  $('hint').innerHTML=h;
+}
+function fmt(ms){ const s=Math.max(0,Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function renderTimer(){
+  const t=$('timer'); if(!S) return;
+  if(S.timeLeft<0){ t.textContent='∞'; return; }
+  t.textContent=(S.paused?'⏸ ':'⏳ ')+fmt(S.timeLeft);
+  t.classList.toggle('low', S.timeLeft<5*60000 && !S.paused);
+  t.classList.toggle('paused', S.paused);
+}
+
+/* ---------- shared modals (from the state) ---------- */
+let lastSig='', lastOver='', LOCAL=false, animRid=-1;
+function renderUI(){
+  if(!S) return;
+  const over=S.ui && S.ui.k==='over';
+  $('over').classList.toggle('on',!!over);
+  if(over){ const so=JSON.stringify(S.ui)+ME; if(so!==lastOver){ lastOver=so; renderOver(); } }
+  else lastOver='';
+  let sig='';
+  if(S.B) sig='B'+JSON.stringify(S.B)+'|'+S.fury+'|'+S.oneDie+'|'+S.stamp+'|'+ME;
+  else if(S.ui && !over) sig='U'+JSON.stringify(S.ui)+'|'+ME;
+  if(!sig){ lastSig=''; if(!LOCAL) hideModal(); return; }
+  LOCAL=false;
+  if(sig===lastSig && modalOpen()) return;
+  lastSig=sig;
+  if(S.B) renderBattle(); else if(S.ui.k==='move') renderMove(); else if(S.ui.k==='event') renderEvent();
+  showModal();
+}
+function sideHTML(i, role, owner){
+  const t=S.terr[i], o=owner??t.owner, e=EMP[o], p=S.players[o];
+  return `<div class="side" style="background:linear-gradient(180deg,${e.light},${e.dark})">
+    <div class="who">${e.crest} ${esc(p.name)} · ${role}</div>
+    <div class="tn">${TERR[i].e} ${TERR[i].n}</div>
+    <div class="tt">⚔️ ${plural(t.troops,'troop')}</div></div>`;
+}
+function moverHTML(min,max,val,label,dis){
+  return `<div style="font-weight:900;font-size:18px">${label}</div><div class="mover">
+    <button class="dc" data-mv="-1" ${dis?'disabled':''}>−</button><span class="num">${val}</span><button class="dc" data-mv="1" ${dis?'disabled':''}>+</button>
+    <span style="font-size:15px;opacity:.7">(${min}–${max})</span></div>`;
+}
+function bindMover(cur){ $('mbox').querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{ sfx.click(); act('mv',{v:cur+ +b.dataset.mv}); }); }
+function unitRow(side){
+  const B=S.B, who= side==='A'?S.cur:B.def, e=EMP[who], p=S.players[who];
+  const mineSide = MODE!=='client' || ME===who;
+  const ch = side==='A'?B.tA:B.tD, both=B.tA&&B.tD;
+  let inner;
+  if(both) inner=`<div style="font-size:21px;font-weight:900">${U[ch].i} ${U[ch].n}</div>`;
+  else if(ch) inner='✅ Ready! <i>(secret)</i>';
+  else inner=Object.keys(U).map(k=>`<button class="ub" data-side="${side}" data-u="${k}" ${mineSide?'':'disabled'}>${U[k].i} ${U[k].n}</button>`).join('')
+       + (side==='D'?`<button class="ub" data-side="D" data-u="?" ${mineSide||canAct()?'':'disabled'} title="Random">🎲</button>`:'');
+  return `<div class="ubox"><div class="lab">${e.crest} ${esc(p.name)} · ${side==='A'?'ATTACK':'DEFENSE'}</div>${inner}</div>`;
+}
+function renderBattle(){
+  const B=S.B, A=S.terr[B.a], D=S.terr[B.d], me=canAct();
+  const ready = !S.units || (B.tA&&B.tD);
+  const flags=[]; if(S.fury) flags.push(`⚔️ FURY +1 (${plural(S.fury,'roll')})`); if(S.oneDie) flags.push(`⚡ DEFENDER: 1 🎲 (${plural(S.oneDie,'roll')})`);
+  if(S.stamp) flags.push(`🐘 STAMPEDE (${plural(S.stamp,'roll')})`); if(D.fort && !B.conquered) flags.push('🪓 STONE FORT: +1 defense');
+  const nA=Math.min(3,A.troops-1);
+  let units='';
+  if(S.units && !B.conquered){
+    units=`<div class="units">${unitRow('A')}${unitRow('D')}</div>`;
+    if(B.tA&&B.tD) units+=`<div class="uwin">${U[B.tA].i} ${U[B.tA].n} vs ${U[B.tD].i} ${U[B.tD].n} → ${B.uw==='A'?'ATTACK wins! +1 on the highest 🎲':B.uw==='D'?'DEFENSE wins! +1 on the highest 🎲':'Same army: no bonus'}</div>`;
+    else units+=`<div style="font-size:13px;font-weight:800;color:var(--ink2)">🐎 beat 🏹 · 🏹 beat 🔱 · 🔱 beat 🐎</div>`;
+  }
+  const say = B.conquered ? `<small>VICTORY SPEECH</small>"We conquered ${TERR[B.d].n}!"`
+    : `<small>SAY IT LOUD</small>"I'm attacking <span style="color:#b3200f">${TERR[B.d].n}</span> from ${TERR[B.a].n}!"<div style="font-size:.62em;margin-top:6px;color:#1e3a5f">${esc(S.players[B.def].name)}: "We will defend ${TERR[B.d].n}!"</div>${flags.length?`<div class="flags">${flags.join(' · ')}</div>`:''}`;
+  let btns;
+  if(B.conquered) btns=`<button class="btn big" id="bOk" ${me?'':'disabled'}>✅ CONFIRM</button>`;
+  else if(B.auto) btns=`<button class="btn big" id="bStop" ${me?'':'disabled'}>✋ STOP</button>`;
+  else { const can=me && A.troops>=2 && !B.rolling && ready;
+    btns=`<button class="btn big" id="bRoll" ${can?'':'disabled'}>🎲 ROLL!</button><button class="btn big" id="bAuto" ${can?'':'disabled'} style="font-size:20px">⚡ ROLL TO THE END</button><button class="btn" id="bRet" ${me&&!B.rolling?'':'disabled'}>🏳️ Retreat</button>`; }
+  $('mbox').innerHTML=`<div class="mtitle">⚔️ BATTLE! ⚔️</div>
+    <div class="vs">${sideHTML(B.a,'ATTACK')}<div class="vsx">VS</div>${B.conquered?sideHTML(B.d,'CONQUERED!'):sideHTML(B.d,'DEFENSE',B.def)}</div>
+    <div class="say">${say}</div>${units}
+    <div class="arena"><div class="dset" id="dA"></div><div class="vsmall">VS</div><div class="dset" id="dD"></div></div>
+    <div class="result">${B.done?B.res:(B.rolling?'🎲 ...':'')}</div>
+    ${B.done&&B.rep?`<div class="report"><small>📜 WAR REPORT</small>${B.rep}</div>`:''}
+    ${B.conquered?moverHTML(B.moveMin,B.moveMax,B.move,`Move troops into ${TERR[B.d].n} (max 3)`,!me):''}
+    ${A.troops<2&&B.done&&!B.conquered?'<div style="font-size:17px;font-weight:900;color:#7a1515">Your army is too small to attack again.</div>':''}
+    <div class="mbtns">${btns}</div>`;
+  // dice
+  if(!B.rid){
+    $('dA').innerHTML=Array.from({length:Math.max(1,nA)},()=>dieHTML('a')).join('');
+    $('dD').innerHTML=Array.from({length:Math.min(D.troops,S.oneDie?1:2)},()=>dieHTML('d')).join('');
+    document.querySelectorAll('#dA .cube,#dD .cube').forEach(c=>c.style.transform='rotateX(-20deg) rotateY(25deg)');
+  } else if(B.rid!==animRid && B.rolling){
+    animRid=B.rid; throwDice($('dA'),B.ra,'a',B.auto); throwDice($('dD'),B.rd,'d',B.auto);
+  } else {
+    animRid=B.rid; staticDice($('dA'),B.ra,'a'); staticDice($('dD'),B.rd,'d');
+    if(B.done){ $('dA').querySelectorAll('.die').forEach((d,k)=>B.rA[k]&&d.classList.add(B.rA[k])); $('dD').querySelectorAll('.die').forEach((d,k)=>B.rD[k]&&d.classList.add(B.rD[k])); }
+  }
+  if(B.rid){
+    $('dA').querySelectorAll('.die').forEach((d,k)=>{ if(B.bA[k]) d.insertAdjacentHTML('beforeend',`<span class="plus">+${B.bA[k]}</span>`); });
+    $('dD').querySelectorAll('.die').forEach((d,k)=>{ if(B.bD[k]) d.insertAdjacentHTML('beforeend',`<span class="plus">+${B.bD[k]}</span>`); });
+  }
+  $('mbox').querySelectorAll('.ub').forEach(b=>b.onclick=()=>act('unit',{side:b.dataset.side,u:b.dataset.u}));
+  if($('bOk')) $('bOk').onclick=()=>act('conquer');
+  if($('bStop')) $('bStop').onclick=()=>act('stop');
+  if($('bRoll')) $('bRoll').onclick=()=>{ ac(); act('roll'); };
+  if($('bAuto')) $('bAuto').onclick=()=>{ ac(); act('auto'); };
+  if($('bRet')) $('bRet').onclick=()=>act('retreat');
+  if(B.conquered) bindMover(B.move);
+}
+function dieHTML(cls){
+  const P={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+  return `<div class="die ${cls}"><div class="cube">${[1,2,3,4,5,6].map(f=>`<div class="face f${f}">${[...Array(9).keys()].map(k=>`<i class="${P[f].includes(k)?'on':''}"></i>`).join('')}</div>`).join('')}</div></div>`;
+}
+const FACE_ROT={1:[0,0],6:[0,180],2:[0,-90],5:[0,90],3:[-90,0],4:[90,0]};
+function throwDice(container, vals, cls, fast){
+  container.innerHTML=vals.map(()=>dieHTML(cls)).join('');
+  const cubes=[...container.querySelectorAll('.cube')];
+  cubes.forEach(c=>{ c.style.transition='none'; c.style.transform=`rotateX(${rnd(360)}deg) rotateY(${rnd(360)}deg)`; });
+  void container.offsetWidth;
+  cubes.forEach((c,k)=>{ const [rx,ry]=FACE_ROT[vals[k]];
+    c.style.transition=`transform ${(fast?.7:.9)+k*0.12}s cubic-bezier(.15,.8,.25,1.05)`;
+    c.style.transform=`rotateX(${rx+720}deg) rotateY(${ry+720}deg)`; });
+}
+function staticDice(container, vals, cls){
+  container.innerHTML=vals.map(()=>dieHTML(cls)).join('');
+  [...container.querySelectorAll('.cube')].forEach((c,k)=>{ const [rx,ry]=FACE_ROT[vals[k]]; c.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; });
+}
+function renderMove(){
+  const u=S.ui, A=S.terr[u.a], me=canAct();
+  $('mbox').innerHTML=`<div class="mtitle">🐎 MOVE TROOPS</div>
+    <div class="vs">${sideHTML(u.a,'FROM')}<div class="vsx" style="color:#2c8f3c">➜</div>${sideHTML(u.b,'TO')}</div>
+    <div class="say"><small>SAY IT LOUD</small>"I'm moving my troops from ${TERR[u.a].n} to ${TERR[u.b].n}!"</div>
+    ${moverHTML(1,A.troops-1,u.v,'How many troops?',!me)}
+    <div class="mbtns"><button class="btn big" id="mvOk" ${me?'':'disabled'}>✅ MOVE</button><button class="btn" id="mvNo" ${me?'':'disabled'}>Cancel</button></div>`;
+  bindMover(u.v);
+  $('mvOk').onclick=()=>act('moveok'); $('mvNo').onclick=()=>act('movecancel');
+}
+function renderEvent(){
+  const u=S.ui, ev=EVENTS[u.id], e=EMP[u.target], pl=S.players[u.target];
+  const can = MODE!=='client' || ME===u.target || ME===S.cur;
+  const head=`<div class="mtitle">📜 EVENT CARD</div>
+    <div class="turnchip" style="display:inline-flex;background:linear-gradient(180deg,${e.light},${e.dark});margin-bottom:8px"><span class="c">${e.crest}</span>${esc(pl.name)}</div>`;
+  const sub=s=>s.replace(/\{S\}/g,u.so);
+  let body;
+  if(ev.t==='q'){
+    body=`<div class="bigcard" style="height:auto;width:auto;max-width:640px;padding:18px 22px;animation:none"><div class="ci" style="font-size:56px">🏛️</div><div class="evq">${ev.q}</div></div>
+      <div class="opts">${u.order.map(k=>`<button class="opt ${u.pick!==null&&k===ev.a?'right':''} ${u.pick===k&&k!==ev.a?'wrong':''}" data-k="${k}" ${can&&u.pick===null?'':'disabled'}>${ev.o[k]}</button>`).join('')}</div>`;
+  } else {
+    body=`<div class="bigcard" style="height:auto;width:auto;max-width:640px;padding:18px 22px;animation:none"><div class="ci" style="font-size:64px">${ev.icon}</div><div class="cn">${ev.title}</div><div class="evq" style="font-size:24px">${sub(ev.q)}</div></div>
+      <div style="font-weight:900;font-size:18px;color:#1e3a5f">Choose... and tell us WHY! 🗣️</div>
+      <div class="opts">${ev.o.map((o,k)=>`<button class="opt ${u.pick===k?'right':''}" data-k="${k}" ${can&&u.pick===null?'':'disabled'}>${String.fromCharCode(65+k)}) ${sub(o)}</button>`).join('')}</div>`;
+  }
+  $('mbox').innerHTML=`${head}${body}<div class="result">${u.msg}</div>
+    <div class="mbtns">${u.pick!==null?`<button class="btn big" id="evOk" ${can?'':'disabled'}>Continue ▶</button>`:''}</div>`;
+  $('mbox').querySelectorAll('.opt').forEach(b=>b.onclick=()=>act('evpick',{k:+b.dataset.k}));
+  if($('evOk')) $('evOk').onclick=()=>act('evok');
+}
+function renderOver(){
+  const u=S.ui, w=u.w, e=EMP[w], pw=S.players[w];
+  const rank=rankList().sort((a,b)=>(b.i===w)-(a.i===w));
+  const head = u.why==='mission' ? '🎯 SECRET MISSION COMPLETE!' : u.why==='conquest' ? '🌍 THE WORLD IS CONQUERED!' : '⏳ TIME\'S UP! The most territories wins.';
+  $('overBox').innerHTML=`<div class="mtitle" style="font-size:24px;color:#1e3a5f">${head}</div>
+    <span class="wcrest">${e.crest}</span>
+    <div class="logo" style="font-size:64px">VICTORY!</div>
+    <div style="font-family:'Russo One';font-weight:900;font-size:32px;margin:6px 0">${esc(pw.name)} · ${e.name}</div>
+    ${u.why==='mission'?`<div class="say"><small>THE SECRET MISSION WAS</small>${missionText(pw.mission)}</div>`:''}
+    <div class="say"><small>VICTORY SPEECH</small>"Today, my empire..."</div>
+    <table class="rank">${rank.map((r,k)=>`<tr><td>${['🥇','🥈','🥉'][k]||(k+1)}</td><td style="text-align:left">${EMP[r.i].crest} ${esc(r.p.name)}${r.p.alive?'':' ☠️'}</td><td>🏳️ ${r.t}</td><td>⚔️ ${r.tr}</td><td>⭐ Lv ${lvlOf(r.p.xp)}</td>
+      <td class="mtxt">🎯 ${missionText(r.p.mission)}<br><span class="prog">${missionProg(r.i)}</span></td></tr>`).join('')}</table>
+    <div class="mbtns">${MODE==='client'?'<div style="font-weight:900;font-size:18px">⏳ The host can start a NEW WAR</div>':'<button class="btn big" id="oNew">🔄 NEW WAR</button>'}</div>`;
+  if($('oNew')) $('oNew').onclick=newWar;
+}
+
+/* ---------- local modals (only on this screen) ---------- */
+function modalOpen(){ return $('modal').classList.contains('on'); }
+function showModal(){ $('modal').classList.add('on'); }
+function hideModal(){ $('modal').classList.remove('on'); }
+function localModal(html){ if(S && (S.B || (S.ui&&S.ui.k!=='over'))) return false; LOCAL=true; lastSig=''; $('mbox').innerHTML=html; showModal(); return true; }
+function closeLocal(){ LOCAL=false; hideModal(); renderUI(); }
+function openCard(idx){
+  const v=V(), c=S.players[v].cards[idx]; if(!c) return; const C=CARDS[c.k];
+  const lock=c.t>=S.turnNo, ok = v===S.cur && canAct() && !lock && cardPlayable(c.k) && !S.mode;
+  sfx.card();
+  if(!localModal(`<div class="bigcard"><div style="font-size:34px;font-weight:900;color:${SYMC[c.s]}">${SYMS[c.s]}</div><div class="ci">${C.icon}</div><div class="cn">${C.name}</div><div class="ct">${C.txt}</div></div>
+    <div class="say"><small>SAY IT LOUD</small>${C.say}</div>
+    <div style="font-weight:800;font-size:16px">${lock?'🔒 NEW card: you can play it NEXT turn.<br>':''}Or keep it: 3 cards with the SAME symbol (■■■) or ALL DIFFERENT (■▲●) = troops!</div>
+    <div class="mbtns"><button class="btn big" id="cPlay" ${ok?'':'disabled'}>✨ PLAY</button><button class="btn" id="cNo">Keep it</button></div>`)) return;
+  $('cPlay').onclick=()=>{ closeLocal(); act('play',{idx}); };
+  $('cNo').onclick=closeLocal;
+}
+function openMission(){
+  const v=V(), pl=S.players[v];
+  if(!localModal(`<div class="mtitle">🎯 SECRET MISSION</div>
+    <div class="say"><small>${EMP[v].crest} ${esc(pl.name).toUpperCase()} ONLY!</small>🙈 Everybody else: close your eyes!</div>
+    <div class="mbtns"><button class="btn big" id="mkShow">👁️ SHOW</button><button class="btn" id="mkNo">Close</button></div>`)) return;
+  $('mkNo').onclick=closeLocal;
+  $('mkShow').onclick=()=>{
+    $('mbox').innerHTML=`<div class="mtitle">🎯 ${esc(pl.name)}'s SECRET MISSION</div>
+      <div class="bigcard" style="height:auto;width:auto;max-width:560px;padding:20px"><div class="ci" style="font-size:64px">📜</div><div class="evq">${missionText(pl.mission)}</div><div class="prog" style="font-size:17px">${missionProg(v)}</div></div>
+      <div class="say"><small>COMPLETE IT = INSTANT VICTORY 🏆</small>"My mission is a SECRET!" 🤫</div>
+      <div class="mbtns"><button class="btn big" id="mkHide">🙈 HIDE</button></div>`;
+    $('mkHide').onclick=closeLocal;
+  };
+}
+function openDeal(){
+  if(!localModal(`<div class="mtitle">🤝 MAKE A DEAL</div>
+    <div class="dealgrid">
+      <div>"Let's be allies!" 🤝</div><div>"I trust you."</div>
+      <div>"If you attack ___, I'll ___."</div><div>"Let's attack ___ together!"</div>
+      <div>"I won't attack you if..."</div><div>"Nothing personal! 😅"</div>
+      <div>"You betrayed me! 😡"</div><div>"Revenge is coming! 🔥"</div>
+      <div>"Deal! ✅"</div><div>"No deal! ✋"</div>
+    </div>
+    <div class="mbtns"><button class="btn big" id="dOk">Close</button></div>`)) return;
+  sfx.click(); $('dOk').onclick=closeLocal;
+}
+function openMenu(){
+  if(!localModal(`<div class="mtitle">☰ MENU</div>
+    <div class="mbtns" style="flex-direction:column;align-items:center">
+      <button class="btn" id="mResume">▶ Back to the war</button>
+      <button class="btn" id="mEnd">🏁 END THE WAR NOW (show the winner)</button>
+      <button class="btn" id="mNew">🔄 New game</button>
+    </div>`)) return;
+  $('mResume').onclick=closeLocal;
+  $('mEnd').onclick=()=>{ if(confirm('End the war now? The empire with the most territories wins.')){ closeLocal(); act('end'); } };
+  $('mNew').onclick=()=>{ if(confirm('Start a new game? This war will be lost.')){ closeLocal(); newWar(); } };
+}
+function openHelp(){
+  const html=`<div class="mtitle">❓ HOW TO PLAY</div>
+    <div class="help">
+      <div class="goal"><b>🎯 GOAL</b>Every empire has a SECRET MISSION. Complete it = INSTANT VICTORY! When the time is up, the empire with the MOST territories wins.</div>
+      <div><b>1 · REINFORCE 🪖</b>New troops: 1 for every 3 territories (min 3) + 🌍 CONTINENT BONUS. Click your lands to place them. Cards ■■■ or ■▲● = more troops!</div>
+      <div><b>2 · ATTACK ⚔️</b>Click your army (2+ troops), then an enemy neighbor. Choose 🐎 KNIGHTS, 🏹 ARCHERS or 🔱 SPEARS (🐎 beat 🏹 · 🏹 beat 🔱 · 🔱 beat 🐎). ROLL or ⚡ ROLL TO THE END. Max 3 troops go into the new land.</div>
+      <div><b>3 · MOVE 🐎</b>(optional) Move troops ONE time between two neighbor lands. Then END TURN.</div>
+      <div><b>⭐ HERO</b>10 levels! Conquer = +1 XP (max 2 per turn). Your power grows at levels 4, 7 and 10. After you use it, it recharges for 1 turn ⏳.</div>
+      <div><b>🃏 CARDS</b>Conquer 1+ land = 1 card at the end of your turn. Play it from your NEXT turn. 🕵️ SPY blocks an enemy's next card.</div>
+      <div><b>📜 EVENTS</b>Every round, one empire gets an event. Choose... and say WHY!</div>
+    </div>
+    <div class="mbtns"><button class="btn big" id="hOk">GOT IT! ⚔️</button></div>`;
+  if(S){ if(!localModal(html)) return; }
+  else { LOCAL=true; $('mbox').innerHTML=html; showModal(); }
+  $('hOk').onclick=closeLocal;
+}
+
+/* ---------- small UI helpers ---------- */
+function toast(msg){ const d=document.createElement('div'); d.className='toast'; d.innerHTML=msg; $('toasts').appendChild(d); setTimeout(()=>d.remove(),2900); }
+function banner(){
+  if(!S) return;
+  const e=EMP[S.cur], b=$('banner');
+  b.style.background=`linear-gradient(90deg,transparent,${e.dark} 12%,${e.color} 50%,${e.dark} 88%,transparent)`;
+  b.innerHTML=`<span class="bc">${e.crest}</span><span>${esc(P().name).toUpperCase()}'S TURN<span class="bs">${e.name.toUpperCase()} · ROUND ${S.round}</span></span>`;
+  b.classList.remove('go'); void b.offsetWidth; b.classList.add('go');
+}
+function shake(i){ const el=hexEl(i); if(!el) return; el.classList.remove('shake'); void el.getBoundingClientRect(); el.classList.add('shake'); }
+function pop(i){ const el=hexEl(i); if(!el) return; el.classList.remove('pop'); void el.getBoundingClientRect(); el.classList.add('pop'); }
+
+/* =========================================================
+   PARTICLES
+   ========================================================= */
+const cv=$('fx'), cx=cv.getContext('2d'); let parts=[], fxOn=false;
+function sizeCv(){ cv.width=innerWidth*devicePixelRatio; cv.height=innerHeight*devicePixelRatio; cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+addEventListener('resize',sizeCv); sizeCv();
+function burst(i,color,n){
+  const el=hexEl(i); if(!el) return; const r=el.querySelector('.base').getBoundingClientRect();
+  const x=r.left+r.width/2, y=r.top+r.height/2;
+  for(let k=0;k<n;k++){ const a=Math.random()*Math.PI*2, s=2+Math.random()*7;
+    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,life:1,dec:.012+Math.random()*.02,sz:3+Math.random()*6,c:color,sq:Math.random()<.4}); }
+  runFx();
+}
+function confetti(color){
+  const cols=[color,'#ffd84a','#fff3cf','#ffffff'];
+  for(let k=0;k<220;k++) parts.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.6,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,life:1,dec:.003,sz:5+Math.random()*7,c:cols[k%4],sq:true,conf:true});
+  runFx();
+}
+function runFx(){ if(fxOn) return; fxOn=true; requestAnimationFrame(stepFx); }
+function stepFx(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0 && p.y<innerHeight+40);
+  parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=p.conf?0.02:0.18; p.vx*=.98; p.life-=p.dec;
+    cx.globalAlpha=Math.max(0,p.life); cx.fillStyle=p.c;
+    if(p.sq){ cx.save(); cx.translate(p.x,p.y); cx.rotate(p.y*.05); cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz*.6); cx.restore(); }
+    else { cx.beginPath(); cx.arc(p.x,p.y,p.sz/2,0,7); cx.fill(); } });
+  cx.globalAlpha=1;
+  if(parts.length) requestAnimationFrame(stepFx); else { fxOn=false; cx.clearRect(0,0,innerWidth,innerHeight); }
+}
+
+/* =========================================================
+   SOUND (synth, no files)
+   ========================================================= */
+let AC=null;
+function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } } if(AC.state==='suspended') AC.resume(); return AC; }
+function tone(f,d,type='sine',v=.12,w=0,f2){ if(muted) return; const a=ac(); if(!a) return; const t=a.currentTime+w;
+  const o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(v,t+.015); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+d+.05); }
+function noise(d,v=.2,w=0,ff=1200,q=1){ if(muted) return; const a=ac(); if(!a) return; const t=a.currentTime+w;
+  const buf=a.createBuffer(1,Math.floor(a.sampleRate*d),a.sampleRate), ch=buf.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*(1-i/ch.length);
+  const s=a.createBufferSource(), f=a.createBiquadFilter(), g=a.createGain(); s.buffer=buf; f.type='bandpass'; f.frequency.value=ff; f.Q.value=q; g.gain.value=v;
+  s.connect(f).connect(g).connect(a.destination); s.start(t); }
+const sfx={
+  click:()=>tone(660,.07,'triangle',.08),
+  no:()=>tone(180,.15,'square',.05,0,120),
+  place:()=>{tone(520,.08,'triangle',.1); tone(780,.1,'triangle',.07,.05);},
+  dice:()=>{for(let k=0;k<9;k++) noise(.05,.35,k*.09+Math.random()*.04,2500+Math.random()*2000,3);},
+  hit:(good)=>{noise(.35,.5,0,180,.8); tone(good?140:90,.35,'sawtooth',.08,0,50);},
+  boom:()=>{noise(.6,.6,0,120,.6); tone(80,.5,'sine',.25,0,35);},
+  conquer:()=>{[392,523,659,784].forEach((f,k)=>tone(f,.35,'sawtooth',.06,k*.11)); tone(1046,.6,'triangle',.08,.44);},
+  level:()=>{[523,659,784,1046,1318].forEach((f,k)=>tone(f,.18,'triangle',.08,k*.07));},
+  card:()=>{noise(.25,.25,0,3500,.7); tone(900,.15,'sine',.05,.08,1400);},
+  event:()=>{tone(330,.5,'sawtooth',.05); tone(440,.5,'sawtooth',.05,.15); tone(660,.7,'triangle',.07,.3);},
+  turn:()=>{tone(196,.45,'sawtooth',.05,0,220); tone(294,.6,'sawtooth',.05,.18);},
+  horn:()=>{tone(147,.6,'sawtooth',.07,0,165); tone(220,.7,'sawtooth',.05,.1);},
+  march:()=>{[0,.12,.24].forEach(w=>noise(.08,.4,w,300,1));},
+  drums:()=>{[0,.15,.3,.38,.46].forEach(w=>{noise(.12,.5,w,110,.7); tone(70,.15,'sine',.2,w,45);});},
+  shield:()=>{tone(880,.3,'sine',.08,0,1320); tone(1320,.4,'sine',.05,.1);},
+  coins:()=>{[0,.07,.14,.21].forEach(w=>tone(1500+Math.random()*600,.12,'triangle',.06,w));}
+};
+
+/* =========================================================
+   TIMER (host / this PC only)
+   ========================================================= */
+let tick=0;
+setInterval(()=>{
+  if(MODE==='client' || !S || S.screen!=='game' || S.paused || S.timeLeft<0) return;
+  S.timeLeft-=1000; tick++;
+  if(S.timeLeft===5*60000) toast('⏳ 5 MINUTES LEFT!');
+  if(S.timeLeft<=0){
+    S.timeLeft=0; if(S.B&&S.B.rolling) return;
+    if(S.B&&S.B.conquered){ const A=S.terr[S.B.a],D=S.terr[S.B.d]; A.troops-=S.B.move; D.troops+=S.B.move; }
+    S.B=null; S.ui=null; gameOver('time'); commit(); return;
+  }
+  renderTimer();
+  if(MODE==='host') bcast({t:'time',v:S.timeLeft,p:S.paused});
+  if(tick%5===0) save();
+},1000);
+
+/* =========================================================
+   ONLINE (PeerJS — free, no server of ours)
+   ========================================================= */
+const PFX='miniwar4-room-';
+function loadPeer(cb){
+  if(window.Peer) return cb();
+  const s=document.createElement('script'); s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';
+  s.onload=cb; s.onerror=()=>toast('❌ Could not load the online system. Internet OK?'); document.head.appendChild(s);
+}
+function genCode(){ const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789'; return Array.from({length:4},()=>A[rnd(A.length)]).join(''); }
+function bcast(m){ conns.forEach(c=>{ if(c.open) try{ c.send(m); }catch(e){} }); }
+function lobbyList(){
+  const names = S ? S.players.map(p=>p.out?'':p.name) : curNames();
+  return ALL.filter(i=>names[i]).map(i=>({i,name:names[i],crest:EMP[i].crest,taken:conns.some(c=>c.open&&c.p===i)}));
+}
+function bcastLobby(){ if(MODE==='host') bcast({t:'lobby',players:lobbyList()}); }
+function startHost(code,tries=0,cb){
+  loadPeer(()=>{
+    MODE='host'; ROOM=code||genCode();
+    try{ localStorage.setItem('miniwar4-room',ROOM); }catch(e){}
+    peer=new Peer(PFX+ROOM);
+    peer.on('open',()=>{ updateHostInfo(); if(cb) cb(); });
+    peer.on('error',e=>{
+      if(e.type==='unavailable-id' && tries<10){ try{peer.destroy();}catch(_){} setTimeout(()=>startHost(ROOM,tries+1,cb),2500); }
+      else if(e.type!=='peer-unavailable') toast('🌐 Online problem: '+e.type);
+    });
+    peer.on('disconnected',()=>{ try{ peer.reconnect(); }catch(e){} });
+    peer.on('connection',c=>{
+      c.p=null;
+      c.on('open',()=>{ conns.push(c); c.send({t:'lobby',players:lobbyList()}); updateHostInfo(); });
+      c.on('data',m=>onHostMsg(c,m));
+      c.on('close',()=>{ conns=conns.filter(x=>x!==c); updateHostInfo(); bcastLobby(); if(S&&S.screen!=='title') commit(); });
+    });
+    updateHostInfo();
+  });
+}
+function onHostMsg(c,m){
+  if(!m) return;
+  if(m.t==='claim'){ c.p=(m.i==null?null:+m.i); bcastLobby(); updateHostInfo(); if(S){ commit(); } return; }
+  if(m.t==='act' && S && c.p!=null) apply(m.type,m.d||{},c.p);
+}
+function updateHostInfo(){
+  const el=$('hostInfo'); if(!el) return;
+  if(MODE!=='host'){
+    $('hostBtn').style.display='';
+    el.innerHTML=`<span class="lbl">or join a room:</span> <input id="joinCode" maxlength="4" placeholder="CODE"> <button class="btn" id="joinBtn">🔗 JOIN</button>`;
+    $('joinBtn').onclick=()=>{ const c=$('joinCode').value.trim().toUpperCase(); if(c.length===4){ history.replaceState(null,'','?room='+c); startClient(c); } else toast('Type the 4-letter code'); };
+    return;
+  }
+  $('hostBtn').style.display='none';
+  const link=location.origin+location.pathname+'?room='+ROOM;
+  const who=conns.filter(c=>c.open).map(c=>c.p!=null?EMP[c.p].crest+' '+esc(lobbyList().find(x=>x.i===c.p)?.name||'?'):'👀 choosing...');
+  el.innerHTML=`<span class="lbl">ROOM</span> <span class="code">${ROOM}</span> <button class="btn" id="copyBtn">📋 Copy link</button>
+    <span class="lbl" style="font-size:18px">${who.length?'🟢 '+who.join(' · '):'Waiting for players...'}</span>`;
+  $('copyBtn').onclick=()=>{
+    const done=()=>toast('📋 Link copied! Send it to the players.');
+    if(navigator.clipboard) navigator.clipboard.writeText(link).then(done).catch(()=>prompt('Copy this link:',link)); else prompt('Copy this link:',link);
+  };
+  $('startBtn').textContent='⚔️ START ONLINE WAR';
+}
+function startClient(code){
+  MODE='client'; ROOM=code.toUpperCase(); LOBBY=null; JOINMSG='Connecting to room '+ROOM+'...';
+  try{ const m=sessionStorage.getItem('mw4-me-'+ROOM); ME = m==null||m==='' ? null : +m; }catch(e){ ME=null; }
+  $('setup').style.display='none'; showJoin();
+  loadPeer(()=>{
+    peer=new Peer();
+    peer.on('open',connectHost);
+    peer.on('error',e=>{
+      if(e.type==='peer-unavailable'){ JOINMSG='Room '+ROOM+' not found yet... trying again ⏳'; if(!S) showJoin(); setTimeout(connectHost,3000); }
+      else { JOINMSG='Online problem: '+e.type; if(!S) showJoin(); }
+    });
+    peer.on('disconnected',()=>{ try{ peer.reconnect(); }catch(e){} });
+  });
+}
+let reconnecting=false;
+function connectHost(){
+  if(!peer || peer.destroyed) return;
+  if(peer.disconnected){ try{ peer.reconnect(); }catch(e){} setTimeout(connectHost,2000); return; }
+  const c=peer.connect(PFX+ROOM,{reliable:true,serialization:'json'});
+  hostConn=c;
+  c.on('open',()=>{ reconnecting=false; if(ME!=null) c.send({t:'claim',i:ME}); });
+  c.on('data',onClientMsg);
+  c.on('close',()=>{ if(hostConn!==c||reconnecting) return; reconnecting=true; toast('🔌 Connection lost... reconnecting'); setTimeout(()=>{ reconnecting=false; connectHost(); },2500); });
+}
+function onClientMsg(m){
+  if(!m) return;
+  if(m.t==='lobby'){ LOBBY=m.players; if(!S||S.screen==='title') showJoin(); }
+  else if(m.t==='state'){ const first=!S; S=m.S; if(first) enterGame(); paint(m.f); }
+  else if(m.t==='time'){ if(S){ S.timeLeft=m.v; S.paused=m.p; renderTimer(); } }
+  else if(m.t==='reset'){ S=null; $('over').classList.remove('on'); hideModal(); $('game').style.display='none'; $('title').style.display='flex'; showJoin(); }
+}
+function showJoin(){
+  const box=$('joinBox'); box.style.display='flex';
+  if(!LOBBY){ box.innerHTML=`<div class="lbl" style="font-size:24px">🔌 ${esc(JOINMSG)}</div>`; return; }
+  const mine=LOBBY.find(p=>p.i===ME);
+  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:14px;align-items:center">
+    <div class="lbl" style="font-size:24px">🌐 ROOM <span class="code">${ROOM}</span></div>
+    <div class="lbl" style="font-size:24px">${mine?`✅ You are <b>${mine.crest} ${esc(mine.name)}</b>. Waiting for the host to START... ⏳`:'WHO ARE YOU? 👇'}</div>
+    <div class="who-list">${LOBBY.map(p=>`<button class="btn ${p.i===ME?'big':''}" data-i="${p.i}">${p.crest} ${esc(p.name)}${p.taken&&p.i!==ME?' 🟢':''}</button>`).join('')}</div></div>`;
+  box.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
+    ME=+b.dataset.i; try{ sessionStorage.setItem('mw4-me-'+ROOM,ME); }catch(e){}
+    if(hostConn&&hostConn.open) hostConn.send({t:'claim',i:ME});
+    ac(); sfx.click(); showJoin();
+  });
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+const curNames=()=>ALL.map(i=>($('nm'+i)?$('nm'+i).value.trim():''));
+function enterGame(){ $('title').style.display='none'; $('game').style.display='grid'; LOCAL=false; lastSig=''; lastOver=''; buildMap(); }
+function showTitle(){
+  S=null; LOCAL=false; hideModal(); $('over').classList.remove('on');
+  $('game').style.display='none'; $('title').style.display='flex';
+  if(MODE==='client'){ $('setup').style.display='none'; showJoin(); return; }
+  $('setup').style.display='flex'; $('joinBox').style.display='none';
+  let names=null; try{ names=JSON.parse(localStorage.getItem('miniwar4-names')); }catch(e){}
+  if(!Array.isArray(names)||names.length!==EMP.length) names=EMP.map((_,i)=>DEFAULT_NAMES[i]||'');
+  $('empCards').innerHTML=EMP.map((e,i)=>`<div class="ecard" style="--k:${i}">
+    <div class="crest" style="background:linear-gradient(180deg,${e.light},${e.dark})">${e.crest}</div>
+    <h3 style="color:${e.dark}">${e.name}</h3>
+    <div class="hero">${e.hicon} Hero: ${e.hero}</div>
+    <div class="ab"><b>${e.ab}</b><br>${e.t(e.n[0])}</div>
+    <input id="nm${i}" value="${esc(names[i])}" maxlength="14" spellcheck="false" placeholder="(no player)">
+    <div class="pick">${DEFAULT_NAMES.map(n=>`<button data-i="${i}" data-n="${n}">${n}</button>`).join('')}</div>
+  </div>`).join('');
+  const mark=()=>{
+    document.querySelectorAll('.pick button').forEach(b=>b.classList.toggle('on',$('nm'+b.dataset.i).value===b.dataset.n));
+    ALL.forEach(i=>document.querySelectorAll('.ecard')[i].classList.toggle('off',!$('nm'+i).value.trim()));
+    try{ localStorage.setItem('miniwar4-names',JSON.stringify(curNames())); }catch(e){}
+    bcastLobby(); updateHostInfo();
+  };
+  document.querySelectorAll('.pick button').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i, n=b.dataset.n, mine=$('nm'+i).value;
+    if(mine===n){ $('nm'+i).value=''; }
+    else { ALL.forEach(j=>{ if(j!==i && $('nm'+j).value===n) $('nm'+j).value=mine; }); $('nm'+i).value=n; }
+    sfx.click(); mark();
+  });
+  ALL.forEach(i=>$('nm'+i).oninput=mark); mark();
+  $('contBtn').style.display=load()?'':'none';
+  updateHostInfo();
+}
+$('shuffleBtn').onclick=()=>{
+  const v=shuffle(ALL.map(i=>$('nm'+i).value));
+  v.forEach((n,i)=>$('nm'+i).value=n); sfx.dice();
+  $('nm0').dispatchEvent(new Event('input'));
+  document.querySelectorAll('.ecard').forEach(c=>{ c.style.animation='none'; void c.offsetWidth; c.style.animation=''; });
+};
+$('startBtn').onclick=()=>{
+  ac();
+  const names=curNames();
+  if(names.filter(Boolean).length<2){ toast('At least 2 players!'); return; }
+  enterGame(); newGame(names, +$('timeSel').value, $('unitsChk').checked); commit();
+};
+$('contBtn').onclick=()=>{
+  ac(); const s=load(); if(!s) return;
+  const go=()=>{ S=s; S.paused=false; S.sel=null; S.mode=null; enterGame(); fx('banner'); commit(); };
+  if(s.online && MODE!=='host'){ let r=null; try{ r=localStorage.getItem('miniwar4-room'); }catch(e){} startHost(r||undefined,0,go); }
+  else go();
+};
+$('hostBtn').onclick=()=>{ ac(); startHost(); };
+$('nextBtn').onclick=()=>act('next');
+$('timer').onclick=()=>{ if(MODE!=='client') act('pause'); };
+$('dealBtn').onclick=openDeal;
+$('helpBtn').onclick=openHelp; $('helpBtn2').onclick=openHelp;
+$('evBtn').onclick=()=>act('event');
+$('muteBtn').onclick=()=>{ muted=!muted; try{localStorage.setItem('miniwar-mute',muted?'1':'0');}catch(e){} $('muteBtn').textContent=muted?'🔇':'🔊'; if(!muted) sfx.click(); };
+$('menuBtn').onclick=openMenu;
+
+addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(!S || S.screen!=='game') return;
+  const k=e.key.toLowerCase();
+  if(k==='escape'){
+    if(LOCAL){ closeLocal(); return; }
+    if(S.B){ act(S.B.conquered?'conquer':'retreat'); return; }
+    if(S.ui&&S.ui.k==='move'){ act('movecancel'); return; }
+    if(S.mode||S.sel!==null){ act('cancel'); return; }
+    return;
+  }
+  if(modalOpen() && !S.B) return;
+  if(S.B){ if(k==='r') act('roll'); else if(k==='a') act('auto'); return; }
+  if(k==='n') act('next');
+  else if(k==='e') act('event');
+  else if(k==='z') act('undo',{});
+  else if(k==='h') act('power');
+});
+
+const qRoom=new URLSearchParams(location.search).get('room');
+if(qRoom){ $('title').style.display='flex'; startClient(qRoom); }
+else showTitle();
+</script>
+</body>
+</html>
