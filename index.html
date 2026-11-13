@@ -1090,7 +1090,7 @@ function render(){
       ${tr<3?`<div class="abtxt" style="opacity:.7;font-size:12px">Level ${TIER_LV[tr+1]}: ${VE.t(VE.n[tr+1])}</div>`:''}
       <button class="btn" id="abBtn" ${!myTurn||vp.cd>0||busy?'disabled':''}>${abState}</button>
     </div>
-    <div class="mission"><b>🎯 SECRET MISSION</b>${showMission?`${missionText(vp.mission)}<div class="prog">${missionProg(v)}</div>`:`<button class="btn" id="misBtn" style="width:100%;font-size:15px;padding:8px">👁️ ${esc(vp.name)}: peek</button>`}</div>
+    <div class="mission" style="${showMission?'order:-1;border:4px solid #f0b429;box-shadow:0 0 0 3px #132238;font-size:16px':''}"><b>🎯 ${showMission?(ME==null?'CLICK YOUR NAME FIRST (F5)':'YOUR '):''}SECRET MISSION</b>${showMission?`${missionText(vp.mission)}<div class="prog">${missionProg(v)}</div>`:`<button class="btn" id="misBtn" style="width:100%;font-size:15px;padding:8px">👁️ ${esc(vp.name)}: peek</button>`}</div>
     <div><h4>🃏 CARDS <span style="font-family:Nunito;font-size:12px;color:var(--ink2)">(■■■ or ■▲● = troops)</span></h4><div class="hand">${[0,1,2,3,4].map(k=>{const c=vp.cards[k];
       return c?`<div class="card ${c.t>=S.turnNo?'lock':''}" data-k="${k}"><span class="sym" style="color:${SYMC[c.s]}">${SYMS[c.s]}</span><div class="ci">${CARDS[c.k].icon}</div><div class="cn">${CARDS[c.k].name}</div></div>`:`<div class="card empty"></div>`;}).join('')}</div>
       <button class="btn" id="tradeBtn" ${myTurn&&set&&S.phase==='reinforce'&&!busy?'':'disabled'}>🔄 TRADE 3 CARDS → +${tradeVal(S.trades)} 🪖</button></div>
