@@ -59,7 +59,7 @@ select.btn{padding:10px 14px}
 .lbl{color:#ffffff;font-weight:800;text-shadow:0 2px 0 #0d1a2c}
 
 /* ---------- GAME LAYOUT ---------- */
-#game{position:fixed;inset:0;display:none;grid-template-rows:74px 1fr;grid-template-columns:270px 1fr 300px;gap:12px;padding:10px 12px 12px}
+#game{position:fixed;inset:0;display:none;grid-template-rows:74px 1fr;grid-template-columns:225px 1fr 245px;gap:12px;padding:10px 12px 12px}
 #top{grid-column:1/4;display:flex;align-items:center;gap:14px;padding:0 14px;border-radius:16px;border:4px solid #132238;
   background:var(--noise),linear-gradient(180deg,#2f5d8f,#1c3a5e);box-shadow:0 6px 0 #132238, inset 0 2px 0 rgba(255,255,255,.2);color:#ffffff}
 .mini-logo{font-family:'Russo One',sans-serif;font-weight:900;font-size:26px;background:linear-gradient(180deg,#fff6c9,#ffd75a 45%,#c98a12);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #132238);white-space:nowrap}
@@ -158,7 +158,7 @@ select.btn{padding:10px 14px}
 .side .tt{font-weight:900;font-size:20px}
 .side .who{font-weight:800;font-size:15px;opacity:.95}
 .vsx{font-family:'Russo One',sans-serif;font-weight:900;font-size:40px;color:#b3200f;text-shadow:0 3px 0 #132238}
-.say{font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(20px,2.3vw,30px);background:#ffffff;border:3px dashed #2f5d8f;border-radius:14px;padding:12px 14px;margin:8px 0;line-height:1.25}
+.say{font-family:'Russo One',sans-serif;font-weight:900;font-size:clamp(17px,1.8vw,24px);background:#ffffff;border:3px dashed #2f5d8f;border-radius:14px;padding:12px 14px;margin:8px 0;line-height:1.25}
 .say small{display:block;font-family:Nunito;font-weight:800;font-size:15px;color:var(--ink2);letter-spacing:2px;margin-bottom:4px}
 .dicechoice{display:flex;gap:8px;justify-content:center;align-items:center;margin:8px 0;font-weight:900;font-size:17px}
 .dc{width:52px;height:46px;border-radius:12px;border:3px solid #132238;background:#ffffff;font-weight:900;font-size:22px;box-shadow:0 4px 0 #132238}
@@ -182,7 +182,7 @@ select.btn{padding:10px 14px}
 .die .plus{position:absolute;top:-12px;right:-12px;background:#ffd75a;color:#132238;border:2px solid #132238;border-radius:10px;font-weight:900;font-size:14px;padding:1px 6px;z-index:2}
 .vsmall{font-family:'Russo One',sans-serif;font-size:28px;font-weight:900;color:#2f5d8f}
 .result{font-weight:900;font-size:22px;min-height:30px;margin:4px 0}
-.report{font-family:'Russo One',sans-serif;font-weight:900;font-size:22px;background:#132238;color:#ffffff;border-radius:14px;padding:10px 14px;margin:8px 0}
+.report{font-family:'Russo One',sans-serif;font-weight:900;font-size:17px;background:#132238;color:#ffffff;border-radius:14px;padding:10px 14px;margin:8px 0}
 .report small{display:block;font-family:Nunito;font-size:13px;letter-spacing:3px;color:#ffd75a}
 .mbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
 .mover{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0;font-weight:900;font-size:20px}
@@ -222,7 +222,7 @@ select.btn{padding:10px 14px}
 .rank td{padding:8px;border-bottom:2px solid rgba(0,0,0,.15)}
 .wcrest{font-size:110px;animation:bob 2s infinite;display:block}
 
-@media (max-width:1200px){#game{grid-template-columns:220px 1fr 240px}.phases .ph{font-size:12px;padding:6px 8px}.mini-logo{display:none}}
+@media (max-width:1200px){#game{grid-template-columns:195px 1fr 215px}.phases .ph{font-size:12px;padding:6px 8px}.mini-logo{display:none}}
 
 /* ---------- v4 ---------- */
 #title{justify-content:flex-start;padding-top:6px;gap:10px}
@@ -292,7 +292,7 @@ select.btn{padding:10px 14px}
       <select class="btn" id="timeSel">
         <option value="60">60 min</option><option value="75">75 min</option><option value="85" selected>85 min</option><option value="90">90 min</option><option value="999">No limit</option>
       </select>
-      <label class="chk"><input type="checkbox" id="unitsChk" checked> 🐎🏹🔱 Unit battles</label>
+      <label class="chk"><input type="checkbox" id="unitsChk"> 🐎🏹🔱 Unit battles</label>
     </div>
     <div class="title-row">
       <button class="btn big" id="startBtn">⚔️ START THE WAR</button>
@@ -324,7 +324,7 @@ select.btn{padding:10px 14px}
   </div>
   <div class="panel" id="left"></div>
   <div id="mapWrap">
-    <svg id="map" viewBox="0 0 1060 600" preserveAspectRatio="xMidYMid meet"></svg>
+    <svg id="map" viewBox="-6 -8 1076 622" preserveAspectRatio="xMidYMid meet"></svg>
     <div id="hint"></div>
   </div>
   <div class="panel" id="right"></div>
@@ -360,7 +360,7 @@ const EMP = [
   {name:'Elephant Empire', crest:'🐘', color:'#13868f', dark:'#0a4b50', light:'#4cc4cc', hero:'Rajah Tusk', hicon:'👑', ab:'STAMPEDE', pw:'stamp', n:[2,3,4,5],
    t:n=>`In your next ${pl_(n,'roll')}, you lose max 1 troop per roll.`}
 ];
-const DEFAULT_NAMES = ['Mateus','Gabriel','Thiago','Fábio'];
+const DEFAULT_NAMES = ['Mateus','Gabriel','Thiago','Teacher'];
 const ALL = EMP.map((_,i)=>i);
 const LV = [0,2,5,9,14,20,27,35,44,54];           // XP needed for level 1..10
 const TIER_LV = [1,4,7,10];
@@ -428,6 +428,14 @@ const EVENTS = [
   {t:'q', q:'Who was the most famous queen of Egypt?', o:['Cleopatra','Elizabeth','Isabella'], a:0},
   {t:'q', q:'The Greek soldiers hid inside a giant wooden...', o:['horse','elephant','ship'], a:0},
   {t:'q', q:'The Great Wall was built in...', o:['China','Japan','India'], a:0},
+  {t:'q', q:'"I ___ the castle yesterday." (attack)', o:['attacked','attacking','attacks'], a:0},
+  {t:'q', q:'The opposite of ATTACK is...', o:['defend','conquer','betray'], a:0},
+  {t:'q', q:'"We ___ Brazil last turn!" (win)', o:['won','winned','win'], a:0},
+  {t:'q', q:'An ALLY is...', o:['a friend in the war','an enemy','a soldier who runs away'], a:0},
+  {t:'q', q:'Which one is correct?', o:['There are three armies.','There is three armies.','There are three army.'], a:0},
+  {t:'q', q:'"If I ___ you, I would attack Asia."', o:['were','am','be'], a:0},
+  {t:'q', q:'TROOPS are...', o:['soldiers','horses','castles'], a:0},
+  {t:'q', q:'"My empire is ___ than yours!"', o:['bigger','more big','biggest'], a:0},
   {t:'d', icon:'☠️', title:'PLAGUE!', q:'A terrible plague hits your empire.', o:['Lose 2 troops in your biggest army','Your hero loses 2 XP'], fx:['lose2','xp-2']},
   {t:'d', icon:'💰', title:'MERCENARIES', q:'An army of mercenaries wants gold... or glory.', o:['Pay with glory: +4 troops, but hero −2 XP','Send them home: +1 power card'], fx:['t4xp-2','card']},
   {t:'d', icon:'⛏️', title:'GOLD MINE', q:'Your soldiers find a gold mine!', o:['Pay the soldiers: +3 troops','Build a war school: +3 hero XP'], fx:['t3','xp3']},
@@ -446,13 +454,13 @@ const EVENTS = [
 /* =========================================================
    GEOMETRY
    ========================================================= */
-const R = 44;
+const R = 50;
 function hexPts(cx,cy,s){const p=[];for(let k=0;k<6;k++){const a=Math.PI/180*(60*k-30);p.push((cx+s*Math.cos(a)).toFixed(1)+','+(cy+s*Math.sin(a)).toFixed(1));}return p.join(' ');}
 
 /* =========================================================
    STATE + NETWORK CORE
    ========================================================= */
-const SAVE_KEY='miniwar-v4';
+const SAVE_KEY='miniwar-v5';
 let S=null, muted=false;
 let MODE='local', ME=null, ROOM='', peer=null, conns=[], hostConn=null, LOBBY=null, JOINMSG='Connecting...';
 let FX=[];
