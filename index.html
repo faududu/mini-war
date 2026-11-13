@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mini War v4</title>
+<title>Mini War 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -228,7 +228,8 @@ select.btn{padding:10px 14px}
 #title{justify-content:flex-start;padding-top:6px;gap:10px}
 .logo{font-size:clamp(44px,5.6vw,92px)}
 .swords{font-size:clamp(30px,3.5vw,50px)}
-.empires{display:grid;grid-template-columns:repeat(4,212px);gap:42px 16px;margin-top:36px}
+.empires{display:grid;grid-template-columns:repeat(6,200px);gap:40px 14px;margin-top:36px}
+@media (max-width:1300px){.empires{grid-template-columns:repeat(4,200px)}}
 .ecard{width:212px;padding:10px 12px 12px;animation-delay:calc(var(--k)*.06s)}
 .ecard .crest{font-size:44px;width:74px;height:74px;margin:-46px auto 4px}
 .ecard h3{font-size:19px}
@@ -273,6 +274,20 @@ select.btn{padding:10px 14px}
 #tradeBtn{width:100%;margin-top:8px;font-size:15px;padding:9px 8px}
 @media (max-width:1000px){.empires{grid-template-columns:repeat(2,212px)}}
 </style>
+<style id="tema2">
+/* ===== MINI WAR 2: tema "pôr do sol" ===== */
+:root{--parch:#fffaf1;--parch2:#f6e3c6;--wood:#7a2318;--wood2:#b8452c;--ink2:#6b4a3a}
+body{background:var(--noise),radial-gradient(ellipse at 50% 30%,#e0603a 0%,#8c2a3e 45%,#3a1236 100%) !important;background-color:#5a1a3a !important}
+#top{background:var(--noise),linear-gradient(180deg,#b8452c,#7a2318) !important}
+.btn{background:linear-gradient(180deg,#fffaf1,#f3d9b5)}
+.btn:hover{filter:brightness(1.05)}
+#mapWrap{background:var(--noise),radial-gradient(ellipse at 50% 45%,#bff0e6 0%,#7fd3c6 55%,#3fa596 100%) !important}
+#hint{color:#0e3f3a !important}
+.logo .two{display:inline-block;margin-left:10px;padding:0 22px;border-radius:24px;background:linear-gradient(180deg,#ff8a3d,#c2301b);color:#fff;-webkit-text-fill-color:#fff;border:6px solid #2a1410;box-shadow:0 8px 0 #2a1410;transform:rotate(-6deg);font-size:.8em;vertical-align:middle}
+#tut .tbox{background:#fffaf1}
+#tut .tc{background:#fdebd3;border-color:#b8452c}
+#tut .trule{background:#7a2318}
+</style>
 </head>
 <body>
 
@@ -280,12 +295,13 @@ select.btn{padding:10px 14px}
 <div id="title">
   <div class="logo-wrap">
     <span class="swords">⚔️</span>
-    <h1 class="logo">MINI WAR</h1>
+    <h1 class="logo">MINI WAR <span class="two">2</span></h1>
     <div class="logo-sub">CONQUER THE WORLD</div>
   </div>
   <div id="setup" style="display:flex;flex-direction:column;align-items:center;gap:12px">
     <div class="empires" id="empCards"></div>
     <div class="title-row" style="margin-top:6px">
+      <button class="btn" id="tutBtn" style="background:linear-gradient(180deg,#ffe58a,#f0b429)">🎓 TUTORIAL</button>
       <button class="btn" id="helpBtn">❓ How to play</button>
       <button class="btn" id="shuffleBtn">🎲 Random empires</button>
       <span class="lbl">Battle time</span>
@@ -309,7 +325,7 @@ select.btn{padding:10px 14px}
 <!-- GAME -->
 <div id="game">
   <div id="top">
-    <div class="mini-logo">MINI WAR</div>
+    <div class="mini-logo">MINI WAR 2</div>
     <div class="turnchip" id="turnChip"></div>
     <div class="round" id="roundLbl"></div>
     <div class="netb" id="netB" style="display:none"></div>
@@ -345,11 +361,11 @@ const pl_=(n,w,ws)=>n+' '+(n===1?w:(ws||w+'s'));
 const EMP = [
   {name:'Eagle Empire', crest:'🦅', color:'#c62f2f', dark:'#7a1515', light:'#f0705f', hero:'General Hawk', hicon:'🎖️', ab:'BATTLE FURY', pw:'fury', n:[2,3,4,5],
    t:n=>`+1 on all your attack 🎲 in your next ${pl_(n,'roll')}.`},
-  {name:'Lion Kingdom', crest:'🦁', color:'#2563c9', dark:'#123a80', light:'#66a0f2', hero:'Commander Leona', hicon:'🛡️', ab:'IRON SHIELD', pw:'shield', n:[1,2,3,4],
+  {name:'Lion Kingdom', crest:'🦁', color:'#2563c9', dark:'#123a80', light:'#66a0f2', hero:'Commander Leona', hicon:'🛡️', ab:'IRON SHIELD', pw:'shield', n:[1,2,2,3],
    t:n=>`Protect ${pl_(n,'territory','territories')} until your next turn. Nobody can attack them!`},
   {name:'Dragon Horde', crest:'🐉', color:'#2c8f3c', dark:'#14551f', light:'#69cc77', hero:'Marshal Drake', hicon:'🥁', ab:'WAR DRUMS', pw:'drums', n:[2,3,4,5],
    t:n=>`Get ${n} extra troops to place.`},
-  {name:'Wolf Pack', crest:'🐺', color:'#7b3fc4', dark:'#47207f', light:'#a982ea', hero:'Captain Storm', hicon:'⚡', ab:'BLITZ', pw:'blitz', n:[1,2,3,4],
+  {name:'Wolf Pack', crest:'🐺', color:'#7b3fc4', dark:'#47207f', light:'#a982ea', hero:'Captain Storm', hicon:'⚡', ab:'BLITZ', pw:'blitz', n:[1,2,2,3],
    t:n=>`The defender rolls only 1 🎲 in your next ${pl_(n,'roll')}.`},
   {name:'Bear Clan', crest:'🐻', color:'#8a5a2b', dark:'#4f3013', light:'#c08a55', hero:'Chief Ursa', hicon:'🪓', ab:'STONE FORT', pw:'fort', n:[1,2,3,4],
    t:n=>`+1 on all defense 🎲 in ${pl_(n,'territory','territories')} until your next turn.`},
@@ -358,7 +374,15 @@ const EMP = [
   {name:'Fox Tribe', crest:'🦊', color:'#e0681a', dark:'#8f3a06', light:'#ff9d55', hero:'Scout Vixen', hicon:'🗺️', ab:'SECRET PATHS', pw:'paths', n:[2,3,4,5],
    t:n=>`Move troops ${n} times this turn, through ANY path of your lands.`},
   {name:'Elephant Empire', crest:'🐘', color:'#13868f', dark:'#0a4b50', light:'#4cc4cc', hero:'Rajah Tusk', hicon:'👑', ab:'STAMPEDE', pw:'stamp', n:[2,3,4,5],
-   t:n=>`In your next ${pl_(n,'roll')}, you lose max 1 troop per roll.`}
+   t:n=>`In your next ${pl_(n,'roll')}, you lose max 1 troop per roll.`},
+  {name:'Shark Navy', crest:'🦈', color:'#1f6fb2', dark:'#0d3a63', light:'#5eaee8', hero:'Admiral Fin', hicon:'⚓', ab:'SEA LANDING', pw:'landing', n:[2,3,4,5],
+   t:n=>`+1 troop on ${pl_(n,'border land')} (the weakest ones).`},
+  {name:'Owl Order', crest:'🦉', color:'#5b6b7a', dark:'#2c3640', light:'#9aabbb', hero:'Sage Athena', hicon:'📚', ab:'WISDOM', pw:'wisdom', n:[1,1,2,2],
+   t:n=>`Get ${pl_(n,'power card')} (you can play next turn).`},
+  {name:'Phoenix Clan', crest:'🔥', color:'#d6336c', dark:'#7d1238', light:'#f2789f', hero:'Flame Ember', hicon:'🪶', ab:'REBIRTH', pw:'rebirth', n:[2,3,4,5],
+   t:n=>`Your SMALLEST army gets +${n} troops.`},
+  {name:'Raven Kingdom', crest:'🐦‍⬛', color:'#3d3d5c', dark:'#1c1c30', light:'#7b7ba3', hero:'Lord Corvus', hicon:'🪄', ab:'THIEF', pw:'thief', n:[1,1,2,2],
+   t:n=>`Steal ${pl_(n,'power card')} from the strongest enemy.`}
 ];
 const DEFAULT_NAMES = ['Mateus','Gabriel','Thiago','Teacher'];
 const ALL = EMP.map((_,i)=>i);
@@ -405,6 +429,11 @@ const CARDS = {
   trade:    {name:'TRADE ROUTE', icon:'💰', txt:'+1 troop on 5 of your border lands.',                    say:'"I\'m playing TRADE ROUTE. More troops on my borders!"'},
   rebellion:{name:'REBELLION',   icon:'🔥', txt:'An enemy territory loses 2 troops.',                    say:'"I\'m starting a REBELLION in ___!"'},
   catapult: {name:'CATAPULT',    icon:'🪨', txt:'The defender rolls only 1 🎲 in your next 2 rolls.',     say:'"I\'m using my CATAPULT. Your walls will fall!"'},
+  ambush:   {name:'AMBUSH',      icon:'🏹', txt:'+1 on your attack 🎲 in your next 2 rolls (this turn).', say:'"AMBUSH! Surprise attack!"'},
+  elephant: {name:'WAR ELEPHANTS',icon:'🐘', txt:'You lose max 1 troop per roll, next 2 rolls (this turn).', say:'"Here come my WAR ELEPHANTS!"'},
+  school:   {name:'WAR SCHOOL',  icon:'📜', txt:'Your hero gets +2 XP.',                                 say:'"My hero is studying at the WAR SCHOOL!"'},
+  march:    {name:'FORCED MARCH',icon:'🥾', txt:'+1 extra MOVE this turn.',                              say:'"FORCED MARCH! My troops never sleep!"'},
+  horn:     {name:'WAR HORN',    icon:'📯', txt:'Your hero power is READY now.',                         say:'"Listen to my WAR HORN!"'},
   spy:      {name:'SPY',         icon:'🕵️', txt:'BLOCK the next power card of an enemy.',                say:'"My SPY is watching you, ___!"'}
 };
 const CARD_KEYS = Object.keys(CARDS);
@@ -422,20 +451,30 @@ const MISSIONS = [
 const WORDS = ['attack','defend','conquer','ally','betray','trust','revenge','mission','troops','border','continent','surrender'];
 
 const EVENTS = [
-  {t:'q', q:'Who built the pyramids of Giza?', o:['The Egyptians','The Romans','The Vikings'], a:0},
-  {t:'q', q:'Hannibal of Carthage crossed the Alps with...', o:['elephants','camels','tanks'], a:0},
-  {t:'q', q:'Where were the first Olympic Games?', o:['Greece','Egypt','India'], a:0},
-  {t:'q', q:'Who was the most famous queen of Egypt?', o:['Cleopatra','Elizabeth','Isabella'], a:0},
-  {t:'q', q:'The Greek soldiers hid inside a giant wooden...', o:['horse','elephant','ship'], a:0},
-  {t:'q', q:'The Great Wall was built in...', o:['China','Japan','India'], a:0},
-  {t:'q', q:'"I ___ the castle yesterday." (attack)', o:['attacked','attacking','attacks'], a:0},
-  {t:'q', q:'The opposite of ATTACK is...', o:['defend','conquer','betray'], a:0},
-  {t:'q', q:'"We ___ Brazil last turn!" (win)', o:['won','winned','win'], a:0},
-  {t:'q', q:'An ALLY is...', o:['a friend in the war','an enemy','a soldier who runs away'], a:0},
-  {t:'q', q:'Which one is correct?', o:['There are three armies.','There is three armies.','There are three army.'], a:0},
-  {t:'q', q:'"If I ___ you, I would attack Asia."', o:['were','am','be'], a:0},
-  {t:'q', q:'TROOPS are...', o:['soldiers','horses','castles'], a:0},
-  {t:'q', q:'"My empire is ___ than yours!"', o:['bigger','more big','biggest'], a:0},
+  {t:'q', q:'"We ___ for hours when the enemy finally surrendered."', o:['had been fighting','have fought','were fight'], a:0},
+  {t:'q', q:'Which sentence is correct?', o:['If they attack, we will defend.','If they will attack, we defend.','If they attacked, we will defend.'], a:0},
+  {t:'q', q:'"The Great Wall ___ to stop invaders."', o:['was built','built','has build'], a:0},
+  {t:'q', q:'You are OUTNUMBERED. That means...', o:['the enemy has MORE soldiers','you have more soldiers','nobody has soldiers'], a:0},
+  {t:'q', q:'SURRENDER means...', o:['give up','show up','set up'], a:0},
+  {t:'q', q:'RETREAT means the same as...', o:['fall back','fall out','fall for'], a:0},
+  {t:'q', q:'"Neither the king ___ the queen escaped."', o:['nor','or','and'], a:0},
+  {t:'q', q:'"He is the bravest soldier I have ___ met."', o:['ever','never','already'], a:0},
+  {t:'q', q:'"We should have ___ Asia first!"', o:['attacked','attack','attacking'], a:0},
+  {t:'q', q:'Which word is NOT a synonym of BRAVE?', o:['coward','fearless','bold'], a:0},
+  {t:'q', q:'"By the end of the game, I ___ the whole world!"', o:['will have conquered','would conquered','am conquering'], a:0},
+  {t:'q', q:'"I wish I ___ more troops right now."', o:['had','have','will have'], a:0},
+  {t:'q', q:'"The enemy army is ___ than ours."', o:['much stronger','more strong','much strongest'], a:0},
+  {t:'q', q:'Genghis Khan led which empire?', o:['The Mongol Empire','The Ottoman Empire','The Inca Empire'], a:0},
+  {t:'q', q:'Napoleon lost his LAST battle at...', o:['Waterloo','Moscow','Rome'], a:0},
+  {t:'q', q:'Which country has the most people in Africa?', o:['Nigeria','Egypt','South Africa'], a:0},
+  {t:'q', q:'The old Aztec capital is today called...', o:['Mexico City','Lima','Buenos Aires'], a:0},
+  {t:'q', q:'Machu Picchu was built by the...', o:['Incas','Aztecs','Mayans'], a:0},
+  {t:'q', q:'Which country has the longest coastline in the world?', o:['Canada','Brazil','Australia'], a:0},
+  {t:'q', q:'Sparta was a famous warrior city in...', o:['Greece','Italy','Turkey'], a:0},
+  {t:'q', q:'Which continent has the most countries?', o:['Africa','Europe','Asia'], a:0},
+  {t:'q', q:'Hannibal of Carthage crossed the Alps with...', o:['elephants','camels','horses only'], a:0},
+  {t:'q', q:'Which empire was the LARGEST in history?', o:['The British Empire','The Roman Empire','The Aztec Empire'], a:0},
+  {t:'q', q:'The Vikings came from...', o:['Scandinavia','Scotland','Germany'], a:0},
   {t:'d', icon:'☠️', title:'PLAGUE!', q:'A terrible plague hits your empire.', o:['Lose 2 troops in your biggest army','Your hero loses 2 XP'], fx:['lose2','xp-2']},
   {t:'d', icon:'💰', title:'MERCENARIES', q:'An army of mercenaries wants gold... or glory.', o:['Pay with glory: +4 troops, but hero −2 XP','Send them home: +1 power card'], fx:['t4xp-2','card']},
   {t:'d', icon:'⛏️', title:'GOLD MINE', q:'Your soldiers find a gold mine!', o:['Pay the soldiers: +3 troops','Build a war school: +3 hero XP'], fx:['t3','xp3']},
@@ -448,6 +487,11 @@ const EVENTS = [
   {t:'d', icon:'🍞', title:'FAMINE', q:'There is no food in your empire.', o:['Feed the people: −2 troops','Feed the army: hero power +2 turns to recharge'], fx:['lose2','cd2']},
   {t:'d', icon:'⚔️', title:'THE DUEL', q:'An enemy champion challenges your hero!', o:['Accept: roll 🎲 — 4, 5, 6 = +3 XP · 1, 2, 3 = −1 XP','Refuse: −1 troop (shame!)'], fx:['duel','lose1']},
   {t:'d', icon:'🌊', title:'STORM AT SEA', q:'A giant storm is coming.', o:['Stay in port: lose your newest power card','Sail anyway: biggest army −2 troops'], fx:['losecard','lose2']},
+  {t:'d', icon:'🔮', title:'THE ORACLE', q:'An old oracle wants to tell your future...', o:['Listen to her: +1 power card','Ignore her: +2 hero XP'], fx:['card','xp2']},
+  {t:'d', icon:'🗡️', title:'TRAITOR GENERAL', q:'One of your generals wants to join {S}!', o:['Pay him to stay: biggest army −2 troops','Let him go: your hero −2 XP'], fx:['lose2','xp-2']},
+  {t:'d', icon:'🎉', title:'BIG FESTIVAL', q:'Your people want a huge party!', o:['Party time: +2 hero XP','Save the gold: +1 power card'], fx:['xp2','card']},
+  {t:'d', icon:'🏹', title:'LEGENDARY ARCHER', q:'A legendary archer wants to join your empire.', o:['Make him a soldier: +3 troops','Make him a teacher: +2 hero XP'], fx:['t3','xp2']},
+  {t:'d', icon:'❄️', title:'BRUTAL WINTER', q:'The coldest winter in 100 years arrives.', o:['Make fires: biggest army −2 troops','Hide in the castles: hero power +2 turns to recharge'], fx:['lose2','cd2']},
   {t:'d', icon:'🕵️', title:'SPY CAUGHT!', q:'Your guards catch an enemy spy.', o:['Interrogate him: +1 power card','Send him back with a message: +2 hero XP'], fx:['card','xp2']}
 ];
 
@@ -460,7 +504,7 @@ function hexPts(cx,cy,s){const p=[];for(let k=0;k<6;k++){const a=Math.PI/180*(60
 /* =========================================================
    STATE + NETWORK CORE
    ========================================================= */
-const SAVE_KEY='miniwar-v5';
+const SAVE_KEY='miniwar-v6';
 let S=null, muted=false;
 let MODE='local', ME=null, ROOM='', peer=null, conns=[], hostConn=null, LOBBY=null, JOINMSG='Connecting...';
 let FX=[];
@@ -836,6 +880,10 @@ function usePower(){
     case 'blitz': S.oneDie+=n; pay(); fx('sfx','boom'); fx('toast',`⚡ BLITZ! The defender rolls 1 🎲 for ${plural(n,'roll')}`); break;
     case 'stamp': S.stamp+=n; pay(); fx('sfx','drums'); fx('toast',`🐘 STAMPEDE! Max 1 loss per roll for ${plural(n,'roll')}`); break;
     case 'paths': S.paths=true; S.maxMoves=Math.max(S.maxMoves,n); pay(); fx('sfx','march'); fx('toast',`🗺️ SECRET PATHS! ${plural(n,'move')} this turn, any path`); break;
+    case 'landing': { const b=borderLands(p).slice(0,n); b.forEach(i=>{ S.terr[i].troops++; fx('pop',i); fx('burst',i,E.color,14); }); pay(); fx('sfx','drums'); fx('toast',`⚓ SEA LANDING! +1 troop in ${plural(b.length,'border land')}`); break; }
+    case 'wisdom': { let g=0; for(let k=0;k<n;k++) if(drawCard(p)) g++; pay(); fx('sfx','level'); fx('toast',`📚 WISDOM! +${plural(g,'power card')}`); break; }
+    case 'rebirth': { let w=-1; S.terr.forEach((t,i)=>{ if(t.owner===p && (w<0||t.troops<S.terr[w].troops)) w=i; }); if(w>=0){ S.terr[w].troops+=n; fx('pop',w); fx('burst',w,E.color,30); } pay(); fx('sfx','conquer'); fx('toast',`🪶 REBIRTH! +${n} troops in ${w>=0?TERR[w].n:'—'}`); break; }
+    case 'thief': { const v=strongestOther(p); let g=0; if(v!=null){ const vc=S.players[v].cards; for(let k=0;k<n && vc.length && pl.cards.length<5;k++){ const c=vc.splice(rnd(vc.length),1)[0]; c.t=S.turnNo; pl.cards.push(c); g++; } } if(g){ pay(); fx('sfx','coins'); fx('toast',`🪄 THIEF! Stole ${plural(g,'card')} from ${esc(S.players[v].name)}!`); } else { fx('sfx','no'); fx('toast','🪄 Nothing to steal right now (power not used)'); } break; }
     case 'shield': S.mode={kind:'shield',left:n,pw:1}; fx('sfx','click'); break;
     case 'fort':   S.mode={kind:'fort',left:n,pw:1}; fx('sfx','click'); break;
     case 'poison': S.mode={kind:'poison',n,pw:1}; fx('sfx','click'); break;
@@ -844,7 +892,8 @@ function usePower(){
 function drawCard(p){
   const pl=S.players[p];
   if(pl.cards.length>=5) return false;
-  pl.cards.push({k:CARD_KEYS[rnd(CARD_KEYS.length)], s:rnd(3), t:S.turnNo});
+  if(!S.deck||!S.deck.length) S.deck=shuffle(CARD_KEYS.flatMap(k=>[k,k]));
+  pl.cards.push({k:S.deck.pop(), s:rnd(3), t:S.turnNo});
   fx('sfx','card'); fx('toast',`🃏 ${esc(pl.name)} got a new card!`);
   return true;
 }
@@ -882,6 +931,11 @@ function playCard(idx){
   else if(k==='catapult'){ takeCard(idx); S.oneDie+=2; fx('sfx','boom'); fx('toast','🪨 CATAPULT ready: defender rolls 1 🎲 in your next 2 rolls!'); }
   else if(k==='rebellion'){ S.mode={kind:'rebellion',card:idx,n:2}; }
   else if(k==='spy'){ S.mode={kind:'spy',card:idx}; }
+  else if(k==='ambush'){ takeCard(idx); S.fury+=2; fx('sfx','level'); fx('toast','🏹 AMBUSH! +1 on your attack 🎲 for 2 rolls'); }
+  else if(k==='elephant'){ takeCard(idx); S.stamp+=2; fx('sfx','drums'); fx('toast','🐘 WAR ELEPHANTS! Max 1 loss per roll for 2 rolls'); }
+  else if(k==='school'){ takeCard(idx); gainXP(S.cur,2); fx('sfx','level'); fx('toast','📜 WAR SCHOOL! Hero +2 XP'); }
+  else if(k==='march'){ takeCard(idx); S.maxMoves++; fx('sfx','drums'); fx('toast','🥾 FORCED MARCH! +1 move this turn'); }
+  else if(k==='horn'){ takeCard(idx); pl.cd=0; fx('sfx','level'); fx('toast','📯 WAR HORN! Hero power READY'); }
 }
 
 /* =========================================================
@@ -1602,6 +1656,52 @@ addEventListener('keydown',e=>{
 const qRoom=new URLSearchParams(location.search).get('room');
 if(qRoom){ $('title').style.display='flex'; startClient(qRoom); }
 else showTitle();
+</script>
+
+<div id="tut">
+ <div class="tbox">
+  <div class="ttl">⚔️ HOW TO PLAY MINI WAR 2</div>
+  <div class="tsub">Each turn = 3 steps</div>
+  <div class="tsteps">
+   <div class="ts"><b>1</b><span>🪖</span><h5>REINFORCE</h5><p>Click YOUR lands to place new troops</p></div>
+   <div class="ta">➜</div>
+   <div class="ts"><b>2</b><span>⚔️🎲</span><h5>ATTACK</h5><p>Your land (2+ troops) → enemy neighbor → ROLL!<br>Highest dice wins</p></div>
+   <div class="ta">➜</div>
+   <div class="ts"><b>3</b><span>🐎</span><h5>MOVE</h5><p>Move troops 1 time<br>→ END TURN</p></div>
+  </div>
+  <div class="tgrid">
+   <div class="tc"><span>🦸</span><h5>YOUR HERO</h5><p>Conquer = XP ⭐<br><i>Lv 1</i> power · <i>Lv 4</i> · <i>Lv 7</i> · <i>Lv 10</i> = STRONGER<br>Use it, then wait 1 turn</p></div>
+   <div class="tc"><span>🃏</span><h5>POWER CARDS</h5><p>Conquer a land = 1 card<br>3 cards <b>■■■</b> or <b>■▲●</b> = BIG troop bonus</p></div>
+   <div class="tc"><span>❓</span><h5>EVENTS</h5><p>Every round, a surprise!<br>Right answer = +2 troops +1 XP</p></div>
+   <div class="tc"><span>🎯</span><h5>SECRET MISSION</h5><p>Shhh! 🤫 Complete it = YOU WIN<br>Or have the most lands at the end</p></div>
+  </div>
+  <div class="trule">🗣️ GOLDEN RULE: every attack, <b>SAY IT LOUD in English!</b></div>
+  <button class="btn big" id="tutX">GOT IT! ⚔️</button>
+ </div>
+</div>
+<style>
+#tut{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(8,20,40,.82);backdrop-filter:blur(4px);padding:16px}
+#tut .tbox{background:#f7f2e4;border:5px solid #132238;border-radius:24px;box-shadow:0 10px 0 #132238;padding:22px 26px;max-width:1150px;width:100%;text-align:center;color:#132238;max-height:96vh;overflow:auto}
+#tut .ttl{font-family:'Russo One',sans-serif;font-size:clamp(28px,3.2vw,46px)}
+#tut .tsub{font-weight:900;font-size:18px;opacity:.6;margin:2px 0 14px;letter-spacing:2px;text-transform:uppercase}
+#tut .tsteps{display:flex;align-items:stretch;justify-content:center;gap:10px}
+#tut .ts{flex:1;background:#fff;border:4px solid #132238;border-radius:18px;padding:14px 10px 12px;position:relative;box-shadow:0 5px 0 #132238}
+#tut .ts b{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:#f0b429;border:3px solid #132238;border-radius:50%;width:34px;height:34px;line-height:28px;font-size:20px}
+#tut .ts span,#tut .tc span{font-size:46px;display:block}
+#tut h5{font-family:'Russo One',sans-serif;font-size:22px;margin:4px 0}
+#tut p{font-weight:800;font-size:17px;margin:0;line-height:1.35}
+#tut .ta{align-self:center;font-size:36px;font-weight:900}
+#tut .tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+#tut .tc{background:#e8f1fb;border:3px solid #2f5d8f;border-radius:16px;padding:10px 8px}
+#tut .tc i{font-style:normal;background:#ffd75a;border-radius:6px;padding:0 4px}
+#tut .trule{margin:16px 0 12px;font-weight:900;font-size:22px;background:#132238;color:#fff;border-radius:14px;padding:10px}
+#tut .trule b{color:#ffd75a}
+@media (max-width:900px){#tut .tgrid{grid-template-columns:1fr 1fr}#tut .tsteps{flex-direction:column}#tut .ta{display:none}}
+</style>
+<script>
+(function(){var t=document.getElementById('tut');
+document.getElementById('tutBtn').onclick=function(){t.style.display='flex'};
+t.onclick=function(e){if(e.target===t||e.target.id==='tutX')t.style.display='none'};})();
 </script>
 </body>
 </html>
