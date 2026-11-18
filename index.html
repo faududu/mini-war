@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mini War 2</title>
+<title>Mini War 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -287,6 +287,85 @@ body{background:var(--noise),radial-gradient(ellipse at 50% 30%,#e0603a 0%,#8c2a
 #tut .tbox{background:#fffaf1}
 #tut .tc{background:#fdebd3;border-color:#b8452c}
 #tut .trule{background:#7a2318}
+/* ===== MINI WAR 3 (v8) ===== */
+.plbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+.pchip{font-weight:900;font-size:20px;padding:9px 18px;border-radius:40px;border:3px solid #132238;background:#fffaf1;color:#132238;box-shadow:0 4px 0 #132238;transition:transform .12s}
+.pchip.on{background:linear-gradient(180deg,#ffe58a,#d99a17);box-shadow:0 4px 0 #132238,0 0 22px rgba(255,210,90,.9);transform:scale(1.07)}
+.pchip:disabled{opacity:.5;cursor:not-allowed}
+.pchip.add{padding:9px 15px}
+.ecard{cursor:pointer;transition:transform .15s}
+.ecard:hover{transform:translateY(-5px)}
+#empCards.ready .ecard{animation:none}
+.ecard .slot{margin-top:6px;font-weight:900;font-size:20px;border-radius:10px;padding:5px;border:3px dashed rgba(19,34,56,.3);color:#9aa8bb}
+.ecard.taken{box-shadow:0 10px 0 #132238,0 0 0 4px #ffd75a,0 18px 30px rgba(0,0,0,.45)}
+.ecard.taken .slot{border:3px solid #132238;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.clangrid{display:grid;grid-template-columns:repeat(4,minmax(150px,200px));gap:10px}
+@media (max-width:900px){.clangrid{grid-template-columns:repeat(2,1fr)}}
+.cbtn{border-radius:14px;border:3px solid #132238;padding:8px;color:#fff;font-weight:900;font-size:16px;text-shadow:0 2px 0 rgba(0,0,0,.4);box-shadow:0 4px 0 #132238;text-align:center}
+.cbtn .cc{font-size:34px;display:block}
+.cbtn small{display:block;font-size:12px;opacity:.95}
+.cbtn:disabled{filter:grayscale(.85);opacity:.5;cursor:not-allowed}
+.cbtn.me{outline:5px solid #ffd75a;transform:scale(1.05)}
+.ttimer{position:relative;font-family:'Russo One',sans-serif;font-size:24px;padding:4px 12px 7px;border-radius:12px;background:rgba(0,0,0,.3);min-width:100px;text-align:center;overflow:hidden;white-space:nowrap;cursor:pointer}
+.ttimer i{position:absolute;left:0;bottom:0;height:5px;background:#ffd84a;transition:width 1s linear}
+.ttimer.low{color:#ffb1a6;animation:pulse 1s infinite}
+.ttimer.low i{background:#ff5a4a}
+@media (max-width:1600px){.mini-logo{display:none}}
+/* battle v8: clean + light */
+.mbox.battle{width:min(780px,100%);padding:14px 20px 18px}
+.mbox.battle .mtitle{font-size:24px;margin-bottom:6px}
+.mbox.battle .side{padding:8px 10px}
+.mbox.battle .side .tn{font-size:22px}
+.loss{display:inline-block;margin-left:8px;color:#fff;background:#b3200f;border:2px solid #132238;border-radius:10px;padding:0 8px;font-size:18px;animation:tin .3s}
+.say2{font-family:'Russo One',sans-serif;font-size:18px;color:#1e3a5f;margin:6px 0}
+.say2 b{color:#b3200f;font-weight:400}
+.arena2{display:grid;grid-template-columns:1fr 54px 1fr;gap:10px 6px;align-items:center;justify-items:center;margin:8px auto;max-width:420px;padding:10px 12px;border-radius:16px;background:rgba(30,60,100,.08)}
+.alab{font-family:'Russo One',sans-serif;font-size:14px;color:var(--ink2);letter-spacing:1px}
+.d2{width:62px;height:62px;border-radius:14px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:9px;border:3px solid #132238;box-shadow:0 4px 0 #132238;position:relative;will-change:transform}
+.d2 i{display:block;width:11px;height:11px;border-radius:50%;margin:auto;visibility:hidden}
+.d2 i.on{visibility:visible}
+.d2.a{background:linear-gradient(180deg,#ff7a6a,#c62f2f)} .d2.a i{background:#fff}
+.d2.d{background:linear-gradient(180deg,#ffffff,#e6dcc6)} .d2.d i{background:#132238}
+.d2.idle{opacity:.35}
+.d2.roll{animation:wob .16s linear infinite}
+@keyframes wob{0%{transform:rotate(-10deg) translateY(-3px)}50%{transform:rotate(10deg) translateY(2px)}100%{transform:rotate(-10deg) translateY(-3px)}}
+.d2.win{box-shadow:0 4px 0 #132238,0 0 0 4px #ffd84a,0 0 18px #ffd84a}
+.d2.lose{opacity:.38;filter:grayscale(.8)}
+.d2.land{animation:land .25s ease-out}
+@keyframes land{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+.d2 .plus{position:absolute;top:-12px;right:-12px;background:#ffd75a;color:#132238;border:2px solid #132238;border-radius:10px;font-weight:900;font-size:14px;padding:1px 6px}
+.cmp{font-family:'Russo One',sans-serif;font-size:30px;line-height:1}
+.cmp.w{color:#2c8f3c}.cmp.l{color:#b3200f}
+.chal{border:4px solid #132238;border-radius:18px;padding:10px 14px 12px;margin:8px 0;background:linear-gradient(180deg,#fff6d0,#ffe58a);box-shadow:0 5px 0 #132238}
+.chal .ck{font-family:'Russo One',sans-serif;font-size:15px;letter-spacing:2px;color:#7a2318}
+.chal .cq{font-family:'Russo One',sans-serif;font-size:clamp(22px,2.8vw,34px);margin:4px 0 6px;line-height:1.2}
+.chal .cpic{font-size:76px;line-height:1.05}
+.chbar{height:12px;border-radius:12px;background:rgba(0,0,0,.15);overflow:hidden;margin:4px 0 10px}
+.chbar i{display:block;height:100%;background:linear-gradient(90deg,#c62f2f,#ffd84a,#2c8f3c);transition:width 1s linear}
+.copts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.copts .opt{min-width:150px;font-size:20px;padding:10px 14px}
+.chal input{font:900 28px Nunito,sans-serif;text-align:center;padding:8px;border-radius:12px;border:3px solid #132238;width:min(360px,80%);text-transform:uppercase}
+.chres{font-family:'Russo One',sans-serif;font-size:20px;padding:9px 12px;border-radius:12px;color:#fff;margin:8px 0;border:3px solid #132238}
+.chres u{text-decoration:none;background:rgba(255,255,255,.25);padding:0 6px;border-radius:6px}
+/* v8.1 dado + desafio */
+.d2{background-clip:padding-box;transform-origin:50% 60%}
+.d2.a{background:radial-gradient(circle at 30% 22%,#ff9b8c 0%,#e2412f 45%,#a8161a 100%);box-shadow:0 5px 0 #5a0d0d,0 8px 14px rgba(0,0,0,.35),inset 0 3px 0 rgba(255,255,255,.45),inset 0 -5px 0 rgba(0,0,0,.18)}
+.d2.d{background:radial-gradient(circle at 30% 22%,#ffffff 0%,#f4efe4 50%,#d6cbb2 100%);box-shadow:0 5px 0 #6b5a3a,0 8px 14px rgba(0,0,0,.3),inset 0 3px 0 #fff,inset 0 -5px 0 rgba(0,0,0,.12)}
+.d2.a i{background:radial-gradient(circle at 40% 35%,#fff,#ffd9d2);box-shadow:inset 0 -1px 2px rgba(0,0,0,.25)}
+.d2.d i{background:radial-gradient(circle at 40% 35%,#3b4d6b,#0e1a2c)}
+.d2.roll{animation:tumble .42s cubic-bezier(.4,.1,.6,.9) infinite}
+.d2.roll:nth-child(odd){animation-duration:.5s;animation-direction:reverse}
+@keyframes tumble{0%{transform:translateY(0) rotate(0) scale(1)}25%{transform:translateY(-14px) rotate(90deg) scale(1.08)}50%{transform:translateY(0) rotate(180deg) scale(.94)}75%{transform:translateY(-8px) rotate(270deg) scale(1.04)}100%{transform:translateY(0) rotate(360deg) scale(1)}}
+.d2.land{animation:land2 .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes land2{0%{transform:translateY(-18px) rotate(-25deg) scale(1.3)}55%{transform:translateY(2px) rotate(4deg) scale(.92,1.06)}100%{transform:none}}
+.d2.win{animation:land2 .45s cubic-bezier(.2,1.6,.4,1),winp 1.2s .45s ease-in-out infinite;box-shadow:0 5px 0 #132238,0 0 0 4px #ffd84a,0 0 26px #ffd84a!important}
+@keyframes winp{50%{transform:scale(1.1)}}
+.d2.lose{opacity:.4;filter:grayscale(.85);transform:translateY(4px) scale(.92)}
+.arena2{background:radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.55),rgba(30,60,100,.1));border:3px solid rgba(19,34,56,.15)}
+.cmp{animation:tin .3s}
+.chal.duel{background:linear-gradient(180deg,#e3f0ff,#9cc6f5)}
+.chal.dbl{box-shadow:0 5px 0 #132238,0 0 0 4px #c62f2f,0 0 30px rgba(198,47,47,.6)}
+.copts.big .opt{font-size:46px;min-width:110px;padding:6px 14px}
 </style>
 </head>
 <body>
@@ -295,19 +374,25 @@ body{background:var(--noise),radial-gradient(ellipse at 50% 30%,#e0603a 0%,#8c2a
 <div id="title">
   <div class="logo-wrap">
     <span class="swords">⚔️</span>
-    <h1 class="logo">MINI WAR <span class="two">2</span></h1>
+    <h1 class="logo">MINI WAR <span class="two">3</span></h1>
     <div class="logo-sub">CONQUER THE WORLD</div>
   </div>
   <div id="setup" style="display:flex;flex-direction:column;align-items:center;gap:12px">
+    <div class="plbar" id="plBar"></div>
     <div class="empires" id="empCards"></div>
     <div class="title-row" style="margin-top:6px">
       <button class="btn" id="tutBtn" style="background:linear-gradient(180deg,#ffe58a,#f0b429)">🎓 TUTORIAL</button>
       <button class="btn" id="helpBtn" style="display:none">❓ How to play</button>
-      <button class="btn" id="shuffleBtn">🎲 Random empires</button>
-      <span class="lbl">Battle time</span>
+      <button class="btn" id="shuffleBtn">🎲 Random clans</button>
+      <span class="lbl">War</span>
       <select class="btn" id="timeSel">
         <option value="60">60 min</option><option value="75">75 min</option><option value="85" selected>85 min</option><option value="90">90 min</option><option value="999">No limit</option>
       </select>
+      <span class="lbl">Turn</span>
+      <select class="btn" id="turnSel">
+        <option value="45">45 s</option><option value="60" selected>1 min</option><option value="90">1:30</option><option value="120">2 min</option><option value="0">No timer</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="chChk" checked> ⚡ English Strike</label>
       <label class="chk" style="display:none"><input type="checkbox" id="unitsChk"> Unit battles</label>
     </div>
     <div class="title-row">
@@ -325,12 +410,13 @@ body{background:var(--noise),radial-gradient(ellipse at 50% 30%,#e0603a 0%,#8c2a
 <!-- GAME -->
 <div id="game">
   <div id="top">
-    <div class="mini-logo">MINI WAR 2</div>
+    <div class="mini-logo">MINI WAR 3</div>
     <div class="turnchip" id="turnChip"></div>
     <div class="round" id="roundLbl"></div>
     <div class="netb" id="netB" style="display:none"></div>
     <div class="phases" id="phases"></div>
     <button class="btn" id="nextBtn">NEXT ▶</button>
+    <div class="ttimer" id="tTimer" title="Turn time (click = pause)"></div>
     <div class="timer" id="timer" title="Pause / resume">85:00</div>
     <button class="ibtn" id="helpBtn2" title="How to play">❓</button>
     <button class="ibtn" id="dealBtn" title="Diplomacy">🤝</button>
@@ -359,30 +445,30 @@ body{background:var(--noise),radial-gradient(ellipse at 50% 30%,#e0603a 0%,#8c2a
    ========================================================= */
 const pl_=(n,w,ws)=>n+' '+(n===1?w:(ws||w+'s'));
 const EMP = [
-  {name:'Eagle Empire', crest:'🦅', color:'#c62f2f', dark:'#7a1515', light:'#f0705f', hero:'General Hawk', hicon:'🎖️', ab:'BATTLE FURY', pw:'fury', n:[2,3,4,5],
+  {name:'Roman Legion', crest:'🦅', color:'#c62f2f', dark:'#7a1515', light:'#f0705f', hero:'Julius Caesar', hicon:'🗡️', ab:'VENI VIDI VICI', pw:'fury', n:[2,3,4,5],
    t:n=>`+1 on all your attack 🎲 in your next ${pl_(n,'roll')}.`},
-  {name:'Lion Kingdom', crest:'🦁', color:'#2563c9', dark:'#123a80', light:'#66a0f2', hero:'Commander Leona', hicon:'🛡️', ab:'IRON SHIELD', pw:'shield', n:[1,2,2,3],
+  {name:'Spartans', crest:'🛡️', color:'#2563c9', dark:'#123a80', light:'#66a0f2', hero:'King Leonidas', hicon:'⚔️', ab:'THIS IS SPARTA', pw:'shield', n:[1,2,2,3],
    t:n=>`Protect ${pl_(n,'territory','territories')} until your next turn. Nobody can attack them!`},
-  {name:'Dragon Horde', crest:'🐉', color:'#2c8f3c', dark:'#14551f', light:'#69cc77', hero:'Marshal Drake', hicon:'🥁', ab:'WAR DRUMS', pw:'drums', n:[2,3,4,5],
+  {name:'Egyptians', crest:'☀️', color:'#2c8f3c', dark:'#14551f', light:'#69cc77', hero:'Queen Cleopatra', hicon:'👑', ab:'NILE HARVEST', pw:'drums', n:[2,3,4,5],
    t:n=>`Get ${n} extra troops to place.`},
-  {name:'Wolf Pack', crest:'🐺', color:'#7b3fc4', dark:'#47207f', light:'#a982ea', hero:'Captain Storm', hicon:'⚡', ab:'BLITZ', pw:'blitz', n:[1,2,2,3],
+  {name:'Mongol Horde', crest:'🐎', color:'#7b3fc4', dark:'#47207f', light:'#a982ea', hero:'Genghis Khan', hicon:'🏹', ab:'LIGHTNING RIDE', pw:'blitz', n:[1,2,2,3],
    t:n=>`The defender rolls only 1 🎲 in your next ${pl_(n,'roll')}.`},
-  {name:'Bear Clan', crest:'🐻', color:'#8a5a2b', dark:'#4f3013', light:'#c08a55', hero:'Chief Ursa', hicon:'🪓', ab:'STONE FORT', pw:'fort', n:[1,2,3,4],
+  {name:'Vikings', crest:'🪓', color:'#8a5a2b', dark:'#4f3013', light:'#c08a55', hero:'Ragnar Lothbrok', hicon:'🛶', ab:'SHIELD WALL', pw:'fort', n:[1,2,3,4],
    t:n=>`+1 on all defense 🎲 in ${pl_(n,'territory','territories')} until your next turn.`},
-  {name:'Cobra Cult', crest:'🐍', color:'#c98a12', dark:'#7a5208', light:'#f0c14a', hero:'Queen Naga', hicon:'🧪', ab:'POISON', pw:'poison', n:[1,2,3,4],
-   t:n=>`An enemy territory loses ${pl_(n,'troop')}.`},
-  {name:'Fox Tribe', crest:'🦊', color:'#e0681a', dark:'#8f3a06', light:'#ff9d55', hero:'Scout Vixen', hicon:'🗺️', ab:'SECRET PATHS', pw:'paths', n:[2,3,4,5],
+  {name:'Pirates', crest:'☠️', color:'#c98a12', dark:'#7a5208', light:'#f0c14a', hero:'Captain Blackbeard', hicon:'🏴', ab:'PLUNDER', pw:'thief', n:[1,1,2,2],
+   t:n=>`Steal ${pl_(n,'power card')} from the strongest enemy.`},
+  {name:'French Empire', crest:'⚜️', color:'#e0681a', dark:'#8f3a06', light:'#ff9d55', hero:'Napoleon', hicon:'🎖️', ab:'GRANDE ARMÉE', pw:'paths', n:[2,3,4,5],
    t:n=>`Move troops ${n} times this turn, through ANY path of your lands.`},
-  {name:'Elephant Empire', crest:'🐘', color:'#13868f', dark:'#0a4b50', light:'#4cc4cc', hero:'Rajah Tusk', hicon:'👑', ab:'STAMPEDE', pw:'stamp', n:[2,3,4,5],
+  {name:'Carthage', crest:'🐘', color:'#13868f', dark:'#0a4b50', light:'#4cc4cc', hero:'Hannibal', hicon:'🏔️', ab:'CROSS THE ALPS', pw:'stamp', n:[2,3,4,5],
    t:n=>`In your next ${pl_(n,'roll')}, you lose max 1 troop per roll.`},
-  {name:'Shark Navy', crest:'🦈', color:'#1f6fb2', dark:'#0d3a63', light:'#5eaee8', hero:'Admiral Fin', hicon:'⚓', ab:'SEA LANDING', pw:'landing', n:[2,3,4,5],
+  {name:'British Navy', crest:'⚓', color:'#1f6fb2', dark:'#0d3a63', light:'#5eaee8', hero:'Admiral Nelson', hicon:'🔭', ab:'RULE THE WAVES', pw:'landing', n:[2,3,4,5],
    t:n=>`+1 troop on ${pl_(n,'border land')} (the weakest ones).`},
-  {name:'Owl Order', crest:'🦉', color:'#5b6b7a', dark:'#2c3640', light:'#9aabbb', hero:'Sage Athena', hicon:'📚', ab:'WISDOM', pw:'wisdom', n:[1,1,2,2],
+  {name:'Athenians', crest:'🦉', color:'#5b6b7a', dark:'#2c3640', light:'#9aabbb', hero:'Aristotle', hicon:'📜', ab:'THE ACADEMY', pw:'wisdom', n:[1,1,2,2],
    t:n=>`Get ${pl_(n,'power card')} (you can play next turn).`},
-  {name:'Phoenix Clan', crest:'🔥', color:'#d6336c', dark:'#7d1238', light:'#f2789f', hero:'Flame Ember', hicon:'🪶', ab:'REBIRTH', pw:'rebirth', n:[2,3,4,5],
+  {name:'Samurai', crest:'🌸', color:'#d6336c', dark:'#7d1238', light:'#f2789f', hero:'Miyamoto Musashi', hicon:'🗡️', ab:'NEVER SURRENDER', pw:'rebirth', n:[2,3,4,5],
    t:n=>`Your SMALLEST army gets +${n} troops.`},
-  {name:'Raven Kingdom', crest:'🐦‍⬛', color:'#3d3d5c', dark:'#1c1c30', light:'#7b7ba3', hero:'Lord Corvus', hicon:'🪄', ab:'THIEF', pw:'thief', n:[1,1,2,2],
-   t:n=>`Steal ${pl_(n,'power card')} from the strongest enemy.`}
+  {name:'Ninja Clan', crest:'🥷', color:'#3d3d5c', dark:'#1c1c30', light:'#7b7ba3', hero:'Hattori Hanzo', hicon:'💨', ab:'SHADOW STRIKE', pw:'poison', n:[1,2,3,4],
+   t:n=>`An enemy territory loses ${pl_(n,'troop')}.`}
 ];
 const DEFAULT_NAMES = ['Mateus','Gabriel','Thiago','Teacher'];
 const ALL = EMP.map((_,i)=>i);
@@ -450,6 +536,122 @@ const MISSIONS = [
 
 const WORDS = ['attack','defend','conquer','ally','betray','trust','revenge','mission','troops','border','continent','surrender'];
 
+/* ---------- ⚡ ENGLISH STRIKE: 14 kinds of challenge, hundreds of items, no repeats ---------- */
+const CH_PIC = [['🛡️','shield'],['🗡️','sword'],['🏹','bow'],['🏰','castle'],['🐎','horse'],['👑','crown'],['🔥','fire'],['⛵','ship'],['🚩','flag'],['🗺️','map'],
+  ['💀','skull'],['💣','bomb'],['🏆','trophy'],['💰','money'],['⛰️','mountain'],['🌉','bridge'],['🪓','axe'],['🧭','compass'],['⚓','anchor'],['🐉','dragon'],
+  ['🦅','eagle'],['🐺','wolf'],['🌋','volcano'],['🪖','helmet'],['🔭','telescope'],['🕯️','candle'],['🗝️','key'],['⛓️','chain'],['🐍','snake'],['🦂','scorpion'],
+  ['🌊','wave'],['⚡','lightning'],['🧱','wall'],['🪨','rock'],['🎯','target'],['🥁','drum'],['📯','horn'],['🪙','coin'],['🐻','bear'],['🦁','lion'],
+  ['🐘','elephant'],['🐫','camel'],['🦈','shark'],['🦉','owl'],['🐊','crocodile'],['🦇','bat'],['🕷️','spider'],['🐝','bee'],['🦋','butterfly'],['🐢','turtle'],
+  ['🌙','moon'],['⭐','star'],['☀️','sun'],['🌧️','rain'],['❄️','snow'],['🌪️','tornado'],['🌵','cactus'],['🌲','tree'],['🍄','mushroom'],['🌹','rose'],
+  ['🍞','bread'],['🍎','apple'],['🧀','cheese'],['🍗','chicken'],['🥚','egg'],['🍯','honey'],['🧂','salt'],['🍷','wine'],['🥛','milk'],['🍋','lemon'],
+  ['⏳','hourglass'],['📜','scroll'],['🔔','bell'],['🧨','dynamite'],['🪜','ladder'],['🔨','hammer'],['⛏️','pickaxe'],['🪚','saw'],['🧲','magnet'],['🔦','flashlight'],
+  ['🎒','backpack'],['👢','boot'],['🧤','gloves'],['🧥','coat'],['👓','glasses'],['💍','ring'],['💎','diamond'],['🕰️','clock'],['📦','box'],['🪑','chair'],
+  ['🚂','train'],['✈️','airplane'],['🚁','helicopter'],['🚀','rocket'],['🛶','canoe'],['🏝️','island'],['🏜️','desert'],['🏛️','temple']];
+const CH_PT = [['escudo','shield'],['espada','sword'],['castelo','castle'],['cavalo','horse'],['coroa','crown'],['ponte','bridge'],['navio','ship'],['bandeira','flag'],['inimigo','enemy'],['aliado','ally'],
+  ['vitória','victory'],['derrota','defeat'],['exército','army'],['soldado','soldier'],['guerra','war'],['paz','peace'],['fronteira','border'],['tesouro','treasure'],['armadilha','trap'],['fogo','fire'],
+  ['traidor','traitor'],['vingança','revenge'],['rei','king'],['rainha','queen'],['ilha','island'],['montanha','mountain'],['floresta','forest'],['deserto','desert'],['muralha','wall'],['chave','key'],
+  ['cansado','tired'],['corajoso','brave'],['esperto','smart'],['fraco','weak'],['forte','strong'],['rápido','fast'],['devagar','slow'],['perigoso','dangerous'],['seguro','safe'],['bravo (com raiva)','angry'],
+  ['ganhar','win'],['perder','lose'],['atacar','attack'],['defender','defend'],['fugir','escape'],['esconder','hide'],['roubar','steal'],['confiar','trust'],['trair','betray'],['render-se','surrender']];
+const CH_OPP = [['attack','defend'],['win','lose'],['strong','weak'],['ally','enemy'],['brave','coward'],['advance','retreat'],['victory','defeat'],['peace','war'],
+  ['always','never'],['first','last'],['build','destroy'],['rich','poor'],['safe','dangerous'],['loud','quiet'],['fast','slow'],['remember','forget'],['give','take'],['open','close'],
+  ['hot','cold'],['heavy','light'],['early','late'],['easy','hard'],['full','empty'],['young','old'],['happy','sad'],['buy','sell'],['push','pull'],['inside','outside'],
+  ['top','bottom'],['north','south'],['east','west'],['love','hate'],['true','false'],['wide','narrow'],['deep','shallow'],['find','lose'],['arrive','leave'],['start','finish'],
+  ['answer','question'],['friend','enemy'],['cheap','expensive'],['clean','dirty'],['dark','bright'],['save','spend'],['accept','refuse'],['increase','decrease'],['tall','short'],['wet','dry']];
+const CH_SYN = [['big','large'],['fast','quick'],['angry','mad'],['begin','start'],['end','finish'],['smart','clever'],['scared','afraid'],['rich','wealthy'],['help','assist'],['buy','purchase'],
+  ['choose','pick'],['enemy','foe'],['brave','fearless'],['hard','difficult'],['easy','simple'],['small','tiny'],['huge','enormous'],['happy','glad'],['look','watch'],['speak','talk'],
+  ['shout','yell'],['wrong','incorrect'],['fix','repair'],['gift','present'],['rock','stone'],['road','street'],['battle','fight'],['soldier','warrior'],['quiet','silent'],['correct','right']];
+const CH_PAST = [['go','went'],['fight','fought'],['win','won'],['lose','lost'],['take','took'],['buy','bought'],['run','ran'],['see','saw'],['think','thought'],['catch','caught'],
+  ['bring','brought'],['choose','chose'],['fly','flew'],['hide','hid'],['ride','rode'],['steal','stole'],['break','broke'],['eat','ate'],['drink','drank'],['give','gave'],
+  ['know','knew'],['speak','spoke'],['teach','taught'],['write','wrote'],['begin','began'],['build','built'],['feel','felt'],['hold','held'],['lead','led'],['send','sent'],
+  ['sleep','slept'],['swim','swam'],['come','came'],['make','made'],['find','found'],['leave','left'],['meet','met'],['pay','paid'],['sell','sold'],['tell','told'],
+  ['understand','understood'],['wake','woke'],['wear','wore'],['throw','threw'],['shoot','shot'],['sing','sang'],['spend','spent'],['stand','stood'],['strike','struck'],['become','became']];
+const CH_GRAM = [
+  ['"I ___ attacking Brazil!"',['am','is','are']],['"They ___ our castle yesterday."',['attacked','attack','attacks']],['"We ___ never surrender!"',['will','does','am']],
+  ['"My army is ___ than yours."',['stronger','more strong','strongest']],['"He ___ three territories."',['has','have','having']],['"Where ___ your troops?"',['are','is','does']],
+  ['"How ___ troops do you have?"',['many','much','lot']],['"If you attack me, I ___ attack you."',['will','would','am']],['"I have ___ conquered Asia!"',['already','yet','ago']],
+  ['"Don\'t trust ___! I\'m a spy."',['me','I','my']],['"___ you help me attack Peru?"',['Can','Are','Does']],['"We lost ___ they had more troops."',['because','but','so']],
+  ['"This is the ___ battle of the war!"',['biggest','bigger','most big']],['"I didn\'t ___ that coming!"',['see','saw','seen']],['"She ___ playing right now."',['is','are','am']],
+  ['"We ___ fighting for an hour."',['have been','has been','are been']],['"___ attack Spain together!"',['Let\'s','Lets go','Let we']],['"You ___ attack me. We are allies!"',['shouldn\'t','didn\'t should','not should']],
+  ['"Who ___ Egypt right now?"',['controls','control','is control']],['"I\'m ___ than you think."',['smarter','more smart','smartest']],['"___ you ever lost a war?"',['Have','Did','Are']],
+  ['"I ___ Mexico two turns ago."',['conquered','have conquered','conquer']],['"Gabriel is ___ dangerous player here."',['the most','the more','most']],['"There ___ five troops in Peru."',['are','is','be']],
+  ['"I\'m not afraid ___ you!"',['of','from','to']],['"We are good ___ defending."',['at','in','on']],['"He is married ___ the queen."',['to','with','of']],
+  ['"I\'m waiting ___ your answer."',['for','to','by']],['"It depends ___ the dice."',['on','of','from']],['"Thank you ___ your help!"',['for','to','by']],
+  ['"The dice ___ rolling."',['are','is','am']],['"I wish I ___ more troops."',['had','have','has']],['"If I ___ you, I would retreat."',['were','am','be']],
+  ['"You ___ better run!"',['had','have','should']],['"Nobody ___ how to stop me."',['knows','know','knowing']],['"Neither of us ___ going to win."',['is','are','am']],
+  ['"I used ___ play War every weekend."',['to','for','the']],['"He made me ___ my troops."',['move','to move','moving']],['"I\'m looking forward to ___ you."',['beating','beat','beaten']],
+  ['"Russia is ___ country in the world."',['the largest','the larger','largest']],['"I ___ here since round one."',['have been','am','was being']],['"___ is your secret mission?"',['What','Who','Which one is']],
+  ['"Your army is as weak ___ mine."',['as','than','like']],['"I can\'t believe you ___ me!"',['betrayed','betray','betraying']],['"Stop ___ my lands!"',['attacking','attack','to attack']],
+  ['"The war ___ in 85 minutes."',['ends','end','ending']],['"Whose turn ___ it?"',['is','are','does']],['"I\'d rather ___ than surrender."',['fight','to fight','fighting']],
+  ['"Let me ___ about it."',['think','to think','thinking']],['"You\'re ___ lucky today!"',['so','such','too much']]];
+const CH_ODD = [['sword','axe','bow','banana'],['horse','camel','elephant','castle'],['Brazil','Peru','Argentina','Japan'],['king','queen','prince','dragon'],['red','blue','green','table'],
+  ['Monday','Friday','Sunday','April'],['run','walk','jump','happy'],['France','Spain','Italy','China'],['shark','whale','dolphin','eagle'],['ship','boat','canoe','train'],
+  ['brave','strong','smart','sword'],['winter','summer','autumn','morning'],['apple','lemon','banana','bread'],['soldier','general','captain','tomato'],['Tokyo','Paris','London','Africa'],
+  ['eyes','nose','mouth','shoes'],['went','saw','took','go'],['bigger','faster','stronger','best'],['north','south','east','up'],['gold','silver','bronze','wood']];
+const CH_CAP = [['Japan','Tokyo'],['France','Paris'],['Italy','Rome'],['Spain','Madrid'],['Germany','Berlin'],['Russia','Moscow'],['Egypt','Cairo'],['Argentina','Buenos Aires'],['Peru','Lima'],['Mexico','Mexico City'],
+  ['Canada','Ottawa'],['Australia','Canberra'],['China','Beijing'],['India','New Delhi'],['Turkey','Ankara'],['UK','London'],['USA','Washington'],['Portugal','Lisbon'],['Greece','Athens'],['South Korea','Seoul'],
+  ['Chile','Santiago'],['Colombia','Bogotá'],['Morocco','Rabat'],['Nigeria','Abuja'],['Ireland','Dublin'],['Norway','Oslo'],['Sweden','Stockholm'],['Poland','Warsaw'],['Thailand','Bangkok'],['Saudi Arabia','Riyadh']];
+const CH_HIST = [['Who was the first emperor of Rome?',['Augustus','Julius Caesar','Nero']],['The Vikings came from...',['Scandinavia','Spain','Egypt']],['Napoleon was from...',['France','Italy','England']],
+  ['Who built the pyramids?',['The Egyptians','The Romans','The Vikings']],['The 300 Spartans fought at...',['Thermopylae','Waterloo','Troy']],['Genghis Khan led the...',['Mongols','Aztecs','Persians']],
+  ['Hannibal crossed the Alps with...',['elephants','camels','tanks']],['World War II ended in...',['1945','1918','1960']],['The Samurai were warriors from...',['Japan','China','Korea']],
+  ['The Titanic sank in...',['1912','1812','1955']],['Brazil became independent in...',['1822','1500','1922']],['Who discovered America in 1492?',['Columbus','Cabral','Magellan']],
+  ['The Great Wall is in...',['China','Japan','India']],['Machu Picchu is in...',['Peru','Mexico','Chile']],['The Colosseum is in...',['Rome','Athens','Paris']],
+  ['Cleopatra was queen of...',['Egypt','Greece','Persia']],['The Aztec capital was...',['Tenochtitlan','Cusco','Lima']],['Which ocean is the biggest?',['Pacific','Atlantic','Indian']],
+  ['The Berlin Wall fell in...',['1989','1945','2001']],['Alexander the Great was from...',['Macedonia','Rome','Egypt']]];
+const CH_RID = [['I have keys but no locks. What am I?',['a piano','a door','a map']],['The more you take, the more you leave behind.',['footsteps','gold','troops']],
+  ['What has a neck but no head?',['a bottle','a horse','a soldier']],['What gets wetter the more it dries?',['a towel','the sea','rain']],['What has hands but can\'t clap?',['a clock','a king','a robot']],
+  ['What can you catch but not throw?',['a cold','a ball','a spear']],['What goes up but never comes down?',['your age','an arrow','a bird']],['What has many teeth but can\'t bite?',['a comb','a shark','a wolf']],
+  ['What runs but never walks?',['a river','a horse','a clock']],['What belongs to you but others use it more?',['your name','your sword','your castle']]];
+const CH_TYPE = ['conquer','surrender','reinforce','betray','ambush','alliance','victory','territory','retreat','weapon','soldier','enemy','border','empire','revenge','strategy',
+  'battlefield','fortress','cavalry','invade','treasure','kingdom','warrior','champion','defense','attack','mission','general','army','castle','dangerous','emperor','knowledge',
+  'neighbor','thousand','beautiful','language','government','continent','mountain','dinosaur','yesterday','tomorrow','question','answer','because','through','although',
+  'whatever','everybody','beginning','important','different','dictionary','adventure','explosion','catapult','pirate','samurai','spartan','viking','mongol','pyramid'];
+const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+const TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+const numW=n=>n<20?NUMW[n]:TENS[Math.floor(n/10)]+(n%10?'-'+NUMW[n%10]:'');
+function misspell(w){ const out=new Set(); let g=0;
+  while(out.size<2 && g++<40){ const a=w.split(''), r=rnd(4), i=1+rnd(Math.max(1,a.length-2));
+    if(r===0&&i<a.length-1){ [a[i],a[i+1]]=[a[i+1],a[i]]; } else if(r===1){ a.splice(i,0,a[i]); } else if(r===2&&a.length>4){ a.splice(i,1); } else { const v='aeiou', k=a.findIndex((c,j)=>j>=i&&v.includes(c)); if(k>=0) a[k]=v[(v.indexOf(a[k])+1+rnd(4))%5]; }
+    const s=a.join(''); if(s!==w) out.add(s); }
+  return [...out]; }
+const CH_KINDS = ['pic','pic','pt','opp','syn','past','past','gram','gram','gram','odd','cap','hist','rid','spell','math','scr','listen'];
+function makeChallenge(){
+  const kinds=[...CH_KINDS]; if(MODE==='host') kinds.push('type','type','type');
+  if(!S.chUsed) S.chUsed=[]; if(S.chUsed.length>500) S.chUsed=[];
+  const pick=a=>a[rnd(a.length)], three=(ans,pool)=>shuffle([ans,...shuffle([...new Set(pool.filter(x=>x!==ans))]).slice(0,2)]);
+  let ch=null;
+  for(let t=0;t<25;t++){
+    const k=kinds[rnd(kinds.length)]; let c;
+    if(k==='pic'){ const [e,w]=pick(CH_PIC); c={ck:'🖼️ WHAT IS IT?',show:e,q:'',opts:three(w,CH_PIC.map(x=>x[1])),ans:w}; }
+    else if(k==='pt'){ const [p,w]=pick(CH_PT); c={ck:'🇧🇷 → 🇺🇸 TRANSLATE',q:`"${p}" in English is...`,opts:three(w,CH_PT.map(x=>x[1])),ans:w}; }
+    else if(k==='opp'){ const [a,b]=shuffle([...pick(CH_OPP)]); c={ck:'🔄 THE OPPOSITE',q:`The opposite of <b>${a.toUpperCase()}</b> is...`,opts:three(b,CH_OPP.flat().filter(x=>x!==a)),ans:b}; }
+    else if(k==='syn'){ const [a,b]=shuffle([...pick(CH_SYN)]); c={ck:'🟰 SAME MEANING',q:`<b>${a.toUpperCase()}</b> means the same as...`,opts:three(b,CH_SYN.flat().filter(x=>x!==a)),ans:b}; }
+    else if(k==='past'){ const [v,p]=pick(CH_PAST); const fake=[v+(v.endsWith('e')?'d':'ed'), pick(CH_PAST.filter(x=>x[1]!==p))[1]]; c={ck:'⏪ PAST TENSE',q:`Yesterday I... <b>${v.toUpperCase()}</b>`,opts:shuffle([p,...fake]),ans:p}; }
+    else if(k==='gram'){ const g=pick(CH_GRAM); c={ck:'✍️ COMPLETE IT',q:g[0],opts:shuffle([...g[1]]),ans:g[1][0]}; }
+    else if(k==='odd'){ const o=pick(CH_ODD); c={ck:'🧩 ODD ONE OUT',q:'Which one does NOT belong?',opts:shuffle([...o]),ans:o[3]}; }
+    else if(k==='cap'){ const [p,cap]=pick(CH_CAP); c={ck:'🌍 CAPITAL CITY',q:`The capital of <b>${p}</b> is...`,opts:three(cap,CH_CAP.map(x=>x[1])),ans:cap}; }
+    else if(k==='hist'){ const h=pick(CH_HIST); c={ck:'🏛️ HISTORY',q:h[0],opts:shuffle([...h[1]]),ans:h[1][0]}; }
+    else if(k==='rid'){ const r=pick(CH_RID); c={ck:'🤔 RIDDLE',q:r[0],opts:shuffle([...r[1]]),ans:r[1][0],left:14}; }
+    else if(k==='spell'){ const w=pick(CH_TYPE.filter(x=>x.length>=6)); c={ck:'🔤 RIGHT SPELLING',q:'Which one is spelled RIGHT?',opts:shuffle([w,...misspell(w)]),ans:w}; }
+    else if(k==='math'){ const op=rnd(3); let a,b,r,s;
+      if(op===0){ a=2+rnd(9); b=2+rnd(9); r=a*b; s='times'; } else if(op===1){ a=10+rnd(40); b=5+rnd(40); r=a+b; s='plus'; } else { a=30+rnd(60); b=5+rnd(25); r=a-b; s='minus'; }
+      if(r>99) continue; const w=new Set([r]); while(w.size<3){ const x=r+(rnd(2)?1:-1)*(1+rnd(9)); if(x>=0&&x<100) w.add(x); }
+      c={ck:'🔢 QUICK MATH',q:`${numW(a)} ${s} ${numW(b)} = ?`,opts:shuffle([...w].map(numW)),ans:numW(r)}; }
+    else if(k==='scr'){ const w=pick(CH_TYPE); let s; do{ s=shuffle(w.split('')).join(''); }while(s===w);
+      c={ck:'🔀 UNSCRAMBLE',q:s.toUpperCase().split('').join(' '),opts:three(w,CH_TYPE.filter(x=>Math.abs(x.length-w.length)<=1)),ans:w}; }
+    else if(k==='listen'){ if(!('speechSynthesis' in window)) continue; const [e,w]=pick(CH_PIC); c={ck:'👂 LISTEN!',q:'🔊 Listen and choose the picture!',say:w,opts:three(e,CH_PIC.map(x=>x[0])),ans:e,big:1}; }
+    else { const w=pick(CH_TYPE); c={ck:'⌨️ TYPE IT FAST!',q:w.toUpperCase(),opts:null,ans:w,left:12}; k==='type'; c.k='type'; }
+    c.k=c.k||k; const key=c.k+':'+c.ans+':'+c.q;
+    if(S.chUsed.includes(key)) continue;
+    S.chUsed.push(key); ch=c; break;
+  }
+  if(!ch){ const w=pick(CH_TYPE); ch={k:'scr',ck:'🔀 UNSCRAMBLE',q:shuffle(w.split('')).join('').toUpperCase(),opts:[w,...misspell(w)].slice(0,3),ans:w}; }
+  ch.left=ch.left||(ch.k==='type'?12:10); ch.max=ch.left;
+  ch.x = Math.random()<.15 ? 2 : 1;                       // 🃏 DOUBLE OR NOTHING
+  ch.duel = MODE==='host' && Math.random()<.45;           // ⚔️ 1v1: first right answer wins
+  ch.lockA=false; ch.lockD=false;
+  return ch;
+}
+
 const EVENTS = [
   {t:'q', q:'"We ___ for hours when the enemy finally surrendered."', o:['had been fighting','have fought','were fight'], a:0},
   {t:'q', q:'Which sentence is correct?', o:['If they attack, we will defend.','If they will attack, we defend.','If they attacked, we will defend.'], a:0},
@@ -504,13 +706,13 @@ function hexPts(cx,cy,s){const p=[];for(let k=0;k<6;k++){const a=Math.PI/180*(60
 /* =========================================================
    STATE + NETWORK CORE
    ========================================================= */
-const SAVE_KEY='miniwar-v6';
+const SAVE_KEY='miniwar-v8';
 let S=null, muted=false;
 let MODE='local', ME=null, ROOM='', peer=null, conns=[], hostConn=null, LOBBY=null, JOINMSG='Connecting...';
 let FX=[];
 try{ muted = localStorage.getItem('miniwar-mute')==='1'; }catch(e){}
 function save(){ if(MODE==='client') return; try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
-function load(){ try{ const s=JSON.parse(localStorage.getItem(SAVE_KEY)); return s&&s.screen==='game'&&s.ver===4?s:null; }catch(e){ return null; } }
+function load(){ try{ const s=JSON.parse(localStorage.getItem(SAVE_KEY)); return s&&s.screen==='game'&&s.ver===8?s:null; }catch(e){ return null; } }
 const rnd=n=>Math.floor(Math.random()*n);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 const $=id=>document.getElementById(id);
@@ -536,13 +738,14 @@ function allowed(type,d,from){
   if(from==='host'||from==='local') return true;
   if(!S||S.screen!=='game'||HOSTONLY.has(type)) return false;
   if(type==='unit') return !!S.B && ((d.side==='A'&&from===S.cur) || (d.side==='D'&&(from===S.B.def||(from===S.cur&&d.u==='?'))));
+  if(type==='chans') return !!(S.B&&S.B.ch) && (from===S.cur || (S.B.ch.duel && from===S.B.def));
   if(type==='evpick'||type==='evok') return !!S.ui && S.ui.k==='event' && (from===S.ui.target||from===S.cur);
   return from===S.cur;
 }
 function apply(type,d,from){
   const h=H[type]; if(!h||!S) return;
   if(!allowed(type,d,from)) return;
-  h(d);
+  h(d,from);
   commit();
 }
 function commit(){
@@ -587,16 +790,30 @@ const H = {
   evpick:d=>eventPick(+d.k),
   evok:()=>{ if(S.ui&&S.ui.k==='event'&&S.ui.pick!==null) S.ui=null; },
   event:()=>{ if(!S.ui&&!S.B) startEvent(S.cur); },
-  pause:()=>{ if(S.timeLeft>=0){ S.paused=!S.paused; fx('toast',S.paused?'⏸ Paused':'▶ Go!'); } },
+  pause:()=>{ if(S.timeLeft>=0||S.turnSec>0){ S.paused=!S.paused; fx('toast',S.paused?'⏸ Paused':'▶ Go!'); } },
+  chans:(d,from)=>{ const B=S.B, ch=B&&B.ch; if(!ch||ch.res||B.conquered) return;
+    const raw=String(d.v||'').trim().slice(0,30), ok=raw.toLowerCase()===String(ch.ans).toLowerCase();
+    if(ch.duel){
+      let side;
+      if(from==='host'||from==='local'){ const cc=conns.filter(c=>c.open&&c.p!=null).map(c=>c.p); side=!cc.includes(S.cur)?'A':!cc.includes(B.def)?'D':'A'; }
+      else side=(from===B.def&&from!==S.cur)?'D':'A';
+      if(side==='A'?ch.lockA:ch.lockD) return;
+      const who=S.players[side==='A'?S.cur:B.def].name;
+      if(ok){ ch.res=side; ch.picked=raw; fx('sfx','level'); fx('toast',`⚔️ ${esc(who)} WINS THE 1v1! +${ch.x} 🎲`); }
+      else { if(side==='A') ch.lockA=true; else ch.lockD=true; fx('sfx','no'); fx('toast',`❌ ${esc(who)}: "${esc(raw)}" is wrong!`); if(ch.lockA&&ch.lockD) ch.res='N'; }
+      return;
+    }
+    ch.picked=raw; ch.res=ok?'A':'D';
+    fx('sfx',ok?'level':'no'); fx('toast',ok?`⚡ ENGLISH STRIKE! +${ch.x} on the attack 🎲`:`🛡️ The DEFENSE gets +${ch.x} 🎲`); },
   end:()=>gameOver('time')
 };
 
 /* =========================================================
    GAME FLOW
    ========================================================= */
-function newGame(names, minutes, units){
+function newGame(names, minutes, units, turnSec, chOn){
   const active=ALL.filter(i=>names[i]);
-  S={ver:4, screen:'game', online:MODE==='host',
+  S={ver:8, screen:'game', online:MODE==='host', turnSec:+turnSec||0, turnLeft:(+turnSec||0)*1000, chOn:!!chOn,
      players:EMP.map((e,i)=>({name:names[i]||e.hero, xp:0, cards:[], alive:!!names[i], out:!names[i], cd:0, blocked:null, mission:null})),
      terr:[], cur:active[0], round:1, turnNo:0, phase:'reinforce', pool:0, undo:[], sel:null, mode:null,
      fury:0, oneDie:0, stamp:0, conq:0, xpT:0, moves:0, maxMoves:1, paths:false, trades:0, units:!!units,
@@ -654,7 +871,7 @@ function missionDone(p){
 
 function startTurn(){
   const p=S.cur, pl=P();
-  S.turnNo++;
+  S.turnNo++; S.turnLeft=(S.turnSec||0)*1000;
   S.terr.forEach(t=>{ if(t.owner===p){ t.shield=false; t.fort=false; } });
   if(pl.cd>0) pl.cd--;
   Object.assign(S,{phase:'reinforce', pool:reinforcement(p), undo:[], sel:null, mode:null, fury:0, oneDie:0, stamp:0, conq:0, xpT:0, moves:0, maxMoves:1, paths:false});
@@ -766,8 +983,17 @@ function handleTarget(i){
    ========================================================= */
 function openBattle(a,d){
   S.B={a,d,def:S.terr[d].owner,tA:null,tD:null,uw:null,rid:0,ra:[],rd:[],bA:[],bD:[],rA:[],rD:[],done:false,rolling:false,auto:false,
-       res:'',rep:'',conquered:false,move:1,moveMin:1,moveMax:1,nA:0};
+       res:'',rep:'',conquered:false,move:1,moveMin:1,moveMax:1,nA:0,lA:0,lD:0,ch:S.chOn?makeChallenge():null};
   S.sel=a; fx('sfx','horn');
+}
+function turnTimeUp(){
+  fx('toast','⏰ TIME\'S UP! Next player!'); fx('sfx','no');
+  if(S.B){ if(S.B.conquered){ confirmConquest(); if(S.screen!=='game') return; } else S.B=null; }
+  if(S.ui && S.ui.k==='move') S.ui=null;
+  S.mode=null; S.sel=null;
+  if(S.pool>0){ const mine=S.terr.map((t,i)=>t.owner===S.cur?i:-1).filter(i=>i>=0);
+    while(S.pool>0 && mine.length){ S.terr[mine[rnd(mine.length)]].troops++; S.pool--; } }
+  endTurn();
 }
 function setUnit(side,u){
   const B=S.B; if(!B || B.rid>0 || !S.units) return;
@@ -780,6 +1006,7 @@ function setUnit(side,u){
 function doRoll(auto){
   const B=S.B; if(!B || B.rolling || B.conquered) return;
   if(S.units && !(B.tA&&B.tD)){ fx('toast','Choose the armies first! 🐎🏹🔱'); return; }
+  if(B.ch && !B.ch.res){ fx('toast','⚡ Answer the ENGLISH STRIKE first!'); return; }
   if(S.terr[B.a].troops<2) return;
   B.auto=!!auto; rollOnce();
 }
@@ -790,20 +1017,20 @@ function rollOnce(){
   const one=S.oneDie>0, nA=Math.min(3,A.troops-1), nD=Math.min(D.troops, one?1:2);
   const ra=Array.from({length:nA},()=>1+rnd(6)).sort((x,y)=>y-x);
   const rd=Array.from({length:nD},()=>1+rnd(6)).sort((x,y)=>y-x);
-  const bA=ra.map(()=>S.fury>0?1:0); if(B.uw==='A') bA[0]++;
-  const bD=rd.map(()=>D.fort?1:0);   if(B.uw==='D') bD[0]++;
+  const bA=ra.map(()=>S.fury>0?1:0); if(B.uw==='A') bA[0]++; if(B.ch&&B.ch.res==='A') bA[0]+=B.ch.x||1;
+  const bD=rd.map(()=>D.fort?1:0);   if(B.uw==='D') bD[0]++; if(B.ch&&B.ch.res==='D') bD[0]+=B.ch.x||1;
   let lossA=0, lossD=0; const rA=[], rD=[];
   for(let k=0;k<Math.min(nA,nD);k++){ if(ra[k]+bA[k]>rd[k]+bD[k]){ lossD++; rA[k]='win'; rD[k]='lose'; } else { lossA++; rA[k]='lose'; rD[k]='win'; } }
   let saved=0; if(S.stamp>0 && lossA>1){ saved=lossA-1; lossA=1; }
   if(S.fury>0) S.fury--; if(one) S.oneDie--; if(S.stamp>0) S.stamp--;
-  Object.assign(B,{rid:B.rid+1, ra, rd, bA, bD, rA, rD, done:false, rolling:true, res:'', rep:'', nA});
+  Object.assign(B,{rid:B.rid+1, ra, rd, bA, bD, rA, rD, done:false, rolling:true, res:'', rep:'', nA, lA:0, lD:0});
   fx('sfx','dice');
-  later(B.auto?1000:1350, ()=>resolveRoll(lossA,lossD,saved));
+  later(B.auto?650:850, ()=>resolveRoll(lossA,lossD,saved));
 }
 function resolveRoll(lossA,lossD,saved){
   const B=S.B; if(!B) return;
   const A=S.terr[B.a], D=S.terr[B.d];
-  A.troops-=lossA; D.troops-=lossD; B.done=true; B.rolling=false;
+  A.troops-=lossA; D.troops-=lossD; B.done=true; B.rolling=false; B.lA=lossA; B.lD=lossD;
   if(lossD){ fx('shake',B.d); fx('burst',B.d,'#ffcf4a',18*lossD); }
   if(lossA) fx('shake',B.a);
   fx('quake'); fx('sfx','hit',lossD>lossA);
@@ -825,7 +1052,7 @@ function resolveRoll(lossA,lossD,saved){
   else rep=`"We lost ${plural(lossA,'troop')} and they lost ${lossD}!"`;
   B.res=res; B.rep=rep;
   if(B.auto){
-    if(A.troops>=2) later(450,()=>{ if(S.B && S.B.auto && !S.B.conquered && !S.B.rolling) rollOnce(); });
+    if(A.troops>=2) later(400,()=>{ if(S.B && S.B.auto && !S.B.conquered && !S.B.rolling) rollOnce(); });
     else B.auto=false;
   }
 }
@@ -1090,15 +1317,21 @@ function render(){
       ${tr<3?`<div class="abtxt" style="opacity:.7;font-size:12px">Level ${TIER_LV[tr+1]}: ${VE.t(VE.n[tr+1])}</div>`:''}
       <button class="btn" id="abBtn" ${!myTurn||vp.cd>0||busy?'disabled':''}>${abState}</button>
     </div>
-    <div class="mission" style="${showMission?'order:-1;border:4px solid #f0b429;box-shadow:0 0 0 3px #132238;font-size:16px':''}"><b>🎯 ${showMission?(ME==null?'CLICK YOUR NAME FIRST (F5)':'YOUR '):''}SECRET MISSION</b>${showMission?`${missionText(vp.mission)}<div class="prog">${missionProg(v)}</div>`:`<button class="btn" id="misBtn" style="width:100%;font-size:15px;padding:8px">👁️ ${esc(vp.name)}: peek</button>`}</div>
+    <div class="mission" style="${showMission?'order:-1;border:4px solid #f0b429;box-shadow:0 0 0 3px #132238;font-size:16px':''}"><b>🎯 ${showMission?'YOUR ':''}SECRET MISSION</b>${showMission?`${missionText(vp.mission)}<div class="prog">${missionProg(v)}</div>`:`<button class="btn" id="misBtn" style="width:100%;font-size:15px;padding:8px">👁️ ${esc(vp.name)}: peek</button>`}</div>
     <div><h4>🃏 CARDS <span style="font-family:Nunito;font-size:12px;color:var(--ink2)">(■■■ or ■▲● = troops)</span></h4><div class="hand">${[0,1,2,3,4].map(k=>{const c=vp.cards[k];
       return c?`<div class="card ${c.t>=S.turnNo?'lock':''}" data-k="${k}"><span class="sym" style="color:${SYMC[c.s]}">${SYMS[c.s]}</span><div class="ci">${CARDS[c.k].icon}</div><div class="cn">${CARDS[c.k].name}</div></div>`:`<div class="card empty"></div>`;}).join('')}</div>
       <button class="btn" id="tradeBtn" ${myTurn&&set&&S.phase==='reinforce'&&!busy?'':'disabled'}>🔄 TRADE 3 CARDS → +${tradeVal(S.trades)} 🪖</button></div>
     <div><h4>⚔️ WAR WORDS</h4><div class="words">${WORDS.map(w=>`<span>${w}</span>`).join('')}</div></div>`;
+  if(MODE==='client' && ME==null){
+    const on=(LOBBY&&LOBBY.on)||[];
+    $('right').innerHTML=`<div class="mission" style="font-size:18px"><b>👤 WHO ARE YOU?</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${ALL.filter(i=>!S.players[i].out).map(i=>`<button class="btn" data-me="${i}" ${on.includes(S.players[i].name)?'disabled':''}>${EMP[i].crest} ${esc(S.players[i].name)}</button>`).join('')}</div></div>`;
+    $('right').querySelectorAll('[data-me]').forEach(b=>b.onclick=()=>{ setMyName(S.players[+b.dataset.me].name); claim(); ac(); sfx.click(); });
+  } else {
   $('abBtn').onclick=()=>act('power');
   $('tradeBtn').onclick=()=>act('trade');
   if($('misBtn')) $('misBtn').onclick=openMission;
   $('right').querySelectorAll('.card[data-k]').forEach(c=>c.onclick=()=>openCard(+c.dataset.k));
+  }
   // map
   CONT.forEach((c,k)=>{ const o=contOwner(k); $('cl'+k).textContent=`${c.n.toUpperCase()} +${c.b}`+(o>=0?' '+EMP[o].crest:''); });
   const tgt=new Set(), kind={};
@@ -1139,6 +1372,11 @@ function render(){
 function fmt(ms){ const s=Math.max(0,Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 function renderTimer(){
   const t=$('timer'); if(!S) return;
+  const tt=$('tTimer');
+  if(S.turnSec>0){ const s=Math.max(0,Math.ceil(S.turnLeft/1000));
+    tt.style.display=''; tt.innerHTML=`${S.paused?'⏸':'⏱️'} ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}<i style="width:${S.turnLeft/(S.turnSec*10)}%"></i>`;
+    tt.classList.toggle('low', s<=10 && !S.paused);
+  } else tt.style.display='none';
   if(S.timeLeft<0){ t.textContent='∞'; return; }
   t.textContent=(S.paused?'⏸ ':'⏳ ')+fmt(S.timeLeft);
   t.classList.toggle('low', S.timeLeft<5*60000 && !S.paused);
@@ -1154,12 +1392,13 @@ function renderUI(){
   if(over){ const so=JSON.stringify(S.ui)+ME; if(so!==lastOver){ lastOver=so; renderOver(); } }
   else lastOver='';
   let sig='';
-  if(S.B) sig='B'+JSON.stringify(S.B)+'|'+S.fury+'|'+S.oneDie+'|'+S.stamp+'|'+ME;
+  if(S.B) sig='B'+JSON.stringify(S.B,(k,v)=>k==='left'?undefined:v)+'|'+S.fury+'|'+S.oneDie+'|'+S.stamp+'|'+ME;
   else if(S.ui && !over) sig='U'+JSON.stringify(S.ui)+'|'+ME;
   if(!sig){ lastSig=''; if(!LOCAL) hideModal(); return; }
   LOCAL=false;
   if(sig===lastSig && modalOpen()) return;
   lastSig=sig;
+  $('mbox').classList.toggle('battle',!!S.B);
   if(S.B) renderBattle(); else if(S.ui.k==='move') renderMove(); else if(S.ui.k==='event') renderEvent();
   showModal();
 }
@@ -1187,74 +1426,103 @@ function unitRow(side){
        + (side==='D'?`<button class="ub" data-side="D" data-u="?" ${mineSide||canAct()?'':'disabled'} title="Random">🎲</button>`:'');
   return `<div class="ubox"><div class="lab">${e.crest} ${esc(p.name)} · ${side==='A'?'ATTACK':'DEFENSE'}</div>${inner}</div>`;
 }
+function sideB(i, role, owner, loss){
+  const t=S.terr[i], o=owner??t.owner, e=EMP[o], p=S.players[o];
+  return `<div class="side" style="background:linear-gradient(180deg,${e.light},${e.dark})">
+    <div class="who">${e.crest} ${esc(p.name)} · ${role}</div>
+    <div class="tn">${TERR[i].e} ${TERR[i].n}</div>
+    <div class="tt">⚔️ ${plural(t.troops,'troop')}${loss?`<span class="loss">−${loss}</span>`:''}</div></div>`;
+}
+let lastSay='';
+function speakCh(w){ try{ if(muted) return; const u=new SpeechSynthesisUtterance(w); u.lang='en-US'; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
+function challengeHTML(ch,me){
+  const B=S.B, an=esc(S.players[S.cur].name), dn=esc(S.players[B.def].name);
+  const body = ch.k==='type'
+    ? `<input id="chIn" autocomplete="off" spellcheck="false" placeholder="type + ENTER" ${me?'':'disabled'}> <button class="btn" id="chGo" ${me?'':'disabled'}>✅</button>`
+    : `<div class="copts ${ch.big?'big':''}">${ch.opts.map(o=>`<button class="opt" data-o="${esc(o)}" ${me?'':'disabled'}>${esc(o)}</button>`).join('')}</div>`;
+  const rule = ch.duel
+    ? `⚔️ <b>1v1 DUEL:</b> ${an} vs ${dn} · the FIRST right answer wins +${ch.x} 🎲 · wrong = you're out!${ch.lockA?` <span style="color:#b3200f">(${an} is out)</span>`:''}${ch.lockD?` <span style="color:#b3200f">(${dn} is out)</span>`:''}`
+    : `${an} answers! ✅ = +${ch.x} on your best 🎲 · ❌ or too slow = +${ch.x} for the DEFENSE`;
+  return `<div class="chal ${ch.duel?'duel':''} ${ch.x>1?'dbl':''}"><div class="ck">${ch.duel?'⚔️ 1v1 DUEL':'⚡ ENGLISH STRIKE'}${ch.x>1?' · 🃏 DOUBLE OR NOTHING':''} · ${ch.ck}</div>${ch.show?`<div class="cpic">${ch.show}</div>`:''}${ch.q?`<div class="cq">${ch.q}</div>`:''}
+    ${ch.say?`<button class="btn" id="chSay" style="font-size:16px;padding:6px 14px;margin-bottom:6px">🔊 again</button>`:''}
+    <div class="chbar"><i id="chBar" style="width:${ch.left/ch.max*100}%"></i></div>${body}
+    <div style="font-size:14px;font-weight:800;margin-top:6px;color:var(--ink2)">${rule}</div></div>`;
+}
+function updateChBar(){ const b=$('chBar'); if(b&&S&&S.B&&S.B.ch) b.style.width=(S.B.ch.left/S.B.ch.max*100)+'%'; }
+const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function d2(cls,v,extra){ return `<div class="d2 ${cls}">${[...Array(9).keys()].map(k=>`<i class="${v&&PIPS[v].includes(k)?'on':''}"></i>`).join('')}${extra||''}</div>`; }
+function setFace(el,v){ el.querySelectorAll('i').forEach((p,k)=>p.classList.toggle('on',PIPS[v].includes(k))); }
+setInterval(()=>{ if(!S||!S.B||!S.B.rolling) return; document.querySelectorAll('.d2.roll').forEach(d=>setFace(d,1+rnd(6))); },70);
+function arenaHTML(B,nA,nD){
+  let h=`<div class="alab">${EMP[S.cur].crest} ATTACK</div><div></div><div class="alab">${EMP[B.def].crest} DEFENSE</div>`;
+  const rows=Math.max(nA,nD,1);
+  for(let k=0;k<rows;k++){
+    const hasA=k<nA, hasD=k<nD;
+    let a='',d='',m='';
+    if(!B.rid){ a=hasA?d2('a idle',6):''; d=hasD?d2('d idle',6):''; m='<span class="cmp" style="opacity:.3">?</span>'; }
+    else if(B.rolling){ a=hasA?d2('a roll',1+rnd(6)):''; d=hasD?d2('d roll',1+rnd(6)):''; }
+    else {
+      const pa=B.bA[k]?`<span class="plus">+${B.bA[k]}</span>`:'', pd=B.bD[k]?`<span class="plus">+${B.bD[k]}</span>`:'';
+      a=hasA?d2('a land '+(B.rA[k]||'idle'),B.ra[k],pa):''; d=hasD?d2('d land '+(B.rD[k]||'idle'),B.rd[k],pd):'';
+      if(hasA&&hasD) m = B.rA[k]==='win' ? '<span class="cmp w">▶</span>' : '<span class="cmp l">◀</span>';
+    }
+    h+=`<div>${a}</div><div>${m}</div><div>${d}</div>`;
+  }
+  return h;
+}
 function renderBattle(){
-  const B=S.B, A=S.terr[B.a], D=S.terr[B.d], me=canAct();
-  const ready = !S.units || (B.tA&&B.tD);
+  const B=S.B, A=S.terr[B.a], D=S.terr[B.d], me=canAct(), ch=B.ch, chWait=!!(ch&&!ch.res&&!B.conquered);
+  let meCh=me;
+  if(ch&&ch.duel){ meCh = MODE==='client' ? ((ME===S.cur&&!ch.lockA)||(ME===B.def&&!ch.lockD)) : !(ch.lockA&&ch.lockD); }
+  const ready = (!S.units || (B.tA&&B.tD)) && !chWait;
   const flags=[]; if(S.fury) flags.push(`⚔️ FURY +1 (${plural(S.fury,'roll')})`); if(S.oneDie) flags.push(`⚡ DEFENDER: 1 🎲 (${plural(S.oneDie,'roll')})`);
-  if(S.stamp) flags.push(`🐘 STAMPEDE (${plural(S.stamp,'roll')})`); if(D.fort && !B.conquered) flags.push('🪓 STONE FORT: +1 defense');
-  const nA=Math.min(3,A.troops-1);
+  if(S.stamp) flags.push(`🐘 MAX 1 LOSS (${plural(S.stamp,'roll')})`); if(D.fort && !B.conquered) flags.push('🪓 SHIELD WALL: +1 defense');
+  const nA = B.rid ? B.ra.length : Math.max(1,Math.min(3,A.troops-1));
+  const nD = B.rid ? B.rd.length : Math.max(1,Math.min(D.troops,S.oneDie?1:2));
   let units='';
   if(S.units && !B.conquered){
     units=`<div class="units">${unitRow('A')}${unitRow('D')}</div>`;
     if(B.tA&&B.tD) units+=`<div class="uwin">${U[B.tA].i} ${U[B.tA].n} vs ${U[B.tD].i} ${U[B.tD].n} → ${B.uw==='A'?'ATTACK wins! +1 on the highest 🎲':B.uw==='D'?'DEFENSE wins! +1 on the highest 🎲':'Same army: no bonus'}</div>`;
-    else units+=`<div style="font-size:13px;font-weight:800;color:var(--ink2)">🐎 beat 🏹 · 🏹 beat 🔱 · 🔱 beat 🐎</div>`;
   }
-  const say = B.conquered ? `<small>VICTORY SPEECH</small>"We conquered ${TERR[B.d].n}!"`
-    : `<small>SAY IT LOUD</small>"I'm attacking <span style="color:#b3200f">${TERR[B.d].n}</span> from ${TERR[B.a].n}!"<div style="font-size:.62em;margin-top:6px;color:#1e3a5f">${esc(S.players[B.def].name)}: "We will defend ${TERR[B.d].n}!"</div>${flags.length?`<div class="flags">${flags.join(' · ')}</div>`:''}`;
+  let chal='';
+  if(ch && !B.conquered){
+    if(!ch.res) chal=challengeHTML(ch,meCh);
+    else { const AN=esc(String(ch.ans).toUpperCase()), x=ch.x||1;
+      let txt, bg;
+      if(ch.duel){ if(ch.res==='N'){ bg='#5b6b7a'; txt=`⚔️ Nobody got it! Answer: <u>${AN}</u> · no bonus`; }
+        else { const w=S.players[ch.res==='A'?S.cur:B.def].name; bg=ch.res==='A'?'#2c8f3c':'#1f6fb2'; txt=`⚔️ ${esc(w)} WINS THE 1v1! <u>${AN}</u> → +${x} on ${ch.res==='A'?'the ATTACK':'the DEFENSE'} 🎲`; } }
+      else if(ch.res==='A'){ bg='#2c8f3c'; txt=`⚡ <u>${AN}</u> — RIGHT! +${x} on ${esc(S.players[S.cur].name)}'s best 🎲 (this battle)`; }
+      else { bg='#b3200f'; txt=`${ch.picked?`❌ "${esc(ch.picked)}" — wrong!`:'⏰ Too slow!'} Answer: <u>${AN}</u> → +${x} for the DEFENSE`; }
+      chal=`<div class="chres" style="background:${bg}">${txt}</div>`; }
+  }
+  const say = B.conquered ? `🗣️ "We conquered <b>${TERR[B.d].n}</b>!"`
+    : `🗣️ "I'm attacking <b>${TERR[B.d].n}</b> from ${TERR[B.a].n}!" <span style="opacity:.75">· ${esc(S.players[B.def].name)}: "We will defend it!"</span>`;
   let btns;
   if(B.conquered) btns=`<button class="btn big" id="bOk" ${me?'':'disabled'}>✅ CONFIRM</button>`;
   else if(B.auto) btns=`<button class="btn big" id="bStop" ${me?'':'disabled'}>✋ STOP</button>`;
   else { const can=me && A.troops>=2 && !B.rolling && ready;
-    btns=`<button class="btn big" id="bRoll" ${can?'':'disabled'}>🎲 ROLL!</button><button class="btn big" id="bAuto" ${can?'':'disabled'} style="font-size:20px">⚡ ROLL TO THE END</button><button class="btn" id="bRet" ${me&&!B.rolling?'':'disabled'}>🏳️ Retreat</button>`; }
-  $('mbox').innerHTML=`<div class="mtitle">⚔️ BATTLE! ⚔️</div>
-    <div class="vs">${sideHTML(B.a,'ATTACK')}<div class="vsx">VS</div>${B.conquered?sideHTML(B.d,'CONQUERED!'):sideHTML(B.d,'DEFENSE',B.def)}</div>
-    <div class="say">${say}</div>${units}
-    <div class="arena"><div class="dset" id="dA"></div><div class="vsmall">VS</div><div class="dset" id="dD"></div></div>
-    <div class="result">${B.done?B.res:(B.rolling?'🎲 ...':'')}</div>
-    ${B.done&&B.rep?`<div class="report"><small>📜 WAR REPORT</small>${B.rep}</div>`:''}
+    btns=`<button class="btn big" id="bRoll" ${can?'':'disabled'}>🎲 ROLL!</button><button class="btn big" id="bAuto" ${can?'':'disabled'} style="font-size:20px">⚡ TO THE END</button><button class="btn" id="bRet" ${me&&!B.rolling?'':'disabled'}>🏳️ Retreat</button>`; }
+  const res = B.done ? `${B.res}${B.rep?`<div style="font-size:16px;color:#1e3a5f;margin-top:2px">📜 ${B.rep}</div>`:''}` : (B.rolling?'🎲 🎲 🎲':'');
+  $('mbox').innerHTML=`<div class="mtitle">⚔️ BATTLE ⚔️</div>
+    <div class="vs">${sideB(B.a,'ATTACK',null,B.done?B.lA:0)}<div class="vsx">VS</div>${B.conquered?sideB(B.d,'CONQUERED!'):sideB(B.d,'DEFENSE',B.def,B.done?B.lD:0)}</div>
+    <div class="say2">${say}</div>${flags.length?`<div class="flags">${flags.join(' · ')}</div>`:''}${units}${chal}
+    ${chWait?'':`<div class="arena2">${arenaHTML(B,nA,nD)}</div>`}
+    <div class="result">${res}</div>
     ${B.conquered?moverHTML(B.moveMin,B.moveMax,B.move,`Move troops into ${TERR[B.d].n} (max 3)`,!me):''}
     ${A.troops<2&&B.done&&!B.conquered?'<div style="font-size:17px;font-weight:900;color:#7a1515">Your army is too small to attack again.</div>':''}
     <div class="mbtns">${btns}</div>`;
-  // dice
-  if(!B.rid){
-    $('dA').innerHTML=Array.from({length:Math.max(1,nA)},()=>dieHTML('a')).join('');
-    $('dD').innerHTML=Array.from({length:Math.min(D.troops,S.oneDie?1:2)},()=>dieHTML('d')).join('');
-    document.querySelectorAll('#dA .cube,#dD .cube').forEach(c=>c.style.transform='rotateX(-20deg) rotateY(25deg)');
-  } else if(B.rid!==animRid && B.rolling){
-    animRid=B.rid; throwDice($('dA'),B.ra,'a',B.auto); throwDice($('dD'),B.rd,'d',B.auto);
-  } else {
-    animRid=B.rid; staticDice($('dA'),B.ra,'a'); staticDice($('dD'),B.rd,'d');
-    if(B.done){ $('dA').querySelectorAll('.die').forEach((d,k)=>B.rA[k]&&d.classList.add(B.rA[k])); $('dD').querySelectorAll('.die').forEach((d,k)=>B.rD[k]&&d.classList.add(B.rD[k])); }
-  }
-  if(B.rid){
-    $('dA').querySelectorAll('.die').forEach((d,k)=>{ if(B.bA[k]) d.insertAdjacentHTML('beforeend',`<span class="plus">+${B.bA[k]}</span>`); });
-    $('dD').querySelectorAll('.die').forEach((d,k)=>{ if(B.bD[k]) d.insertAdjacentHTML('beforeend',`<span class="plus">+${B.bD[k]}</span>`); });
-  }
   $('mbox').querySelectorAll('.ub').forEach(b=>b.onclick=()=>act('unit',{side:b.dataset.side,u:b.dataset.u}));
+  $('mbox').querySelectorAll('.copts .opt').forEach(b=>b.onclick=()=>{ ac(); act('chans',{v:b.dataset.o}); });
+  if(ch&&ch.say&&!ch.res){ const key=B.a+'-'+B.d+'-'+ch.say+'-'+ch.max; if(key!==lastSay){ lastSay=key; setTimeout(()=>speakCh(ch.say),250); } if($('chSay')) $('chSay').onclick=()=>speakCh(ch.say); }
+  if($('chIn')){ const go=()=>{ ac(); act('chans',{v:$('chIn').value}); };
+    $('chGo').onclick=go; $('chIn').onkeydown=e=>{ if(e.key==='Enter') go(); };
+    if(meCh) setTimeout(()=>{ const i=$('chIn'); if(i) i.focus(); },30); }
   if($('bOk')) $('bOk').onclick=()=>act('conquer');
   if($('bStop')) $('bStop').onclick=()=>act('stop');
   if($('bRoll')) $('bRoll').onclick=()=>{ ac(); act('roll'); };
   if($('bAuto')) $('bAuto').onclick=()=>{ ac(); act('auto'); };
   if($('bRet')) $('bRet').onclick=()=>act('retreat');
   if(B.conquered) bindMover(B.move);
-}
-function dieHTML(cls){
-  const P={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
-  return `<div class="die ${cls}"><div class="cube">${[1,2,3,4,5,6].map(f=>`<div class="face f${f}">${[...Array(9).keys()].map(k=>`<i class="${P[f].includes(k)?'on':''}"></i>`).join('')}</div>`).join('')}</div></div>`;
-}
-const FACE_ROT={1:[0,0],6:[0,180],2:[0,-90],5:[0,90],3:[-90,0],4:[90,0]};
-function throwDice(container, vals, cls, fast){
-  container.innerHTML=vals.map(()=>dieHTML(cls)).join('');
-  const cubes=[...container.querySelectorAll('.cube')];
-  cubes.forEach(c=>{ c.style.transition='none'; c.style.transform=`rotateX(${rnd(360)}deg) rotateY(${rnd(360)}deg)`; });
-  void container.offsetWidth;
-  cubes.forEach((c,k)=>{ const [rx,ry]=FACE_ROT[vals[k]];
-    c.style.transition=`transform ${(fast?.7:.9)+k*0.12}s cubic-bezier(.15,.8,.25,1.05)`;
-    c.style.transform=`rotateX(${rx+720}deg) rotateY(${ry+720}deg)`; });
-}
-function staticDice(container, vals, cls){
-  container.innerHTML=vals.map(()=>dieHTML(cls)).join('');
-  [...container.querySelectorAll('.cube')].forEach((c,k)=>{ const [rx,ry]=FACE_ROT[vals[k]]; c.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; });
 }
 function renderMove(){
   const u=S.ui, A=S.terr[u.a], me=canAct();
@@ -1306,7 +1574,7 @@ function renderOver(){
 function modalOpen(){ return $('modal').classList.contains('on'); }
 function showModal(){ $('modal').classList.add('on'); }
 function hideModal(){ $('modal').classList.remove('on'); }
-function localModal(html){ if(S && (S.B || (S.ui&&S.ui.k!=='over'))) return false; LOCAL=true; lastSig=''; $('mbox').innerHTML=html; showModal(); return true; }
+function localModal(html){ if(S && (S.B || (S.ui&&S.ui.k!=='over'))) return false; LOCAL=true; lastSig=''; $('mbox').classList.remove('battle'); $('mbox').innerHTML=html; showModal(); return true; }
 function closeLocal(){ LOCAL=false; hideModal(); renderUI(); }
 function openCard(idx){
   const v=V(), c=S.players[v].cards[idx]; if(!c) return; const C=CARDS[c.k];
@@ -1361,11 +1629,11 @@ function openHelp(){
     <div class="help">
       <div class="goal"><b>🎯 GOAL</b>Every empire has a SECRET MISSION. Complete it = INSTANT VICTORY! When the time is up, the empire with the MOST territories wins.</div>
       <div><b>1 · REINFORCE 🪖</b>New troops: 1 for every 3 territories (min 3) + 🌍 CONTINENT BONUS. Click your lands to place them. Cards ■■■ or ■▲● = more troops!</div>
-      <div><b>2 · ATTACK ⚔️</b>Click your army (2+ troops), then an enemy neighbor. Choose 🐎 KNIGHTS, 🏹 ARCHERS or 🔱 SPEARS (🐎 beat 🏹 · 🏹 beat 🔱 · 🔱 beat 🐎). ROLL or ⚡ ROLL TO THE END. Max 3 troops go into the new land.</div>
+      <div><b>2 · ATTACK ⚔️</b>Click your army (2+ troops), then an enemy neighbor. ⚡ ENGLISH STRIKE: answer fast! Right = +1 on your best 🎲 · wrong or too slow = +1 for the DEFENSE. Then ROLL. Max 3 troops go into the new land.</div>
       <div><b>3 · MOVE 🐎</b>(optional) Move troops ONE time between two neighbor lands. Then END TURN.</div>
       <div><b>⭐ HERO</b>10 levels! Conquer = +1 XP (max 2 per turn). Your power grows at levels 4, 7 and 10. After you use it, it recharges for 1 turn ⏳.</div>
       <div><b>🃏 CARDS</b>Conquer 1+ land = 1 card at the end of your turn. Play it from your NEXT turn. 🕵️ SPY blocks an enemy's next card.</div>
-      <div><b>📜 EVENTS</b>Every round, one empire gets an event. Choose... and say WHY!</div>
+      <div><b>⏱️ TURN TIMER</b>Your turn has a timer! Time's up = next player (your troops are placed for you).</div>
     </div>
     <div class="mbtns"><button class="btn big" id="hOk">GOT IT! ⚔️</button></div>`;
   if(S){ if(!localModal(html)) return; }
@@ -1424,15 +1692,18 @@ function tone(f,d,type='sine',v=.12,w=0,f2){ if(muted) return; const a=ac(); if(
   const o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+d);
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(v,t+.015); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
   o.connect(g).connect(a.destination); o.start(t); o.stop(t+d+.05); }
+let NB=null;
+function nbuf(a){ if(!NB){ NB=a.createBuffer(1,a.sampleRate,a.sampleRate); const c=NB.getChannelData(0); for(let i=0;i<c.length;i++) c[i]=Math.random()*2-1; } return NB; }
 function noise(d,v=.2,w=0,ff=1200,q=1){ if(muted) return; const a=ac(); if(!a) return; const t=a.currentTime+w;
-  const buf=a.createBuffer(1,Math.floor(a.sampleRate*d),a.sampleRate), ch=buf.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*(1-i/ch.length);
-  const s=a.createBufferSource(), f=a.createBiquadFilter(), g=a.createGain(); s.buffer=buf; f.type='bandpass'; f.frequency.value=ff; f.Q.value=q; g.gain.value=v;
-  s.connect(f).connect(g).connect(a.destination); s.start(t); }
+  const s=a.createBufferSource(), f=a.createBiquadFilter(), g=a.createGain(); s.buffer=nbuf(a); f.type='bandpass'; f.frequency.value=ff; f.Q.value=q;
+  g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  s.connect(f).connect(g).connect(a.destination); s.start(t,Math.random()*.3,d+.02); }
 const sfx={
   click:()=>tone(660,.07,'triangle',.08),
   no:()=>tone(180,.15,'square',.05,0,120),
   place:()=>{tone(520,.08,'triangle',.1); tone(780,.1,'triangle',.07,.05);},
-  dice:()=>{for(let k=0;k<9;k++) noise(.05,.35,k*.09+Math.random()*.04,2500+Math.random()*2000,3);},
+  dice:()=>{for(let k=0;k<7;k++) noise(.04,.3,k*.1+Math.random()*.03,2500+Math.random()*2000,3);},
+  tick:()=>tone(1250,.05,'square',.04),
   hit:(good)=>{noise(.35,.5,0,180,.8); tone(good?140:90,.35,'sawtooth',.08,0,50);},
   boom:()=>{noise(.6,.6,0,120,.6); tone(80,.5,'sine',.25,0,35);},
   conquer:()=>{[392,523,659,784].forEach((f,k)=>tone(f,.35,'sawtooth',.06,k*.11)); tone(1046,.6,'triangle',.08,.44);},
@@ -1452,23 +1723,44 @@ const sfx={
    ========================================================= */
 let tick=0;
 setInterval(()=>{
-  if(MODE==='client' || !S || S.screen!=='game' || S.paused || S.timeLeft<0) return;
-  S.timeLeft-=1000; tick++;
-  if(S.timeLeft===5*60000) toast('⏳ 5 MINUTES LEFT!');
-  if(S.timeLeft<=0){
-    S.timeLeft=0; if(S.B&&S.B.rolling) return;
-    if(S.B&&S.B.conquered){ const A=S.terr[S.B.a],D=S.terr[S.B.d]; A.troops-=S.B.move; D.troops+=S.B.move; }
-    S.B=null; S.ui=null; gameOver('time'); commit(); return;
+  if(MODE==='client' || !S || S.screen!=='game' || S.paused) return;
+  tick++;
+  const ch=S.B&&!S.B.conquered&&S.B.ch;
+  if(ch && !ch.res){
+    ch.left--;
+    if(ch.left<=0){ ch.left=0; ch.res=ch.duel?'N':'D'; ch.picked=''; fx('sfx','no'); fx('toast',ch.duel?'⏰ Too slow! Nobody wins the 1v1':`⏰ Too slow! +${ch.x} for the DEFENSE`); commit(); return; }
+    updateChBar(); if(ch.left<=3) sfx.tick();
+    if(MODE==='host') bcast({t:'ch',v:ch.left});
+  }
+  if(S.turnSec>0 && !(S.ui&&S.ui.k==='event') && !(ch&&!ch.res) && !(S.B&&S.B.rolling)){
+    S.turnLeft-=1000;
+    if(S.turnLeft>0 && S.turnLeft<=5000) sfx.tick();
+    if(S.turnLeft<=0){ S.turnLeft=0; turnTimeUp(); commit(); return; }
+  }
+  if(S.timeLeft>=0){
+    S.timeLeft-=1000;
+    if(S.timeLeft===5*60000) toast('⏳ 5 MINUTES LEFT!');
+    if(S.timeLeft<=0){
+      S.timeLeft=0; if(S.B&&S.B.rolling) return;
+      if(S.B&&S.B.conquered){ const A=S.terr[S.B.a],D=S.terr[S.B.d]; A.troops-=S.B.move; D.troops+=S.B.move; }
+      S.B=null; S.ui=null; gameOver('time'); commit(); return;
+    }
   }
   renderTimer();
-  if(MODE==='host') bcast({t:'time',v:S.timeLeft,p:S.paused});
+  if(MODE==='host') bcast({t:'time',v:S.timeLeft,p:S.paused,tl:S.turnLeft});
   if(tick%5===0) save();
 },1000);
 
 /* =========================================================
    ONLINE (PeerJS — free, no server of ours)
    ========================================================= */
-const PFX='miniwar4-room-';
+const PFX='miniwar8-room-';
+// STUN/TURN grátis (o TURN padrão do PeerJS morreu = "não conectava de primeira")
+const PEER_OPT={debug:0,config:{iceServers:[
+  {urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},
+  {urls:'stun:stun.cloudflare.com:3478'},
+  {urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}
+]}};
 function loadPeer(cb){
   if(window.Peer) return cb();
   const s=document.createElement('script'); s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';
@@ -1476,16 +1768,24 @@ function loadPeer(cb){
 }
 function genCode(){ const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789'; return Array.from({length:4},()=>A[rnd(A.length)]).join(''); }
 function bcast(m){ conns.forEach(c=>{ if(c.open) try{ c.send(m); }catch(e){} }); }
-function lobbyList(){
-  const names = S ? S.players.map(p=>p.out?'':p.name) : curNames();
-  return ALL.filter(i=>names[i]).map(i=>({i,name:names[i],crest:EMP[i].crest,taken:conns.some(c=>c.open&&c.p===i)}));
-}
-function bcastLobby(){ if(MODE==='host') bcast({t:'lobby',players:lobbyList()}); }
+
+/* ---- players + clans (no duplicate names, no duplicate clans) ---- */
+let PL=['Mateus','Gabriel','Thiago','Teacher'], ASG={}, SELP=0;
+try{ const o=JSON.parse(localStorage.getItem('miniwar8-setup')); if(o&&Array.isArray(o.PL)&&o.PL.length){ PL=o.PL; ASG=o.ASG||{}; } }catch(e){}
+function saveSetup(){ try{ localStorage.setItem('miniwar8-setup',JSON.stringify({PL,ASG})); }catch(e){} }
+const curNames=()=>ALL.map(i=>Object.keys(ASG).find(n=>ASG[n]===i&&PL.includes(n))||'');
+const clanOwner=i=>Object.keys(ASG).find(n=>ASG[n]===i&&PL.includes(n));
+function canonName(n){ n=String(n||'').trim().replace(/\s+/g,' ').slice(0,14); if(!n) return ''; const f=PL.find(x=>x.toLowerCase()===n.toLowerCase()); return f||(n.charAt(0).toUpperCase()+n.slice(1)); }
+function onlineNames(){ return conns.filter(c=>c.open&&c.nm).map(c=>c.nm); }
+function lobbyMsg(){ return {t:'lobby', PL, ASG, on:onlineNames(), game: S&&S.screen!=='title' ? S.players.map(p=>p.out?'':p.name) : null}; }
+function bcastLobby(){ if(MODE==='host') bcast(lobbyMsg()); }
+function refreshLobby(){ if(MODE==='client') return; if(!S && $('title').style.display!=='none') renderSetup(); else { bcastLobby(); updateHostInfo(); } }
+
 function startHost(code,tries=0,cb){
   loadPeer(()=>{
     MODE='host'; ROOM=code||genCode();
-    try{ localStorage.setItem('miniwar4-room',ROOM); }catch(e){}
-    peer=new Peer(PFX+ROOM);
+    try{ localStorage.setItem('miniwar8-room',ROOM); }catch(e){}
+    peer=new Peer(PFX+ROOM,PEER_OPT);
     peer.on('open',()=>{ updateHostInfo(); if(cb) cb(); });
     peer.on('error',e=>{
       if(e.type==='unavailable-id' && tries<10){ try{peer.destroy();}catch(_){} setTimeout(()=>startHost(ROOM,tries+1,cb),2500); }
@@ -1493,17 +1793,35 @@ function startHost(code,tries=0,cb){
     });
     peer.on('disconnected',()=>{ try{ peer.reconnect(); }catch(e){} });
     peer.on('connection',c=>{
-      c.p=null;
-      c.on('open',()=>{ conns.push(c); c.send({t:'lobby',players:lobbyList()}); updateHostInfo(); });
+      c.p=null; c.nm=null; c.cid=null;
+      c.on('open',()=>{ conns.push(c); c.send(lobbyMsg()); updateHostInfo(); });
       c.on('data',m=>onHostMsg(c,m));
-      c.on('close',()=>{ conns=conns.filter(x=>x!==c); updateHostInfo(); bcastLobby(); if(S&&S.screen!=='title') commit(); });
+      c.on('close',()=>{ conns=conns.filter(x=>x!==c); refreshLobby(); if(S&&S.screen!=='title') commit(); });
     });
     updateHostInfo();
   });
 }
 function onHostMsg(c,m){
   if(!m) return;
-  if(m.t==='claim'){ c.p=(m.i==null?null:+m.i); bcastLobby(); updateHostInfo(); if(S){ commit(); } return; }
+  if(m.t==='claim'){
+    const name=canonName(m.name);
+    if(!name){ c.nm=null; c.p=null; refreshLobby(); return; }
+    const dup=conns.find(x=>x!==c && x.open && x.nm===name && x.cid!==m.cid);
+    if(dup){ c.send({t:'deny',k:'name',why:`${name} is already in the room! Choose YOUR name.`}); return; }
+    if(S && S.screen!=='title'){
+      const p=S.players.findIndex(pl=>!pl.out && pl.name===name);
+      if(p<0){ c.send({t:'deny',k:'name',why:`${name} is not in this war.`}); return; }
+      c.nm=name; c.cid=m.cid; c.p=p; c.send({t:'you',name,p}); bcastLobby(); updateHostInfo(); commit(); return;
+    }
+    if(m.emp!=null){ const o=clanOwner(+m.emp); if(o && o!==name){ c.send({t:'deny',k:'clan',why:`${EMP[+m.emp].name} is taken by ${o}!`}); c.send(lobbyMsg()); return; } }
+    c.nm=name; c.cid=m.cid;
+    if(!PL.includes(name)) PL.push(name);
+    if(m.emp!=null) ASG[name]=+m.emp;
+    c.p = PL.includes(name)&&ASG[name]!=null ? ASG[name] : null;
+    saveSetup(); refreshLobby();
+    c.send({t:'you',name,p:c.p});
+    return;
+  }
   if(m.t==='act' && S && c.p!=null) apply(m.type,m.d||{},c.p);
 }
 function updateHostInfo(){
@@ -1516,7 +1834,7 @@ function updateHostInfo(){
   }
   $('hostBtn').style.display='none';
   const link=location.origin+location.pathname+'?room='+ROOM;
-  const who=conns.filter(c=>c.open).map(c=>c.p!=null?EMP[c.p].crest+' '+esc(lobbyList().find(x=>x.i===c.p)?.name||'?'):'👀 choosing...');
+  const who=conns.filter(c=>c.open).map(c=>c.nm?(ASG[c.nm]!=null?EMP[ASG[c.nm]].crest:'👤')+' '+esc(c.nm):'👀 choosing...');
   el.innerHTML=`<span class="lbl">ROOM</span> <span class="code">${ROOM}</span> <button class="btn" id="copyBtn">📋 Copy link</button>
     <span class="lbl" style="font-size:18px">${who.length?'🟢 '+who.join(' · '):'Waiting for players...'}</span>`;
   $('copyBtn').onclick=()=>{
@@ -1525,16 +1843,22 @@ function updateHostInfo(){
   };
   $('startBtn').textContent='⚔️ START ONLINE WAR';
 }
+
+/* ---- client ---- */
+let CID=null, MYNAME=null;
+try{ CID=sessionStorage.getItem('mw8-cid'); if(!CID){ CID=Math.random().toString(36).slice(2,10); sessionStorage.setItem('mw8-cid',CID); } }catch(e){ CID=Math.random().toString(36).slice(2,10); }
+function setMyName(n){ MYNAME=n||null; try{ sessionStorage.setItem('mw8-name-'+ROOM,n||''); }catch(e){} }
+function claim(emp){ if(hostConn&&hostConn.open) hostConn.send({t:'claim',cid:CID,name:MYNAME,emp}); }
 function startClient(code){
-  MODE='client'; ROOM=code.toUpperCase(); LOBBY=null; JOINMSG='Connecting to room '+ROOM+'...';
-  try{ const m=sessionStorage.getItem('mw4-me-'+ROOM); ME = m==null||m==='' ? null : +m; }catch(e){ ME=null; }
+  MODE='client'; ROOM=code.toUpperCase(); LOBBY=null; JOINMSG='Connecting to room '+ROOM+'...'; ME=null;
+  try{ MYNAME=sessionStorage.getItem('mw8-name-'+ROOM)||null; }catch(e){ MYNAME=null; }
   $('setup').style.display='none'; showJoin();
   loadPeer(()=>{
-    peer=new Peer();
+    peer=new Peer(PEER_OPT);
     peer.on('open',connectHost);
     peer.on('error',e=>{
       if(e.type==='peer-unavailable'){ JOINMSG='Room '+ROOM+' not found yet... trying again ⏳'; if(!S) showJoin(); setTimeout(connectHost,3000); }
-      else { JOINMSG='Online problem: '+e.type; if(!S) showJoin(); }
+      else { JOINMSG='Online problem: '+e.type+' — trying again ⏳'; if(!S) showJoin(); }
     });
     peer.on('disconnected',()=>{ try{ peer.reconnect(); }catch(e){} });
   });
@@ -1545,89 +1869,113 @@ function connectHost(){
   if(peer.disconnected){ try{ peer.reconnect(); }catch(e){} setTimeout(connectHost,2000); return; }
   const c=peer.connect(PFX+ROOM,{reliable:true,serialization:'json'});
   hostConn=c;
-  c.on('open',()=>{ reconnecting=false; if(ME!=null) c.send({t:'claim',i:ME}); });
+  // vigia: se não abrir em 9 s, tenta de novo sozinho
+  const wd=setTimeout(()=>{ if(!c.open && hostConn===c){ hostConn=null; try{ c.close(); }catch(e){} JOINMSG='Connecting again... ⏳'; if(!S) showJoin(); connectHost(); } },9000);
+  c.on('open',()=>{ clearTimeout(wd); reconnecting=false; if(MYNAME) claim(); });
   c.on('data',onClientMsg);
-  c.on('close',()=>{ if(hostConn!==c||reconnecting) return; reconnecting=true; toast('🔌 Connection lost... reconnecting'); setTimeout(()=>{ reconnecting=false; connectHost(); },2500); });
+  c.on('close',()=>{ clearTimeout(wd); if(hostConn!==c||reconnecting) return; reconnecting=true; toast('🔌 Connection lost... reconnecting'); setTimeout(()=>{ reconnecting=false; connectHost(); },2500); });
 }
 function onClientMsg(m){
   if(!m) return;
-  if(m.t==='lobby'){ LOBBY=m.players; if(!S||S.screen==='title') showJoin(); }
-  else if(m.t==='state'){ const first=!S; S=m.S; if(first) enterGame(); paint(m.f); }
-  else if(m.t==='time'){ if(S){ S.timeLeft=m.v; S.paused=m.p; renderTimer(); } }
-  else if(m.t==='reset'){ S=null; $('over').classList.remove('on'); hideModal(); $('game').style.display='none'; $('title').style.display='flex'; showJoin(); }
+  if(m.t==='lobby'){ LOBBY=m; if(!S||S.screen==='title') showJoin(); else render(); }
+  else if(m.t==='you'){ const was=ME; setMyName(m.name); ME=m.p; if(!S) showJoin(); else paint([]); if(was!==ME && ME!=null && S) toast('✅ You are '+esc(m.name)+' '+EMP[ME].crest); }
+  else if(m.t==='deny'){ toast('✋ '+esc(m.why)); if(m.k==='name'){ setMyName(null); ME=null; } if(!S) showJoin(); else render(); }
+  else if(m.t==='state'){ const first=!S; S=m.S; if(first){ enterGame(); if(MYNAME) claim(); } paint(m.f); }
+  else if(m.t==='time'){ if(S){ S.timeLeft=m.v; S.paused=m.p; if(m.tl!=null) S.turnLeft=m.tl; renderTimer(); } }
+  else if(m.t==='ch'){ if(S&&S.B&&S.B.ch){ S.B.ch.left=m.v; updateChBar(); if(m.v<=3) sfx.tick(); } }
+  else if(m.t==='reset'){ S=null; ME=null; $('over').classList.remove('on'); hideModal(); $('game').style.display='none'; $('title').style.display='flex'; showJoin(); }
 }
 function showJoin(){
   const box=$('joinBox'); box.style.display='flex';
   if(!LOBBY){ box.innerHTML=`<div class="lbl" style="font-size:24px">🔌 ${esc(JOINMSG)}</div>`; return; }
-  const mine=LOBBY.find(p=>p.i===ME);
-  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:14px;align-items:center">
-    <div class="lbl" style="font-size:24px">🌐 ROOM <span class="code">${ROOM}</span></div>
-    <div class="lbl" style="font-size:24px">${mine?`✅ You are <b>${mine.crest} ${esc(mine.name)}</b>. Waiting for the host to START... ⏳`:'WHO ARE YOU? 👇'}</div>
-    <div class="who-list">${LOBBY.map(p=>`<button class="btn ${p.i===ME?'big':''}" data-i="${p.i}">${p.crest} ${esc(p.name)}${p.taken&&p.i!==ME?' 🟢':''}</button>`).join('')}</div></div>`;
-  box.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
-    ME=+b.dataset.i; try{ sessionStorage.setItem('mw4-me-'+ROOM,ME); }catch(e){}
-    if(hostConn&&hostConn.open) hostConn.send({t:'claim',i:ME});
-    ac(); sfx.click(); showJoin();
-  });
+  const L=LOBBY, on=L.on||[], A=L.ASG||{}, pls=L.PL||[];
+  const head=`<div class="lbl" style="font-size:22px">🌐 ROOM <span class="code">${ROOM}</span></div>`;
+  let body;
+  if(!MYNAME){
+    const names=L.game?L.game.filter(Boolean):pls;
+    body=`<div class="lbl" style="font-size:32px">1 · WHO ARE YOU? 👇</div>
+      <div class="who-list">${names.map(n=>{ const busy=on.includes(n); return `<button class="pchip" data-n="${esc(n)}" ${busy?'disabled':''}>${busy?'🟢 ':'👤 '}${esc(n)}${busy?' (in the room)':''}</button>`; }).join('')}</div>
+      ${L.game?'':`<div style="display:flex;gap:8px;justify-content:center"><input id="newName" maxlength="14" placeholder="other name" style="font:800 20px Nunito;padding:8px;border-radius:10px;border:3px solid #132238;width:200px;text-align:center"><button class="btn" id="newNameOk">OK</button></div>`}`;
+  } else if(L.game){
+    body=`<div class="lbl" style="font-size:26px">✅ ${esc(MYNAME)}: the war has started! Loading... ⏳</div>`;
+  } else {
+    const mine=pls.includes(MYNAME)?A[MYNAME]:null;
+    body=`<div class="lbl" style="font-size:28px">${mine!=null?`✅ <b>${esc(MYNAME)}</b> = ${EMP[mine].crest} ${EMP[mine].name}<br><span style="font-size:20px">Waiting for the host to START ⏳ (you can still change)</span>`:`2 · ${esc(MYNAME)}, CHOOSE YOUR CLAN 👇`}</div>
+      <div class="clangrid">${EMP.map((e,i)=>{ const who=Object.keys(A).find(n=>A[n]===i&&n!==MYNAME&&pls.includes(n));
+        return `<button class="cbtn ${mine===i?'me':''}" data-c="${i}" ${who?'disabled':''} style="background:linear-gradient(180deg,${e.light},${e.dark})"><span class="cc">${e.crest}</span>${e.name}<small>${who?'🔒 '+esc(who):e.hero+' · '+e.ab}</small></button>`; }).join('')}</div>
+      <button class="btn" id="chgName" style="font-size:14px;padding:6px 12px">↩ I'm not ${esc(MYNAME)}</button>`;
+  }
+  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:14px;align-items:center">${head}${body}</div>`;
+  box.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ ac(); sfx.click(); setMyName(b.dataset.n); claim(); showJoin(); });
+  if($('newNameOk')) $('newNameOk').onclick=()=>{ const n=$('newName').value.trim(); if(!n) return; ac(); sfx.click(); setMyName(n); claim(); showJoin(); };
+  box.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ ac(); sfx.click(); claim(+b.dataset.c); });
+  if($('chgName')) $('chgName').onclick=()=>{ setMyName(null); ME=null; if(hostConn&&hostConn.open) hostConn.send({t:'claim',cid:CID,name:''}); showJoin(); };
 }
 
 /* =========================================================
-   TITLE
+   TITLE (host / this PC)
    ========================================================= */
-const curNames=()=>ALL.map(i=>($('nm'+i)?$('nm'+i).value.trim():''));
 function enterGame(){ $('title').style.display='none'; $('game').style.display='grid'; LOCAL=false; lastSig=''; lastOver=''; buildMap(); }
 function showTitle(){
   S=null; LOCAL=false; hideModal(); $('over').classList.remove('on');
   $('game').style.display='none'; $('title').style.display='flex';
   if(MODE==='client'){ $('setup').style.display='none'; showJoin(); return; }
   $('setup').style.display='flex'; $('joinBox').style.display='none';
-  let names=null; try{ names=JSON.parse(localStorage.getItem('miniwar4-names')); }catch(e){}
-  if(!Array.isArray(names)||names.length!==EMP.length) names=EMP.map((_,i)=>DEFAULT_NAMES[i]||'');
-  $('empCards').innerHTML=EMP.map((e,i)=>`<div class="ecard" style="--k:${i}">
-    <div class="crest" style="background:linear-gradient(180deg,${e.light},${e.dark})">${e.crest}</div>
-    <h3 style="color:${e.dark}">${e.name}</h3>
-    <div class="hero">${e.hicon} Hero: ${e.hero}</div>
-    <div class="ab"><b>${e.ab}</b><br>${e.t(e.n[0])}</div>
-    <input id="nm${i}" value="${esc(names[i])}" maxlength="14" spellcheck="false" placeholder="(no player)">
-    <div class="pick">${DEFAULT_NAMES.map(n=>`<button data-i="${i}" data-n="${n}">${n}</button>`).join('')}</div>
-  </div>`).join('');
-  const mark=()=>{
-    document.querySelectorAll('.pick button').forEach(b=>b.classList.toggle('on',$('nm'+b.dataset.i).value===b.dataset.n));
-    ALL.forEach(i=>document.querySelectorAll('.ecard')[i].classList.toggle('off',!$('nm'+i).value.trim()));
-    try{ localStorage.setItem('miniwar4-names',JSON.stringify(curNames())); }catch(e){}
-    bcastLobby(); updateHostInfo();
-  };
-  document.querySelectorAll('.pick button').forEach(b=>b.onclick=()=>{
-    const i=+b.dataset.i, n=b.dataset.n, mine=$('nm'+i).value;
-    if(mine===n){ $('nm'+i).value=''; }
-    else { ALL.forEach(j=>{ if(j!==i && $('nm'+j).value===n) $('nm'+j).value=mine; }); $('nm'+i).value=n; }
-    sfx.click(); mark();
-  });
-  ALL.forEach(i=>$('nm'+i).oninput=mark); mark();
+  renderSetup();
   $('contBtn').style.display=load()?'':'none';
-  updateHostInfo();
+}
+function renderSetup(){
+  if(SELP>=PL.length) SELP=0;
+  const on=onlineNames();
+  $('plBar').innerHTML=`<span class="lbl" style="font-size:18px">1 · PLAYER</span>`+PL.map((n,k)=>{ const e=ASG[n];
+      return `<button class="pchip ${k===SELP?'on':''}" data-k="${k}" title="double-click = rename · right-click = remove">${e!=null?EMP[e].crest:'👤'} ${esc(n)}${on.includes(n)?'<span class="pdot"></span>':''}</button>`; }).join('')
+    +`<button class="pchip add" id="addP" title="Add a player">＋</button><span class="lbl" style="font-size:18px">2 · CLAN 👇</span>`;
+  const grid=$('empCards');
+  grid.innerHTML=EMP.map((e,i)=>{ const who=clanOwner(i);
+    return `<div class="ecard ${who?'taken':'off'}" data-i="${i}" style="--k:${i}">
+      <div class="crest" style="background:linear-gradient(180deg,${e.light},${e.dark})">${e.crest}</div>
+      <h3 style="color:${e.dark}">${e.name}</h3>
+      <div class="hero">${e.hicon} ${e.hero}</div>
+      <div class="ab"><b>${e.ab}</b><br>${e.t(e.n[0])}</div>
+      <div class="slot" style="${who?`background:linear-gradient(180deg,${e.light},${e.dark})`:''}">${who?esc(who):'—'}</div></div>`; }).join('');
+  setTimeout(()=>grid.classList.add('ready'),900);
+  $('plBar').querySelectorAll('[data-k]').forEach(b=>{
+    b.onclick=()=>{ SELP=+b.dataset.k; sfx.click(); renderSetup(); };
+    b.ondblclick=()=>{ const k=+b.dataset.k, old=PL[k], n=canonName(prompt('Name:',old)||''); if(!n||n===old) return; if(PL.includes(n)){ toast('That name already exists!'); return; } PL[k]=n; if(ASG[old]!=null){ ASG[n]=ASG[old]; delete ASG[old]; } saveSetup(); renderSetup(); };
+    b.oncontextmenu=ev=>{ ev.preventDefault(); const k=+b.dataset.k; if(!confirm('Remove '+PL[k]+'?')) return; delete ASG[PL[k]]; PL.splice(k,1); saveSetup(); renderSetup(); };
+  });
+  $('addP').onclick=()=>{ const n=canonName(prompt('Player name:')||''); if(!n) return; if(PL.includes(n)){ toast('That name already exists!'); return; } PL.push(n); SELP=PL.length-1; saveSetup(); renderSetup(); };
+  grid.querySelectorAll('.ecard').forEach(c=>c.onclick=()=>{
+    const i=+c.dataset.i, n=PL[SELP]; if(n==null) return;
+    if(ASG[n]===i) delete ASG[n];
+    else { const o=clanOwner(i); if(o) delete ASG[o]; ASG[n]=i; const nx=PL.findIndex(x=>ASG[x]==null); if(nx>=0) SELP=nx; }
+    ac(); sfx.click(); saveSetup(); renderSetup();
+  });
+  bcastLobby(); updateHostInfo();
 }
 $('shuffleBtn').onclick=()=>{
-  const v=shuffle(ALL.map(i=>$('nm'+i).value));
-  v.forEach((n,i)=>$('nm'+i).value=n); sfx.dice();
-  $('nm0').dispatchEvent(new Event('input'));
-  document.querySelectorAll('.ecard').forEach(c=>{ c.style.animation='none'; void c.offsetWidth; c.style.animation=''; });
+  const ps=PL.filter(n=>ASG[n]!=null), who=ps.length>=2?ps:PL, picks=shuffle([...ALL]);
+  ASG={}; who.forEach((n,k)=>ASG[n]=picks[k]); sfx.dice(); saveSetup();
+  $('empCards').classList.remove('ready'); renderSetup();
 };
 $('startBtn').onclick=()=>{
   ac();
   const names=curNames();
-  if(names.filter(Boolean).length<2){ toast('At least 2 players!'); return; }
-  enterGame(); newGame(names, +$('timeSel').value, $('unitsChk').checked); commit();
+  if(names.filter(Boolean).length<2){ toast('Choose a CLAN for at least 2 players!'); return; }
+  enterGame(); newGame(names, +$('timeSel').value, false, +$('turnSel').value, $('chChk').checked);
+  if(MODE==='host') conns.forEach(c=>{ if(c.open&&c.nm){ c.p=S.players.findIndex(p=>!p.out&&p.name===c.nm); if(c.p<0) c.p=null; try{ c.send({t:'you',name:c.nm,p:c.p}); }catch(e){} } });
+  commit();
 };
 $('contBtn').onclick=()=>{
   ac(); const s=load(); if(!s) return;
   const go=()=>{ S=s; S.paused=false; S.sel=null; S.mode=null; enterGame(); fx('banner'); commit(); };
-  if(s.online && MODE!=='host'){ let r=null; try{ r=localStorage.getItem('miniwar4-room'); }catch(e){} startHost(r||undefined,0,go); }
+  if(s.online && MODE!=='host'){ let r=null; try{ r=localStorage.getItem('miniwar8-room'); }catch(e){} startHost(r||undefined,0,go); }
   else go();
 };
 $('hostBtn').onclick=()=>{ ac(); startHost(); };
 $('nextBtn').onclick=()=>act('next');
 $('timer').onclick=()=>{ if(MODE!=='client') act('pause'); };
+$('tTimer').onclick=()=>{ if(MODE!=='client') act('pause'); };
 $('dealBtn').onclick=openDeal;
 $('helpBtn').onclick=openHelp; $('helpBtn2').onclick=openHelp;
 $('evBtn').onclick=()=>act('event');
@@ -1660,8 +2008,8 @@ else showTitle();
 
 <div id="tut">
  <div class="tbox">
-  <div class="ttl">⚔️ HOW TO PLAY MINI WAR 2</div>
-  <div class="tsub">Each turn = 3 steps</div>
+  <div class="ttl">⚔️ HOW TO PLAY MINI WAR 3</div>
+  <div class="tsub">Each turn = 3 steps · ⏱️ 1 minute!</div>
   <div class="tsteps">
    <div class="ts"><b>1</b><span>🪖</span><h5>REINFORCE</h5><p>Click YOUR lands to place new troops</p></div>
    <div class="ta">➜</div>
@@ -1672,7 +2020,7 @@ else showTitle();
   <div class="tgrid">
    <div class="tc"><span>🦸</span><h5>YOUR HERO</h5><p>Conquer = XP ⭐<br><i>Lv 1</i> power · <i>Lv 4</i> · <i>Lv 7</i> · <i>Lv 10</i> = STRONGER<br>Use it, then wait 1 turn</p></div>
    <div class="tc"><span>🃏</span><h5>POWER CARDS</h5><p>Conquer a land = 1 card<br>3 cards <b>■■■</b> or <b>■▲●</b> = BIG troop bonus</p></div>
-   <div class="tc"><span>❓</span><h5>EVENTS</h5><p>Every round, a surprise!<br>Right answer = +2 troops +1 XP</p></div>
+   <div class="tc"><span>⚡</span><h5>ENGLISH STRIKE</h5><p>Every battle: answer FAST!<br>Right = +1 on your 🎲<br>Wrong = +1 for the enemy</p></div>
    <div class="tc"><span>🎯</span><h5>SECRET MISSION</h5><p>Shhh! 🤫 Complete it = YOU WIN<br>Or have the most lands at the end</p></div>
   </div>
   <div class="trule">🗣️ GOLDEN RULE: every attack, <b>SAY IT LOUD in English!</b></div>
